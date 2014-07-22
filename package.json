@@ -1,0 +1,14 @@
+{
+  "name": "stockup",
+  "description": "stockup backend",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": ">=4.3",
+    "body-parser": ">=1.2",
+    "cookie-parser": ">=1.1",
+    "express-session": ">=1.2",
+    "mongodb": ">=1.4.7",
+    "mongoose": ">=3.8"
+  }
+}

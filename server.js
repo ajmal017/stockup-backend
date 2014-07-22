@@ -16,7 +16,7 @@ app.use(function(req, res, next) {
     next();
   } else {
     sess.views = 1
-    res.send('welcome to the session demo. refresh!');
+    res.send('welcome to the session demo 1. refresh!');
     next();
   }
 });
