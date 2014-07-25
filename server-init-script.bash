@@ -27,16 +27,21 @@ echo "please add this key to github ,press [Enter] when done"
 echo id_rsa
 read placeholder
 
+aptInstall () {
+	echo "Y" | sudo apt-get install $1
+}
+
 cd /
 sudo apt-get update
 echo "Y" | sudo apt-get upgrade
 
-echo "Y" | sudo apt-get install apache2
-echo "Y" | sudo apt-get install php5
-echo "Y" | sudo apt-get install nodejs
-echo "Y" | sudo apt-get install mongodb
-echo "Y" | sudo apt-get install git
-echo "Y" | sudo apt-get install emacs
+aptInstall apache2
+aptInstall php5
+aptInstall nodejs
+aptInstall npm
+aptInstall mongodb
+aptInstall git
+aptInstall emacs
 
 echo "alias gclone='git clone git@github.com:guoyr/stockup-backend.git'" >> ~/.bashrc
 
