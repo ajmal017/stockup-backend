@@ -17,7 +17,12 @@ for line in stock_list.readlines():
 	stock_number = line[1]
 	full_url = base_url%stock_number
 	print full_url
-	content = urllib2.urlopen(full_url)
+	try:
+		content = urllib2.urlopen(full_url)
+	except urllib2.HTTPError:
+		print "######"
+		print "error reading HTTP"
+		continue
 
 	firstLine = True;
 
