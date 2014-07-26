@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 import urllib2
 client = MongoClient()
 
@@ -28,4 +28,7 @@ for line in stock_list.readlines():
 			continue
 		elements = line.strip().split(",")
 		id_doc = {"c":stock_number,"d":elements[0]}
-		daily_info.insert({"_id":id_doc,"e":elements[1:]}) 
+		try:
+			daily_info.insert({"_id":id_doc,"e":elements[1:]}) 
+		except errors.DuplicateKeyError:
+			pass
