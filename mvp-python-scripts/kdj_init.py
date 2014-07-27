@@ -1,6 +1,7 @@
 import pymongo
 import datetime
 from pymongo import MongoClient, errors
+from collections import deque
 client = MongoClient()
 db = client.ss
 daily_collection = db.daily
@@ -9,13 +10,10 @@ kdj_933_collection = db.kdj_933
 
 # algorithm 
 # http://jingyan.baidu.com/article/e73e26c0ec3b3824adb6a70a.html
-kdjArray = []
 
 n = 9
 m = 3
 m1 = 3
-
-
 
 OPEN = 0
 HIGH = 1
@@ -30,7 +28,7 @@ abbrevs = {"n":"name","c":"stock_code","d":"date"}
 
 def shift(a,v,l):
 	a.append(v)
-	if len(a) > l: a.pop(0)
+	if len(a) > l: a.popleft()
 
 
 def calcRsv(vals):
@@ -38,7 +36,11 @@ def calcRsv(vals):
 	shift(n_high, vals[HIGH], n)
 	denominator = (max(n_high) - min(n_low))
 	if abs(denominator) < 0.000001:
-		return m_rsv[-1]
+		try:
+			return m_rsv[-1]
+		except IndexError:
+			return -1
+
 	return (vals[CLOSE] - min(n_low))/denominator*100
 
 def calcK(rsv):
@@ -58,11 +60,12 @@ for s in stock_list.readlines():
 	if s[0] == "#": continue
 	stock_number = s.strip().split()[1]
 
-	n_low = []
-	n_high = []
-	m_rsv = []
-	m1_k = []
+	n_low = deque()
+	n_high = deque()
+	m_rsv = deque()
+	m1_k = deque()
 
+	to_insert = []
 	for stockInfo in daily_collection.find({"_id.c":stock_number},sort=[("_id.d",pymongo.ASCENDING)]):
 		new_e = []
 		for num in stockInfo[INFO_ELEMENTS]:
@@ -70,6 +73,8 @@ for s in stock_list.readlines():
 		new_e[VOLUME] = int(new_e[VOLUME])
 
 		rsv = calcRsv(new_e)
+		if rsv == -1:
+			continue
 		k = calcK(rsv)
 		d = calcD(k)
 		j = 3*k-2*d
@@ -84,10 +89,14 @@ for s in stock_list.readlines():
 			stockInfo[INFO_ELEMENTS] = new_e
 			daily_collection.save(stockInfo)
 
-		kdj_933_collection.save({"_id":stockInfo["_id"],"kd":k,"d":d,"j":j})
+		to_insert.append({"_id":stockInfo["_id"],"kd":k,"d":d,"j":j})
+	try:
+		kdj_933_collection.insert(to_insert)
+		print "finished", stock_number
+	except errors.InvalidOperation:
+		print "error", stock_number
 
-	print "finished", stock_number
-
+#error 600263
 
 
 
