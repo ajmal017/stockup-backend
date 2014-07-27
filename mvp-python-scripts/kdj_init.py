@@ -89,14 +89,14 @@ for s in stock_list.readlines():
 			stockInfo[INFO_ELEMENTS] = new_e
 			daily_collection.save(stockInfo)
 
-		to_insert.append({"_id":stockInfo["_id"],"kd":k,"d":d,"j":j})
+		to_insert.append({"_id":stockInfo["_id"],"k":k,"d":d,"j":j})
 	try:
 		kdj_933_collection.insert(to_insert)
 		print "finished", stock_number
 	except errors.InvalidOperation:
 		print "error", stock_number
 
-#error 600263
+	#error 600263
 
 
 

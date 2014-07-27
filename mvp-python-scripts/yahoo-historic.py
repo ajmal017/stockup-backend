@@ -38,4 +38,3 @@ for line in stock_list.readlines():
 		except errors.DuplicateKeyError:
 			pass
 
-	break
