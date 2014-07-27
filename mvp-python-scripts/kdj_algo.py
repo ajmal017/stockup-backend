@@ -14,8 +14,8 @@ sellPoints = []
 buyDates = []
 sellDates = []
 
-d_upper = 80
-d_lower = 20
+d_upper = 0
+d_lower = 100
 
 curIndex = 0
 
