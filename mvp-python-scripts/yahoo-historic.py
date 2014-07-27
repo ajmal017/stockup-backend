@@ -34,6 +34,8 @@ for line in stock_list.readlines():
 		elements = line.strip().split(",")
 		id_doc = {"c":stock_number,"d":elements[0]}
 		try:
-			daily_info.insert({"_id":id_doc,"e":elements[1:]}) 
+			daily_info.save({"_id":id_doc,"e":elements[1:]}) 
 		except errors.DuplicateKeyError:
 			pass
+
+	break
