@@ -74,7 +74,6 @@ for s in stock_list.readlines():
 		d = calcD(k)
 		j = 3*k-2*d
 
-
 		dat = stockInfo["_id"]["d"]
 
 		# some dates are stored as string, conver to datetime
