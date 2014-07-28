@@ -25,7 +25,6 @@ def change_k_key(stock_number):
 		f["_id"]["c"] = int(f["_id"]["c"])
 
 		if "kd" in f.keys():
-			print "has k"
 			f["k"] = f["kd"]
 			f.pop("kd")
 		daily.save(f)

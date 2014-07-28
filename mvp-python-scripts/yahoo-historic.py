@@ -1,5 +1,6 @@
 from pymongo import MongoClient, errors
 import urllib2
+import datetime
 client = MongoClient()
 
 db = client.ss
@@ -26,15 +27,26 @@ for line in stock_list.readlines():
 
 	firstLine = True;
 
+	all_elements = []
 	for line in content.readlines():
 		if firstLine:
 			# first line is title
 			firstLine = False
 			continue
 		elements = line.strip().split(",")
-		id_doc = {"c":stock_number,"d":elements[0]}
-		try:
-			daily_info.save({"_id":id_doc,"e":elements[1:]}) 
-		except errors.DuplicateKeyError:
-			pass
+		new_d = datetime.datetime.strptime(elements[0], "%Y-%m-%d")
+		id_doc = {"c":int(stock_number),"d":new_d}
+		new_e = []
+		for el in elements[1:]:
+			new_e.append(float(el))
+		new_e[4] = int(new_e[4])
+		all_elements.append({"_id":id_doc,"e":new_e})
+
+	try:
+		daily_info.insert(all_elements) 
+	except errors.DuplicateKeyError:
+		print "duplicate key error", stock_number
+
+	print "saved",stock_number
+
 

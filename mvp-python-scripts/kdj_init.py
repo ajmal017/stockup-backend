@@ -66,28 +66,14 @@ for s in stock_list.readlines():
 	m1_k = deque()
 
 	to_insert = []
-	for stockInfo in daily_collection.find({"_id.c":stock_number},sort=[("_id.d",pymongo.ASCENDING)]):
-		new_e = []
-		for num in stockInfo[INFO_ELEMENTS]:
-			new_e.append(float(num))
-		new_e[VOLUME] = int(new_e[VOLUME])
+	for stockInfo in daily_collection.find({"_id.c":int(stock_number)},sort=[("_id.d",pymongo.ASCENDING)]):
 
-		rsv = calcRsv(new_e)
+		rsv = calcRsv(stockInfo[INFO_ELEMENTS])
 		if rsv == -1:
 			continue
 		k = calcK(rsv)
 		d = calcD(k)
 		j = 3*k-2*d
-
-		dat = stockInfo["_id"]["d"]
-
-		# some dates are stored as string, conver to datetime
-		if type(dat) != datetime.datetime:
-			daily_collection.remove({"_id":stockInfo["_id"]})
-			new_d = datetime.datetime.strptime(dat, "%Y-%m-%d")
-			stockInfo["_id"]["d"] = new_d
-			stockInfo[INFO_ELEMENTS] = new_e
-			daily_collection.save(stockInfo)
 
 		to_insert.append({"_id":stockInfo["_id"],"k":k,"d":d,"j":j})
 	try:
