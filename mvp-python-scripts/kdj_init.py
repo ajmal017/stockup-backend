@@ -1,5 +1,4 @@
 import pymongo
-import datetime
 from pymongo import MongoClient, errors
 from collections import deque
 client = MongoClient()
