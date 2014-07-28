@@ -2,16 +2,22 @@
                                                                                                                                                                                                                         
 var http = require('http');
 
-fs = require("fs")
+var stockNames = [];
+
+fs = require("fs");
 fs.readFile("stock-list.txt",'utf8',function(err,data){
     if (err) {
         return console.log(err);
     };
     var array = data.toString().split("\n");
     for (var i = 1; i < array.length; i++) {
-        console.log(array[i])
+        if (array[i][0] == "#" || array[i].length < 3) {continue};
+        var stockName = parseInt(array[i].split(" ")[1]);
+        stockNames.push(stockName);
     };
+    console.log(stockNames);
 })
+
 
 
 var prevStockInfo = {};
@@ -19,7 +25,7 @@ var prevStockInfo = {};
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/sina_data');
 
-var StockModel = mongoose.model('Stock',{"_id":String, "data":Array});
+var StockModel = mongoose.model('Stock',{"_id":{"c":Number,"d":Date}, "d":Array});
 
 
 function arraysIdentical(a, b) {
@@ -32,8 +38,9 @@ function arraysIdentical(a, b) {
     return true;
 };
 
-function getStockInfo(i) {
+function getStockInfo(names) {
 
+    var stockNameString = ""
     var stockName = 'sh'+stockCodes[i]
 
     var options = {
@@ -48,6 +55,9 @@ function getStockInfo(i) {
             eval(chunk.toString());
             var stockNameVar = eval("hq_str_"+stockName);
             var stockInfoArray = stockNameVar.split(",");
+            var dateString = stockInfoArray[stockInfoArray.length-3]+"T"+stockInfoArray[stockInfoArray.length-2];
+            var dateObj = new Date(dateString);
+
             if (arraysIdentical(stockInfoArray,prevStockInfo[i])) {
                 console.log("identical "+stockName);
             } else {
