@@ -23,7 +23,7 @@ fs.readFile("stock-list.txt",'utf8',function(err,data){
 var prevStockInfo = {};
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/sina_data');
+mongoose.connect('mongodb://localhost/ss/real_data');
 
 var StockModel = mongoose.model('Stock',{"_id":{"c":Number,"d":Date}, "d":Array});
 
@@ -42,7 +42,9 @@ function getStockInfo(names) {
 
     var stockNameString = ""
     var stockName = 'sh'+stockCodes[i]
-
+    for (var i = names.length - 1; i >= 0; i--) {
+        names[i]
+    };
     var options = {
         host: 'hq.sinajs.cn',
         port: 80,

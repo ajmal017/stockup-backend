@@ -1,5 +1,6 @@
 #!/bin/bash
-cd ~
+
+# mount disk
 sudo fdisk -l
 echo -n "What is the name of the disk? "
 read diskName
@@ -18,7 +19,7 @@ sudo chown trader:trader /data-drive
 line=$(sudo -i blkid|tail -1)
 words=($line)
 UUID=${line[1]}
-echo "$UUID /data-drive ext4 defaults 1 2" >> /etc/fstab
+sudo echo "$UUID /data-drive ext4 defaults 1 2" >> /etc/fstab
 
 #generate ssh key
 cd ~/.ssh
@@ -30,10 +31,6 @@ read placeholder
 aptInstall () {
 	echo "Y" | sudo apt-get install $1 &> ~/init-script.log
 }
-
-cd /
-sudo apt-get update
-echo "Y" | sudo apt-get upgrade &> ~/init-script.log
 
 echo "Installing things, may take a while..."
 aptInstall apache2
@@ -47,7 +44,19 @@ aptInstall python-dev
 aptInstall python-pip
 sudo pip install pymongo
 
-echo "alias gclone='git clone git@github.com:guoyr/stockup-backend.git'" >> ~/.bashrc
+# shorthands
+addAbbrev () {
+	echo $1 >> ~/.bash_profile
+}
+
+upgate() {
+	sudo apt-get update
+	echo "Y" | sudo apt-get upgrade &> ~/init-script.log
+}
+
+addAbbrev "alias gclone='git clone git@github.com:guoyr/stockup-backend.git'"
+addAbbrev "alias ls='ls -G'"
+
 
 git config --global user.name "Robert Guo"
 git config --global user.email "robert.guo@10gen.com"
@@ -70,4 +79,7 @@ npm install
 mkdir /data-drive/db/
 mkdir /data-drive/log/	
 (crontab -l ; echo "@reboot sudo /usr/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log")| crontab -
+
+
+
 
