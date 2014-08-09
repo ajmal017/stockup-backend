@@ -1,23 +1,7 @@
 // Load the http module to create an http server.                                                                                                                                                                      \
-                                                                                                                                                                                                                        
+
 var http = require('http');
-
-var stockNames = [];
-
-fs = require("fs");
-fs.readFile("stock-list.txt",'utf8',function(err,data){
-    if (err) {
-        return console.log(err);
-    };
-    var array = data.toString().split("\n");
-    for (var i = 1; i < array.length; i++) {
-        if (array[i][0] == "#" || array[i].length < 3) {continue};
-        var stockName = parseInt(array[i].split(" ")[1]);
-        stockNames.push(stockName);
-    };
-    console.log(stockNames);
-})
-
+var iconv = require('iconv-lite');
 
 
 var prevStockInfo = {};
@@ -26,6 +10,28 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ss/real_data');
 
 var StockModel = mongoose.model('Stock',{"_id":{"c":Number,"d":Date}, "d":Array});
+
+fs = require("fs");
+fs.readFile("stock-list.txt",'utf8',function(err,data){
+    if (err) {
+        console.log(err);
+    };
+    var stockNames = [];
+
+    var array = data.toString().split("\n");
+    for (var i = 1; i < array.length; i++) {
+        if (array[i][0] == "#" || array[i].length < 3) {continue};
+        var stockName = parseInt(array[i].split(" ")[1]);
+        stockNames.push(stockName);
+    };
+
+
+    a = stockNames.slice(20,35)
+    getStockInfo(a)
+    setInterval(getStockInfo,3000,a)
+})
+
+
 
 
 function arraysIdentical(a, b) {
@@ -39,48 +45,50 @@ function arraysIdentical(a, b) {
 };
 
 function getStockInfo(names) {
-
     var stockNameString = ""
-    var stockName = 'sh'+stockCodes[i]
     for (var i = names.length - 1; i >= 0; i--) {
-        names[i]
+        stockNameString += 'sh'+names[i] + ','
     };
     var options = {
         host: 'hq.sinajs.cn',
         port: 80,
-        path: '/list='+stockName
+        path: '/?list='+stockNameString
     };
-
 
     http.get(options, function(res) {
         res.on('data', function(chunk) {
-            eval(chunk.toString());
-            var stockNameVar = eval("hq_str_"+stockName);
-            var stockInfoArray = stockNameVar.split(",");
-            var dateString = stockInfoArray[stockInfoArray.length-3]+"T"+stockInfoArray[stockInfoArray.length-2];
-            var dateObj = new Date(dateString);
+            try {
+                str = iconv.decode(chunk, 'GB18030');
+                eval(str.toString());
+                for (var i = names.length - 1; i >= 0; i--) {
+                    var stockName = names[i]
+                    var stockNameVar = eval("hq_str_sh"+stockName);
+                    var stockInfoArray = stockNameVar.split(",");
+                    var dateString = stockInfoArray[stockInfoArray.length-3]+"T"+stockInfoArray[stockInfoArray.length-2];
+                    var dateObj = new Date(dateString);
 
-            if (arraysIdentical(stockInfoArray,prevStockInfo[i])) {
-                console.log("identical "+stockName);
-            } else {
-                console.log("writing to DB "+stockName);
-                //write to DB                                                                                                                                                                                           
-                var stock = new StockModel({"_id":stockName+"_"+stockInfoArray[stockInfoArray.length-3]+"_"+stockInfoArray[stockInfoArray.length-2],"data":stockInfoArray});
-                stock.save(function (err) {
-                    if (err) console.log(err);
-                    console.log('inserted');
-                });
+                    if (arraysIdentical(stockInfoArray,prevStockInfo[i])) {
+                        console.log("identical "+stockName);
+                    } else {
+                        console.log("writing to DB "+stockName);
+                        //write to DB                                                                                                                                                                                           
+                        var stock = new StockModel({"_id":{"c":stockName,"d":dateObj},"d":stockInfoArray});
+                        stock.save(function (err) {
+                            if (err) console.log(err);
+                            else console.log('inserted');
+                        });
 
-                prevStockInfo[i] = stockInfoArray;
+                        prevStockInfo[i] = stockInfoArray;
+                    }
+                };
+            } catch (err) {
+                console.log(err);
             }
-    });
-}).on("error", function(e) {
-    console.log("got error" + e.message);
+            
+            
+        });
+    }).on("error", function(e) {
+        console.log("got error" + e.message);
     });
 }
 
-var i = 0;
-while (i < 0) {
-    getStockInfo(i%15);
-    i ++;
-}

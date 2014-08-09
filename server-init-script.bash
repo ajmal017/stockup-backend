@@ -36,6 +36,7 @@ echo "Installing things, may take a while..."
 aptInstall apache2
 aptInstall php5
 aptInstall nodejs
+aptInstall nodejs-legacy
 aptInstall npm
 aptInstall mongodb
 aptInstall git
@@ -73,6 +74,7 @@ sudo chown -R www-data:www-data /var/www/
 sudo -Hu www-data git clone git@github.com:guoyr/stockup-backend.git /var/www/stockup-backend
 sudo -Hu www-data ln -s /var/www/stockup-backend/deploy.php /var/www/html/deploy.php
 cd /var/www/stockup-backend
+sudo npm isntall nodemon
 npm install
 
 # start MongoDB
