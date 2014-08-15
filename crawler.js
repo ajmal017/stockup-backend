@@ -7,9 +7,10 @@ var iconv = require('iconv-lite');
 var prevStockInfo = {};
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/ss/real_data');
+mongoose.connect('mongodb://localhost/ss/');
 
-var StockModel = mongoose.model('Stock',{"_id":{"c":Number,"d":Date}, "d":Array});
+var StockSchema = new Schema({"_id":{"c":Number,"d":Date}, "d":Array}, {autoIndex:false})
+var StockModel = mongoose.model('Stock', StockSchema, 'stocks');
 
 fs = require("fs");
 fs.readFile("stock-list.txt",'utf8',function(err,data){
