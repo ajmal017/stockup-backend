@@ -9,7 +9,7 @@ var prevStockInfo = {};
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ss/');
 
-var StockSchema = new Schema({"_id":{"c":Number,"d":Date}, "d":Array}, {autoIndex:false})
+var StockSchema = new mongoose.Schema({"_id":{"c":Number,"d":Date}, "d":Array}, {autoIndex:false})
 var StockModel = mongoose.model('Stock', StockSchema, 'stocks');
 
 fs = require("fs");
@@ -27,7 +27,7 @@ fs.readFile("stock-list.txt",'utf8',function(err,data){
     };
 
 
-    a = stockNames.slice(20,35)
+    a = stockNames.slice(20,25)
     getStockInfo(a)
     setInterval(getStockInfo,3000,a)
 })
@@ -61,6 +61,7 @@ function getStockInfo(names) {
             try {
                 str = iconv.decode(chunk, 'GB18030');
                 eval(str.toString());
+                console.log(str.toString())
                 for (var i = names.length - 1; i >= 0; i--) {
                     var stockName = names[i]
                     var stockNameVar = eval("hq_str_sh"+stockName);
@@ -83,7 +84,7 @@ function getStockInfo(names) {
                     }
                 };
             } catch (err) {
-                console.log(err);
+                console.log("error" + err);
             }
             
             
