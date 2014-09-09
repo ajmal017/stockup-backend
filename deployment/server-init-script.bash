@@ -57,14 +57,19 @@ upgate() {
 	echo "Y" | sudo apt-get upgrade &> ~/init-script.log
 }
 
+# git stuff
 addAbbrev "alias gclone='git clone git@github.com:guoyr/stockup-backend.git'"
 addAbbrev "alias ls='ls -G'"
 
+gcam() {
+    git commit -am "$1"
+}
 
 git config --global user.name "Robert Guo"
 git config --global user.email "robert.guo@10gen.com"
 
 # setup deployment hook
+
 sudo mkdir /var/www/.ssh
 sudo chown -R www-data:www-data /var/www/.ssh/
 
@@ -79,6 +84,10 @@ cd /var/www/stockup-backend/servers
 sudo pip install -r requirements.txt
 # sudo npm isntall nodemon
 # npm install
+
+sudo cp /var/www/stockup-backend/deployment/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+sudo cp /var/www/stockup-backend/deployment/ports.conf /etc/apache2/ports.conf 
+
 
 # start MongoDB
 mkdir /data-drive/db/
