@@ -60,10 +60,8 @@ upgate() {
 # git stuff
 addAbbrev "alias gclone='git clone git@github.com:guoyr/stockup-backend.git'"
 addAbbrev "alias ls='ls -G'"
+addAbbrev "gcam() {git commit -am \"$1\"}"
 
-gcam() {
-    git commit -am "$1"
-}
 
 git config --global user.name "Robert Guo"
 git config --global user.email "robert.guo@10gen.com"
@@ -95,7 +93,7 @@ mkdir /data-drive/log/
 
 # TODO: change to use replica set and config file
 (crontab -l ; echo "@reboot sudo /usr/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log")| crontab -
-(crontab -l ; echo "@reboot sudo supervisord")| crontab -
+(crontab -l ; echo "@reboot sudo supervisord -c /var/www/stockup-backend/deployment/supervisord.conf")| crontab -
 
 
 
