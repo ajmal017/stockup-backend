@@ -37,6 +37,7 @@ node_modules
 build
 out
 mongo*.jar
+*.pyc
 
 # Eclipse files
 .classpath

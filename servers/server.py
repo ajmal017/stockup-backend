@@ -5,6 +5,8 @@ import tornado.ioloop
 from tornado.web import Application
 
 from tornado.options import options, define
+
+import config
 from request_handlers import *
 
 
@@ -23,7 +25,7 @@ class StockApplication(Application):
         ]
 
         settings = dict(
-            debug=True,
+            debug=config.DEBUG,
             xsrf_cookies=True,
             stock_db=client.ss
 
