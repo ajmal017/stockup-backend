@@ -1,5 +1,7 @@
 #! /bin/sh
-#
+# 
+# DOES NOT FUCKING WORK
+# 
 # Downloaded from:
 # http://bazaar.launchpad.net/~ubuntu-branches/ubuntu/trusty/supervisor/trusty/view/head:/debian/supervisor.init
 #
@@ -28,8 +30,8 @@
 . /lib/lsb/init-functions
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=supervisord
-SUPERVISORCTL=supervisorctl
+DAEMON=/usr/local/bin/supervisord
+SUPERVISORCTL=/usr/local/bin/supervisorctl
 NAME=supervisord
 DESC=supervisor
 

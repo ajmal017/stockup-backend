@@ -44,6 +44,7 @@ aptInstall emacs
 aptInstall python-dev
 aptInstall python-pip
 sudo pip install pymongo
+sudo pip install supervisor
 
 # shorthands
 addAbbrev () {
@@ -80,8 +81,10 @@ npm install
 # start MongoDB
 mkdir /data-drive/db/
 mkdir /data-drive/log/	
-(crontab -l ; echo "@reboot sudo /usr/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log")| crontab -
 
+# TODO: change to use replica set
+(crontab -l ; echo "@reboot sudo /usr/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log")| crontab -
+(crontab -l ; echo "@reboot sudo supervisord")| crontab -
 
 
 
