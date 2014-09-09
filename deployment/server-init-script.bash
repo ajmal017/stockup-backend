@@ -61,7 +61,7 @@ upgate() {
 addAbbrev "alias gclone='git clone git@github.com:guoyr/stockup-backend.git'"
 addAbbrev "alias ls='ls -G'"
 addAbbrev "gcam() {git commit -am \"$1\"}"
-
+addAbbrev "alias sctl=sudo supervisorctl -c '/var/www/stockup-backend/deployment/supervisord.conf'"
 
 git config --global user.name "Robert Guo"
 git config --global user.email "robert.guo@10gen.com"
@@ -85,7 +85,7 @@ sudo pip install -r requirements.txt
 
 sudo cp /var/www/stockup-backend/deployment/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 sudo cp /var/www/stockup-backend/deployment/ports.conf /etc/apache2/ports.conf 
-
+sudo cp /var/www/stockup-backend/deployment/mongodb.conf /etc/init/mongodb.conf
 
 # start MongoDB
 mkdir /data-drive/db/
