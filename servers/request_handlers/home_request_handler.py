@@ -1,4 +1,4 @@
-from request_handlers.base_request_handler import BaseRequestHandler
+from base_request_handler import BaseRequestHandler
 
 
 class HomeRequestHandler(BaseRequestHandler):

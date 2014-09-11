@@ -1,0 +1,1 @@
+# use feedback_server to clean list of invalid apns tokens

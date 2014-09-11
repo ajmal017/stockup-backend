@@ -1,13 +1,15 @@
 import time
+
 from lib.apns import APNs, Payload
+from tornado import ioloop
 
 import config
 
+
 apns = APNs(use_sandbox=True)
 
-from tornado import ioloop
 
-apns = APNs(use_sandbox=True, cert_file='certs/stockup_dev_cert.pem', key_file='certs/stockup_key_nopass.pem')
+apns = APNs(use_sandbox=True, cert_file="certs/stockup_dev_cert.pem", key_file="certs/stockup_key_nopass.pem")
 
 def success():
     print("Sent push message to APNS gateway.")

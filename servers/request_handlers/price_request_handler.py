@@ -1,6 +1,6 @@
 from datetime import datetime
 from tornado import gen
-from request_handlers.base_request_handler import BaseRequestHandler
+from base_request_handler import BaseRequestHandler
 
 
 class PriceRequestHandler(BaseRequestHandler):

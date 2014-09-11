@@ -1,3 +1,4 @@
 pycurl
 motor
 tornado
+psutil

@@ -5,11 +5,10 @@ import tornado.options
 import tornado.httpserver
 import tornado.ioloop
 from tornado.web import Application
-
 from tornado.options import options, define
 
-import config
 from request_handlers import *
+import config
 
 
 define("port", default=9990, help="run on the given port", type=int)
