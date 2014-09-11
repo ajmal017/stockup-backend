@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import codecs
 
 import logging
 import sys
@@ -25,7 +26,7 @@ define("interval", default=2000, help="max number of open connections allowed")
 class SinaCrawler:
     num_connections = 0
     ## TODO: make this not hard coded in
-    stocks_list_all = open('/var/www/stockup-backend/cron_scripts/stocks_all.txt', 'r').readlines()
+    stocks_list_all = codecs.open('/var/www/stockup-backend/cron_scripts/stocks_all.txt', 'r', encoding='utf-8').readlines()
 
     def __init__(self):
         self.start_line = options.start
