@@ -62,8 +62,9 @@ class SinaCrawler:
                     continue
                 else:
                     self.stock_info_cache[name] = time
-                    yield {"_id": {"c": self.stock_ids[name], "d": time}, "d": stock_info_list}
+                    yield {"_id": {"c": int(self.stock_ids[name]), "d": time}, "d": stock_info_list}
             except Exception, e:
+                logger.error('stock_info_list')
                 logger.error(datetime.now())
                 logger.error(sys.exc_info()[0])
 
