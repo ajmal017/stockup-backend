@@ -13,7 +13,6 @@ from tornado.options import options, define
 
 AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
-logging.basicConfig(filename='../../crawler_log',level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 db = motor.MotorClient().ss
@@ -25,7 +24,7 @@ define("interval", default=2000, help="max number of open connections allowed")
 
 class SinaCrawler:
     num_connections = 0
-    stocks_list_all = open('stocks_all.txt', 'r').readlines()
+    stocks_list_all = open('/var/www/stockup-backend/cron_scripts/stocks_all.txt', 'r').readlines()
 
     def __init__(self):
         self.start_line = options.start
@@ -113,7 +112,7 @@ class SinaCrawler:
 
 def main():
     crawler = SinaCrawler()
-    periodic_callback = PeriodicCallback(crawler.fetch_stock_info, 500)
+    periodic_callback = PeriodicCallback(crawler.fetch_stock_info, options.interval)
     periodic_callback.start()
     IOLoop.instance().start()
 
