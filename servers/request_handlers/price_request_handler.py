@@ -19,12 +19,14 @@ class PriceRequestHandler(BaseRequestHandler):
 
         :return:
         """
-        start_time_raw = self.get_argument('start_time')
-        end_time_raw = self.get_argument('end_time')
-        stock_ids = map(lambda x: int(x), self.get_argument('stock_ids').split(','))
-
-        if not (start_time_raw and end_time_raw and stock_ids):
+        start_time_raw = self.get_argument('start_time', None)
+        end_time_raw = self.get_argument('end_time', None)
+        ids_raw = self.get_argument('stock_ids', None)
+        if not (start_time_raw and end_time_raw and ids_raw):
+            self.write({'arguments': ['start_time', 'end_time', 'stock_ids']})
             return
+
+        stock_ids = map(lambda x: int(x), ids_raw.split(','))
 
         start_time = datetime.strptime(start_time_raw, self.datetime_repr)
         end_time = datetime.strptime(end_time_raw, self.datetime_repr)
@@ -42,7 +44,9 @@ class PriceRequestHandler(BaseRequestHandler):
 
         cursor = self.db.stocks.find(query)
 
+        self.write('[')
         for document in (yield cursor.to_list(length=100)):
             del document['_id']['d']
             self.write({'doc': document})
-            self.write('\n')
+            self.write(',')
+        self.write(']')

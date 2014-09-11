@@ -24,6 +24,7 @@ define("interval", default=2000, help="max number of open connections allowed")
 
 class SinaCrawler:
     num_connections = 0
+    ## TODO: make this not hard coded in
     stocks_list_all = open('/var/www/stockup-backend/cron_scripts/stocks_all.txt', 'r').readlines()
 
     def __init__(self):
