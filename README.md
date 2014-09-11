@@ -3,7 +3,4 @@ stockup-backend
 
 Backend for stockup
 
-test
-test
-test
-test5
+Our MVP is a product that makes people money
