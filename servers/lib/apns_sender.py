@@ -34,4 +34,5 @@ apns.gateway_server.connect(on_connected)
 # Wait for the connection and send a notification
 ioloop.IOLoop.instance().add_timeout(time.time()+5, send)
 
-ioloop.IOLoop.instance().start()
+
+print "here"

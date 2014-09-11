@@ -3,14 +3,19 @@ from tornado import gen
 from base_request_handler import BaseRequestHandler
 
 
-class PriceRequestHandler(BaseRequestHandler):
-
-    def initialize(self):
-        self.set_header('Content-Type', 'application/json')
-        self.set_header('Cache-Control', 'no-cache, must-revalidate')
+class ConditionRequestHandler(BaseRequestHandler):
 
     @gen.coroutine
-    def get(self):
+    def get(self, condition=None):
+        if condition == "price":
+            yield self.get_price()
+        elif condition == "macd":
+            print "macd"
+        elif condition == "kdj":
+            print "kdj"
+
+    @gen.coroutine
+    def get_price(self):
         """
         :arg:
             start_time: the start time of the query in ISO 8601 format without timezone
@@ -44,9 +49,9 @@ class PriceRequestHandler(BaseRequestHandler):
 
         cursor = self.db.stocks.find(query)
 
-        self.write('[')
+        self.write_start_array()
         for document in (yield cursor.to_list(length=100)):
             del document['_id']['d']
             self.write({'doc': document})
-            self.write(',')
-        self.write(']')
+            self.write_separator()
+        self.write_end_array()

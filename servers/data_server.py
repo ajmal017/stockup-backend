@@ -21,13 +21,13 @@ class StockApplication(Application):
     def __init__(self):
         handlers = [
             (r"/", HomeRequestHandler),
-            (r"/macd", MacdRequestHandler),
-            (r"/price", PriceRequestHandler)
+            (r"/condition/(macd|kdj|price)/", ConditionRequestHandler),
+            (r"/algo/(upload)/", AlgoRequestHandler)
         ]
 
         settings = dict(
             debug=config.DEBUG,
-            xsrf_cookies=True,
+            xsrf_cookies=not config.DEBUG,
             stock_db=client.ss
 
         )

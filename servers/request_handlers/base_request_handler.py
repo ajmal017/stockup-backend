@@ -4,7 +4,6 @@ from tornado.web import RequestHandler
 class BaseRequestHandler(RequestHandler):
 
     def initialize(self):
-        self.set_header("Content-Type", "application/json")
         self.set_header("Cache-Control", "no-cache, must-revalidate")
 
     @property
@@ -14,3 +13,12 @@ class BaseRequestHandler(RequestHandler):
     @property
     def datetime_repr(self):
         return '%Y-%m-%dT%H:%M:%SZ'
+
+    def write_start_array(self):
+        self.write("[")
+
+    def write_end_array(self):
+        self.write("]")
+
+    def write_separator(self):
+        self.write(",")
