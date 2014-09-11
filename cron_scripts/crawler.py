@@ -31,7 +31,7 @@ class SinaCrawler:
         self.start_line = options.start
         self.count = options.count
         self.connection_limit = options.maxConnections
-        self.stock_ids = []
+        self.stock_ids = {}
         self.coll = db.stocks
         self.parse_stocks_list()
         self.stock_info_cache = {}
@@ -42,6 +42,7 @@ class SinaCrawler:
 
     def inserted(self, result, error):
         if error:
+            logger.error(datetime.now())
             logger.error(str(error))
         else:
             #TODO: parse the newly inserted data
@@ -60,8 +61,9 @@ class SinaCrawler:
                     continue
                 else:
                     self.stock_info_cache[name] = time
-                    yield {"_id": {"c": name, "d": time}, "d": stock_info_list}
+                    yield {"_id": {"c": self.stock_ids[name], "d": time}, "d": stock_info_list}
             except Exception, e:
+                logger.error(datetime.now())
                 logger.error(sys.exc_info()[0])
 
 
@@ -89,7 +91,7 @@ class SinaCrawler:
             if cur_line >= self.start_line + self.count:
                 break
             name, sid = line.strip().split()
-            self.stock_ids.append(sid)
+            self.stock_ids[name] = sid
 
 
     def construct_url(self):
@@ -97,7 +99,7 @@ class SinaCrawler:
         netloc = "hq.sinajs.cn:80"
         path = "/"
         params = ""
-        query = "list=" + ",".join("sh"+str(s) for s in self.stock_ids)
+        query = "list=" + ",".join("sh"+str(s) for s in self.stock_ids.values())
         frags = ""
         return urlparse.urlunparse((scheme, netloc, path, params, query, frags))
 
