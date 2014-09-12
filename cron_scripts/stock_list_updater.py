@@ -21,16 +21,21 @@ AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
 @gen.coroutine
 def fetch_info():
+
     name_code_dict = {}
     code_name_dict = {}
+
+    tasks = []
+    client = AsyncHTTPClient()
+
     for i in range(0, 2000):
         a = "sh60" + str(i).zfill(4)
         url = SinaCrawler.construct_url([a])
-        client = AsyncHTTPClient()
+        tasks.append(gen.Task(client.fetch, url))
 
-        task = gen.Task(client.fetch, url)
-        yield task
-        response = task.result()
+    responses = yield tasks
+
+    for response in responses:
         body = response.body.decode(encoding='GB18030', errors='strict').strip()
         stock_info_list = body.split('"')[1].split(',')
         sid = body.split('"')[0].strip("=").split("_")[-1]
@@ -39,16 +44,17 @@ def fetch_info():
             code_name_dict[sid] = name
             name_code_dict[name] = sid
 
-    coll.save({"_id": "stock_catalog",
-               "name_code_dict": name_code_dict,
-               "code_name_dict": code_name_dict}, callback=inserted)
+    try:
+        _id = yield coll.save({"_id": "stock_catalog",
+                               "name_code_dict": name_code_dict,
+                               "code_name_dict": code_name_dict})
+        logger.info("saved stock catalog")
+        logger.info(str(_id))
 
-def inserted(self, result, error):
-    if error:
+    except Exception, e:
         logger.error(datetime.now())
-        logger.error(str(error))
-    else:
-        print result
+        logger.error(str(e))
+
 
 
 fetch_info()
