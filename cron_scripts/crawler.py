@@ -25,13 +25,9 @@ define("maxConnections", default=500, help="max number of open connections allow
 define("interval", default=2000, help="fetch data interval")
 define("debug", default=False, help="print debug statements to the console")
 
+
 class SinaCrawler:
     num_connections = 0
-    ## TODO: make this not hard coded in
-    try:
-        stocks_list_all = codecs.open('stocks_all.txt', 'r', encoding='utf-8').readlines()
-    except IOError, e:
-        stocks_list_all = codecs.open('/var/www/stockup-backend/cron_scripts/stocks_all.txt', 'r', encoding='utf-8').readlines()
 
     def __init__(self):
         self.start_line = options.start
