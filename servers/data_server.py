@@ -20,9 +20,10 @@ class StockApplication(Application):
 
     def __init__(self):
         handlers = [
-            (r"/", HomeRequestHandler),
-            (r"/condition/(macd|kdj|price)/", ConditionRequestHandler),
-            (r"/algo/(upload)/", AlgoRequestHandler)
+            (r"/?", HomeRequestHandler),
+            (r"/condition/(macd|kdj|price)/?", ConditionRequestHandler),
+            (r"/algo/(upload)/?", AlgoRequestHandler),
+            (r"/stock-list/?", StockListRequestHandler)
         ]
 
         settings = dict(
