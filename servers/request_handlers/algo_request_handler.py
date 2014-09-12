@@ -15,4 +15,3 @@ class AlgoRequestHandler(BaseRequestHandler):
     @gen.coroutine
     def post_upload(self):
         data = json.loads(self.request.body)
-        

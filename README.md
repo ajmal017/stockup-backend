@@ -18,19 +18,14 @@ How the algorithm is stored and
 	"conditions":
 	{
 		"price_type": "market|limited",
-
 		"trade_method": "buy|sell",
-
 		"volume": "NUM_STOCK_TO_TRADE",
-
 		"primary_condition": "", // primary condition that must match exactly, the other conditions can match in a timeframe
-
 		"price_condition": {
 			"type": "more_than|less_than",
 			"price": "PRICE_OF_STOCK",
 			"window": "WINDOW" // timeframe in seconds where this condition must match that of the primary condition, 0 indicates time of trade
 		},
-
 		"kdj_condition": { // D pass K for sell, K pass D for buy
 			"window": "WINDOW",
 			"n": "9", // NOT USER CHANGEABLE FOR NOW
