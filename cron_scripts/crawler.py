@@ -7,6 +7,7 @@ import urlparse
 from datetime import datetime
 
 import motor
+from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.ioloop import IOLoop, PeriodicCallback
 from tornado.options import options, define
@@ -18,15 +19,18 @@ logger = logging.getLogger(__name__)
 
 db = motor.MotorClient().ss
 
-define("start", default=20, help="start line in stocks_all.txt")
-define("count", default=30, help="number of stocks to lookup in stocks_all.txt")
+define("start", default=0, help="start line in stocks_all.txt")
+define("count", default=300, help="number of stocks to lookup in stocks_all.txt")
 define("maxConnections", default=50, help="max number of open connections allowed")
-define("interval", default=2000, help="max number of open connections allowed")
+define("interval", default=2000, help="fetch data interval")
 
 class SinaCrawler:
     num_connections = 0
     ## TODO: make this not hard coded in
-    stocks_list_all = codecs.open('/var/www/stockup-backend/cron_scripts/stocks_all.txt', 'r', encoding='utf-8').readlines()
+    try:
+        stocks_list_all = codecs.open('stocks_all.txt', 'r', encoding='utf-8').readlines()
+    except IOError, e:
+        stocks_list_all = codecs.open('/var/www/stockup-backend/cron_scripts/stocks_all.txt', 'r', encoding='utf-8').readlines()
 
     def __init__(self):
         self.start_line = options.start
@@ -34,7 +38,6 @@ class SinaCrawler:
         self.connection_limit = options.maxConnections
         self.stock_ids = {}
         self.coll = db.stocks
-        self.parse_stocks_list()
         self.stock_info_cache = {}
 
     @property
@@ -64,12 +67,32 @@ class SinaCrawler:
                     self.stock_info_cache[name] = time
                     yield {"_id": {"c": int(self.stock_ids[name]), "d": time}, "d": stock_info_list}
             except Exception, e:
-                logger.error('stock_info_list')
+                logger.error('stock_info_generator ')
                 logger.error(datetime.now())
                 logger.error(sys.exc_info()[0])
 
+    @classmethod
+    def construct_url(cls, values):
+        scheme = "http"
+        netloc = "hq.sinajs.cn:80"
+        path = "/"
+        params = ""
+        query = "list=" + ",".join(str(s) for s in values)
+        frags = ""
+        return urlparse.urlunparse((scheme, netloc, path, params, query, frags))
 
-    def handle_request(self, response):
+
+    @gen.coroutine
+    def fetch_stock_info(self):
+        if SinaCrawler.num_connections > self.connection_limit:
+            return
+
+        http_client = AsyncHTTPClient()
+
+        SinaCrawler.num_connections += 1
+        futureTask = gen.Task(http_client.fetch, self.construct_url(self.stock_ids.values()))
+        yield futureTask
+        response = futureTask.result()
         SinaCrawler.num_connections -= 1
 
         if response.error:
@@ -81,42 +104,9 @@ class SinaCrawler:
                 self.coll.insert(stock_list, callback=self.inserted, continue_one_error=True)
 
 
-
-
-    def parse_stocks_list(self):
-        cur_line = -1
-        for line in SinaCrawler.stocks_list_all:
-            if line[0] == "#": continue
-            cur_line += 1
-            if cur_line < self.start_line:
-                continue
-            if cur_line >= self.start_line + self.count:
-                break
-            name, sid = line.strip().split()
-            self.stock_ids[name] = sid
-
-
-    def construct_url(self):
-        scheme = "http"
-        netloc = "hq.sinajs.cn:80"
-        path = "/"
-        params = ""
-        query = "list=" + ",".join("sh"+str(s) for s in self.stock_ids.values())
-        frags = ""
-        return urlparse.urlunparse((scheme, netloc, path, params, query, frags))
-
-
-    def fetch_stock_info(self):
-        if SinaCrawler.num_connections > self.connection_limit:
-            return
-
-        http_client = AsyncHTTPClient()
-        http_client.fetch(self.construct_url(), self.handle_request)
-        SinaCrawler.num_connections += 1
-
-
 def main():
     crawler = SinaCrawler()
+    crawler.fetch_stock_info()
     periodic_callback = PeriodicCallback(crawler.fetch_stock_info, options.interval)
     periodic_callback.start()
     IOLoop.instance().start()

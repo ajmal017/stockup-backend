@@ -1,12 +1,8 @@
 import time
 
-from lib.apns import APNs, Payload
+from ..lib.apns import APNs, Payload
 from tornado import ioloop
-
-import config
-
-
-apns = APNs(use_sandbox=True)
+from .. import config
 
 
 apns = APNs(use_sandbox=True, cert_file="certs/stockup_dev_cert.pem", key_file="certs/stockup_key_nopass.pem")
