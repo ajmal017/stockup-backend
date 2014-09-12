@@ -5,6 +5,7 @@ Script to update the list of valid stocks
 """
 from datetime import datetime
 import logging
+from sys import stdout
 
 import motor
 from tornado import gen
@@ -37,6 +38,7 @@ def fetch_info():
             name = stock_info_list[0]
             code_name_dict[sid] = name
             name_code_dict[name] = sid
+
     coll.save({"_id": "stock_catalog",
                "name_code_dict": name_code_dict,
                "code_name_dict": code_name_dict}, callback=inserted)
