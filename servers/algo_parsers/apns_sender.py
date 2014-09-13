@@ -1,7 +1,8 @@
 import time
 
-from ..lib.apns import APNs, Payload
 from tornado import ioloop
+
+from ..lib.apns import APNs, Payload
 from .. import config
 
 
