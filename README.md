@@ -15,11 +15,11 @@ How the algorithm is stored and
 	"user_id": "USER_ID",
 	"stock_id": "STOCK_THIS_ALGO_APPLIES_TO",
 	"algo_name": "NAME_OF_ALGO",
+	"price_type": "market|limited",
+	"trade_method": "buy|sell",
+	"volume": "NUM_STOCK_TO_TRADE",
 	"conditions":
 	{
-		"price_type": "market|limited",
-		"trade_method": "buy|sell",
-		"volume": "NUM_STOCK_TO_TRADE",
 		"primary_condition": "", // primary condition that must match exactly, the other conditions can match in a timeframe
 		"price_condition": {
 			"type": "more_than|less_than",

@@ -8,7 +8,9 @@ class Condition:
         self.ts = datetime.now()
         self.is_primary = True
 
-    def from_dict(self, dict):
+    @classmethod
+    def from_dict(cls, dict):
+        return None
 
     def match_condition(self, ts):
         self.ts = ts
