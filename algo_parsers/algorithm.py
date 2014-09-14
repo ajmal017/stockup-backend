@@ -1,9 +1,16 @@
 import json
-from algo_parsers.ConditionFactory import ConditionFactory
+import logging
+import motor
+from tornado import gen
+from algo_parsers.KdjCondition import KdjCondition
+from algo_parsers.PriceCondition import PriceCondition
+from servers import config
 
 __author__ = 'guo'
+logger = logging.getLogger(__name__)
 
 class Algorithm:
+    db = motor.MotorClient().ss
 
     def __init__(self):
         self.algo_id = None
@@ -11,21 +18,80 @@ class Algorithm:
         self.user_id = None
         self.stock_id = None
         self.algo_name = None
-        self.conditions = []
-
-    @property
-    def primary_condition(self):
-        return self.conditions[0]
+        self.price_type = None
+        self.trade_method = None
+        self.volume = None
+        self.conditions = None
+        self.matched = False
+        self.time = False
 
     @classmethod
-    def from_json(cls, json_str):
+    def from_json(cls, json_dict, time):
         algo = cls()
-        json_dict = json.loads(json_str)
         algo.algo_name = json_dict["algo_name"]
         algo.algo_v = json_dict["algo_v"]
         algo.stock_id = json_dict["stock_id"]
-        algo.algo_id = json_dict["algo_id"]
-        algo.conditions = ConditionFactory.conditions_from_dict(json_dict)
+        algo.user_id = json_dict["user_id"]
+        algo.algo_id = json_dict["_id"]
+        algo.price_type = json_dict["price_type"]
+        algo.trade_method = json_dict["trade_method"]
+        algo.volume = json_dict["volume"]
+        algo.time = time
+        # algo.conditions = cls.conditions_from_dict(json_dict)
+        return algo
+
+    @classmethod
+    def conditions_from_dict(cls, condition_dict):
+        conditions = {}
+        for k, v in condition_dict["conditions"].iteritems():
+            if k == "price_condition":
+                conditions[k] = PriceCondition.from_dict(v)
+            elif k == "kdj_condition":
+                conditions[k] = KdjCondition.from_dict(v)
+        conditions[condition_dict["primary_condition"]].is_primary = True
+        return conditions
+
+    @gen.coroutine
+    def match(self):
+
+        for condition in self.conditions:
+            if (yield condition.match_condition(self) == False):
+                raise gen.Return(False)
+
+        raise gen.Return(True)
+
+    @classmethod
+    @gen.coroutine
+    def parse_all(cls, time):
+        algos = []
+        cursor = cls.db.algos.find()
+
+        for algo_json in (yield cursor.to_list(length=100)):
+            algos.append(cls.from_json(algo_json, time))
+
+        if config.DEBUG:
+            logger.info("got algos " + str(len(algos)))
+
+        algo_futures = []
+        for algo in algos:
+            algo_futures.append(algo.match())
+
+        match_responses = yield algo_futures
+
+        notifications_futures = []
+        for i in range(len(match_responses)):
+            if match_responses[i]:
+                # algorithm matched
+                notifications_futures.append(algos[i].send_notification())
+
+        notif_responses = yield notifications_futures
+
+        #TODO: if a notification/transaction failed, do something meaningful
+
+    @gen.coroutine
+    def send_notification(self):
+        print "matched" + self.algo_name
+        raise gen.Return(True)
 
 
 

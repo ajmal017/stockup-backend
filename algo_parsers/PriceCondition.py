@@ -1,11 +1,17 @@
+from tornado import gen
 from algo_parsers.Condition import Condition
 
 
 class PriceCondition(Condition):
 
-    def match_condition_primary(self):
-        return False
+    @classmethod
+    def from_dict(cls, dict):
+        condition = cls()
 
-    def match_condition_secondary(self):
-        return False
+    @gen.coroutine
+    def match_condition_secondary(self, algo):
+        pass
 
+    @gen.coroutine
+    def match_condition_primary(self, algo):
+        raise gen.Return(True)

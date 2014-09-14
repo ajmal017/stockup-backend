@@ -1,26 +1,27 @@
 from datetime import datetime
+from tornado import gen
 
 
 class Condition:
 
     def __init__(self):
-        self.stock = None
-        self.ts = datetime.now()
-        self.is_primary = True
+        self.is_primary = False
 
     @classmethod
     def from_dict(cls, dict):
         return None
 
-    def match_condition(self, ts):
-        self.ts = ts
-        if  self.is_primary:
-            return self.match_condition_primary()
+    @gen.coroutine
+    def match_condition(self, algo):
+        if self.is_primary:
+            yield self.match_condition_primary(algo)
         else:
-            return self.match_condition_secondary()
+            yield self.match_condition_secondary(algo)
 
-    def match_condition_secondary(self):
-        return False
+    @gen.coroutine
+    def match_condition_secondary(self, algo):
+        raise gen.Return(False)
 
-    def match_condition_primary(self):
-        return False
+    @gen.coroutine
+    def match_condition_primary(self, algo):
+        raise gen.Return(False)

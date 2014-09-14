@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import codecs
 from collections import deque, defaultdict
 
 import logging
@@ -12,6 +11,7 @@ from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.ioloop import IOLoop, PeriodicCallback
 from tornado.options import options, define, parse_command_line
+from algo_parsers.algorithm import Algorithm
 
 
 AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
@@ -127,9 +127,12 @@ class SinaCrawler:
             logger.error(str(e))
             return
 
-        # TODO: computer KDJ
-        # TODO: computer MACD
+        # TODO: compute KDJ
+        # TODO: compute MACD
         # TODO: parse all algorithms, use self.time
+        yield Algorithm.parse_all(self.time)
+
+
 
 
 
