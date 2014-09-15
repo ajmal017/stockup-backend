@@ -92,6 +92,7 @@ class Algorithm:
     def process_match(self):
         print "matched " + self.algo_name
         #TODO: store in DB
+
         #TODO: send notification
         raise gen.Return(True)
 
