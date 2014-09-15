@@ -7,16 +7,17 @@ import tornado.ioloop
 from tornado.ioloop import PeriodicCallback
 from tornado.web import Application
 from tornado.options import options, define
+from algo_parsers.apns_sender import apns_sender
 from cron_scripts.crawler import SinaCrawler
 
 from request_handlers import *
 import config
+from servers.request_handlers.tests.conditions_test import ConditionsTestHandler
 
 
 define("port", default=9990, help="run on the given port", type=int)
 
 client = motor.MotorClient()
-
 
 class StockApplication(Application):
 
@@ -25,7 +26,8 @@ class StockApplication(Application):
             (r"/?", HomeRequestHandler),
             (r"/condition/(macd|kdj|price)/?", ConditionRequestHandler),
             (r"/algo/(upload)/?", AlgoRequestHandler),
-            (r"/stock-list/?", StockListRequestHandler)
+            (r"/stock-list/?", StockListRequestHandler),
+            (r"/tests/(price|apns)/?", ConditionsTestHandler)
         ]
 
         settings = dict(
@@ -44,7 +46,9 @@ def main():
     http_server.listen(options.port)
     SinaCrawler().fetch_stock_info()
     PeriodicCallback(SinaCrawler().fetch_stock_info, options.interval).start()
-    tornado.ioloop.IOLoop.instance().start()
+    loop = tornado.ioloop.IOLoop.instance()
+    loop.add_callback(apns_sender.connect)
+    loop.start()
 
 
 if __name__ == "__main__":

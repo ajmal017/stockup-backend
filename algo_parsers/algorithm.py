@@ -1,9 +1,9 @@
-import json
 import logging
 import motor
 from tornado import gen
 from algo_parsers.KdjCondition import KdjCondition
 from algo_parsers.PriceCondition import PriceCondition
+from algo_parsers.apns_sender import apns_sender
 from servers import config
 
 __author__ = 'guo'
@@ -22,8 +22,7 @@ class Algorithm:
         self.trade_method = None
         self.volume = None
         self.conditions = None
-        self.matched = False
-        self.time = False
+        self.time = None
 
     @classmethod
     def from_json(cls, json_dict, time):
@@ -38,8 +37,24 @@ class Algorithm:
         algo.volume = json_dict["volume"]
         algo.time = time
         algo.conditions = cls.conditions_from_dict(json_dict)
-        print algo.conditions
         return algo
+
+    def to_match_dict(self):
+        """
+        Creates a match reference in the matches collection
+
+        :return: the match reference
+        """
+        json_dict = dict()
+        json_dict["algo_v"] = self.algo_v
+        json_dict["stock_id"] = self.stock_id
+        json_dict["user_id"] = self.user_id
+        json_dict["algo_id"] = self.algo_id
+        json_dict["price_type"] = self.price_type
+        json_dict["trade_method"] = self.trade_method
+        json_dict["volume"] = self.volume
+        json_dict["time"] = self.time
+        return json_dict
 
     @classmethod
     def conditions_from_dict(cls, condition_dict):
@@ -54,18 +69,20 @@ class Algorithm:
         return conditions
 
     @gen.coroutine
-    def match(self):
+    def match(self, is_test=False):
         for condition in self.conditions.values():
-            if ((yield condition.match_condition(self)) == False):
+            if not (yield condition.match_condition(self, is_test)):
                 raise gen.Return(False)
-
         raise gen.Return(True)
 
     @classmethod
     @gen.coroutine
-    def parse_all(cls, time):
+    def parse_all(cls, time, test_case=None):
         algos = []
-        cursor = cls.db.algos.find()
+        if test_case:
+            cursor = cls.db.algos.find({"_id": test_case})
+        else:
+            cursor = cls.db.algos.find()
 
         for algo_json in (yield cursor.to_list(length=100)):
             algos.append(cls.from_json(algo_json, time))
@@ -87,16 +104,15 @@ class Algorithm:
 
         match_responses = yield match_futures
 
-
     @gen.coroutine
     def process_match(self):
-        print "matched " + self.algo_name
-        #TODO: store in DB
+        #save the match record for future reference
+        Algorithm.db.matches.insert(self.to_match_dict())
 
-        #TODO: send notification
+        # apns_sender.send()
+        #TODO: if a notification/transaction failed, do something meaningful
         raise gen.Return(True)
 
-        #TODO: if a notification/transaction failed, do something meaningful
 
 
 

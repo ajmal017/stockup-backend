@@ -1,35 +1,38 @@
 import time
+from lib.apns import Payload, APNs
+from tornado import gen
 
-from tornado import ioloop
-
-from ..lib.apns import APNs, Payload
-from .. import config
-
-
-apns = APNs(use_sandbox=True, cert_file="servers/certs/stockup_dev_cert.pem", key_file="servers/certs/stockup_key_nopass.pem")
-
-def success():
-    print("Sent push message to APNS gateway.")
-    ioloop.IOLoop.instance().stop()
-
-def send():
-    identifier = 1
-    expiry = time.time()+3600
-    token_hex = config.TEST_IPAD_TOKEN
-    payload = Payload(alert="Hello World!", sound="default", badge=1)
-    apns.gateway_server.send_notification(identifier, expiry, token_hex, payload, success)
-
-def on_response(status, seq):
-    print "sent push message to APNS gateway error status %s seq %s" % (status, seq)
-
-def on_connected():
-    apns.gateway_server.receive_response(on_response)
-
-# Connect the apns
-apns.gateway_server.connect(on_connected)
-
-# Wait for the connection and send a notification
-ioloop.IOLoop.instance().add_timeout(time.time()+5, send)
+from servers import config
 
 
-print "here"
+class ApnsSender:
+    apns = APNs(use_sandbox=True,
+                cert_file="../servers/certs/stockup_dev_cert.pem",
+                key_file="../servers/certs/stockup_key_nopass.pem")
+    connected = False
+
+    @classmethod
+    def connect(cls):
+        ApnsSender.apns.gateway_server.connect(cls.on_connected)
+
+    @gen.coroutine
+    def send(self):
+        if not ApnsSender.connected:
+            return
+        identifier = 1
+        expiry = time.time()+3600
+        token_hex = config.TEST_IPAD_TOKEN
+        payload = Payload(alert="Hello World!", sound="default", badge=1)
+        yield gen.Task(ApnsSender.apns.gateway_server.send_notification, identifier, expiry, token_hex, payload)
+        print "Sent push message to APNS gateway."
+
+    @classmethod
+    def on_response(cls, status, seq):
+        print "sent push message to APNS gateway error status %s seq %s" % (status, seq)
+
+    @classmethod
+    def on_connected(cls):
+        ApnsSender.apns.gateway_server.receive_response(cls.on_response)
+        cls.connected = True
+
+apns_sender = ApnsSender()

@@ -1,5 +1,4 @@
 import unittest
-from tornado import gen
 import tornado.ioloop
 from tornado.testing import AsyncTestCase
 
