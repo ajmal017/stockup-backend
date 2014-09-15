@@ -37,7 +37,8 @@ class Algorithm:
         algo.trade_method = json_dict["trade_method"]
         algo.volume = json_dict["volume"]
         algo.time = time
-        # algo.conditions = cls.conditions_from_dict(json_dict)
+        algo.conditions = cls.conditions_from_dict(json_dict)
+        print algo.conditions
         return algo
 
     @classmethod
@@ -48,14 +49,14 @@ class Algorithm:
                 conditions[k] = PriceCondition.from_dict(v)
             elif k == "kdj_condition":
                 conditions[k] = KdjCondition.from_dict(v)
+
         conditions[condition_dict["primary_condition"]].is_primary = True
         return conditions
 
     @gen.coroutine
     def match(self):
-
-        for condition in self.conditions:
-            if (yield condition.match_condition(self) == False):
+        for condition in self.conditions.values():
+            if ((yield condition.match_condition(self)) == False):
                 raise gen.Return(False)
 
         raise gen.Return(True)
@@ -70,7 +71,7 @@ class Algorithm:
             algos.append(cls.from_json(algo_json, time))
 
         if config.DEBUG:
-            logger.info("got algos " + str(len(algos)))
+            logger.info("parsing algos " + str(len(algos)))
 
         algo_futures = []
         for algo in algos:
@@ -78,20 +79,23 @@ class Algorithm:
 
         match_responses = yield algo_futures
 
-        notifications_futures = []
+        match_futures = []
         for i in range(len(match_responses)):
             if match_responses[i]:
                 # algorithm matched
-                notifications_futures.append(algos[i].send_notification())
+                match_futures.append(algos[i].process_match())
 
-        notif_responses = yield notifications_futures
+        match_responses = yield match_futures
 
-        #TODO: if a notification/transaction failed, do something meaningful
 
     @gen.coroutine
-    def send_notification(self):
-        print "matched" + self.algo_name
+    def process_match(self):
+        print "matched " + self.algo_name
+        #TODO: store in DB
+        #TODO: send notification
         raise gen.Return(True)
+
+        #TODO: if a notification/transaction failed, do something meaningful
 
 
 

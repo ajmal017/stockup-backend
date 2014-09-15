@@ -4,8 +4,10 @@ import motor
 import tornado.options
 import tornado.httpserver
 import tornado.ioloop
+from tornado.ioloop import PeriodicCallback
 from tornado.web import Application
 from tornado.options import options, define
+from cron_scripts.crawler import SinaCrawler
 
 from request_handlers import *
 import config
@@ -40,6 +42,8 @@ def main():
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(StockApplication())
     http_server.listen(options.port)
+    SinaCrawler().fetch_stock_info()
+    PeriodicCallback(SinaCrawler().fetch_stock_info, options.interval).start()
     tornado.ioloop.IOLoop.instance().start()
 
 

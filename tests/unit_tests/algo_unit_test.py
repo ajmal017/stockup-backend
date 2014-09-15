@@ -5,9 +5,10 @@ from tornado import gen
 from tornado.options import options
 
 from algo_parsers.algorithm import Algorithm
+from cron_scripts.crawler import SinaCrawler
 
 
-class CrawlerUnitTest():
+class CrawlerUnitTest(unittest.TestCase):
     """
     Unit Test for the Various Algorithms
     """
@@ -23,8 +24,8 @@ class CrawlerUnitTest():
         Algorithm().parse_all(1)
 
 if __name__ == "__main__":
-    CrawlerUnitTest().test_algo_parser()
-    # unittest.main()
+    unittest.main()
     options.logging = None
+    SinaCrawler().fetch_stock_info()
+    periodic_callback = tornado.PeriodicCallback(SinaCrawler().fetch_stock_info, options.interval)
     tornado.ioloop.IOLoop.instance().start()
-

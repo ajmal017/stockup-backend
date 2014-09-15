@@ -62,6 +62,7 @@ addAbbrev "alias gclone='git clone git@github.com:guoyr/stockup-backend.git'"
 addAbbrev "alias ls='ls -G'"
 addAbbrev "gcam() {git commit -am \"$1\"}"
 addAbbrev "alias sctl=sudo supervisorctl -c '/var/www/stockup-backend/deployment/supervisord.conf'"
+addAbbrev "export PYTHONPATH=$PYTHOPATH:/var/www/stockup-backend/"
 
 git config --global user.name "Robert Guo"
 git config --global user.email "robert.guo@10gen.com"

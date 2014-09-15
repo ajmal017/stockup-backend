@@ -6,6 +6,8 @@ class Condition:
 
     def __init__(self):
         self.is_primary = False
+        self.window = 0
+
 
     @classmethod
     def from_dict(cls, dict):

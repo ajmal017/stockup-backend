@@ -131,19 +131,3 @@ class SinaCrawler:
         # TODO: compute MACD
         # TODO: parse all algorithms, use self.time
         yield Algorithm.parse_all(self.time)
-
-
-
-
-
-def main():
-    parse_command_line()
-    # create a new instance
-    SinaCrawler().fetch_stock_info()
-    periodic_callback = PeriodicCallback(SinaCrawler().fetch_stock_info, options.interval)
-    periodic_callback.start()
-    IOLoop.instance().start()
-
-
-if __name__ == '__main__':
-    main()
