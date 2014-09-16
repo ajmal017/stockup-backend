@@ -2,16 +2,15 @@
 from collections import deque, defaultdict
 
 import logging
-import urlparse
 from datetime import datetime
 
 import motor
 from pymongo.errors import DuplicateKeyError
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
-from tornado.ioloop import IOLoop, PeriodicCallback
-from tornado.options import options, define, parse_command_line
+from tornado.options import options, define
 from algo_parsers.algorithm import Algorithm
+from util import construct_sina_url
 
 
 AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
@@ -20,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 define("start", default=0, help="start line in stocks_all.txt")
-define("count", default=256, help="number of stocks to lookup in stocks_all.txt")
+define("count", default=256, help="number of stocks to lookup")
 define("maxConnections", default=256, help="max number of open connections allowed")
 define("interval", default=2470, help="fetch data interval")
 define("debug", default=False, help="print debug statements to the console")
@@ -61,18 +60,7 @@ class SinaCrawler:
             except Exception, e:
                 logger.error('stock_info_generator ')
                 logger.error(datetime.now())
-                logger.error(e)
-
-    @classmethod
-    def construct_url(cls, values):
-        scheme = "http"
-        netloc = "hq.sinajs.cn:80"
-        path = "/"
-        params = ""
-        query = "list=" + ",".join(str(s) for s in values)
-        frags = ""
-        return urlparse.urlunparse((scheme, netloc, path, params, query, frags))
-
+                logger.error(str(e))
 
     @gen.coroutine
     def fetch_stock_info(self):
@@ -102,7 +90,7 @@ class SinaCrawler:
         http_client = AsyncHTTPClient()
 
         for segment in SinaCrawler.segmented_catalog:
-            fetch_tasks.append(http_client.fetch(self.construct_url(segment)))
+            fetch_tasks.append(http_client.fetch(construct_sina_url(segment)))
             SinaCrawler.num_connections += 1
 
         responses = yield fetch_tasks

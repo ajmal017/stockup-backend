@@ -4,20 +4,28 @@
 Script to update the list of valid stocks
 """
 from datetime import datetime
+import os
+import sys
 import logging
-from sys import stdout
 
 import motor
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.ioloop import IOLoop, PeriodicCallback
-from crawler import SinaCrawler
+
+here = os.path.dirname(os.path.abspath(__file__))
+par_here = os.path.join(here, os.pardir)
+if par_here not in sys.path:
+    sys.path.append(par_here)
+from util import construct_sina_url
 
 db = motor.MotorClient().ss
 coll = db.stock_catalog
 logger = logging.getLogger("update_stock_list")
 
 AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
+
+
 
 @gen.coroutine
 def fetch_info():
@@ -30,7 +38,7 @@ def fetch_info():
 
     for i in range(0, 2000):
         a = "sh60" + str(i).zfill(4)
-        url = SinaCrawler.construct_url([a])
+        url = construct_sina_url([a])
         tasks.append(gen.Task(client.fetch, url))
 
     responses = yield tasks
