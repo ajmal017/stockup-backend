@@ -1,14 +1,16 @@
+import os
 import time
 from lib.apns import Payload, APNs
 from tornado import gen
 
 from servers import config
 
+_here = os.path.dirname(os.path.abspath(__file__))
 
 class ApnsSender:
     apns = APNs(use_sandbox=True,
-                cert_file="../servers/certs/stockup_dev_cert.pem",
-                key_file="../servers/certs/stockup_key_nopass.pem")
+                cert_file=os.path.join(_here, "certs/stockup_dev_cert.pem"),
+                key_file=os.path.join(_here, "certs/stockup_key_nopass.pem"))
     connected = False
 
     @classmethod

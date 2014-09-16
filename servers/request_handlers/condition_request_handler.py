@@ -24,7 +24,7 @@ class ConditionRequestHandler(BaseRequestHandler):
 
         :return:
         """
-        # TODO: add interval param to only get a subset in a certail
+        # TODO: add interval param to only get a a result every x seconds
         start_time_raw = self.get_argument('start_time', None)
         end_time_raw = self.get_argument('end_time', None)
         ids_raw = self.get_argument('stock_ids', None)

@@ -68,9 +68,9 @@ class Algorithm:
         return conditions
 
     @gen.coroutine
-    def match(self, is_test=False):
+    def match(self):
         for condition in self.conditions.values():
-            if not (yield condition.match_condition(self, is_test)):
+            if not (yield condition.match_condition(self)):
                 raise gen.Return(False)
         raise gen.Return(True)
 
