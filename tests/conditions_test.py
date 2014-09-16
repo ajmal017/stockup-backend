@@ -1,5 +1,4 @@
 from datetime import datetime
-import motor
 from tornado import gen
 
 from algo_parsers.algorithm import Algorithm
@@ -21,10 +20,10 @@ class ConditionsTestHandler(BaseRequestHandler):
     @gen.coroutine
     def test_price(self):
         # Use a different DB for test
-        Algorithm.db = motor.MotorClient().ss_test
+        self.write({"test": "starting price condition"})
         time = datetime.now()
         yield Algorithm().parse_all(time)
-        self.write({"test": "price condition"})
+        self.write({"test": "finished price condition"})
 
     @gen.coroutine
     def test_apns(self):

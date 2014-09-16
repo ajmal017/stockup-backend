@@ -1,6 +1,7 @@
 import json
 
 from tornado import gen
+from config import get_db
 
 from request_handlers.base_request_handler import BaseRequestHandler
 
@@ -22,4 +23,4 @@ class AlgoRequestHandler(BaseRequestHandler):
         algo_data["_id"] = _id
         del algo_data["algo_id"]
         del algo_data["algo_v"]
-        self.db.algos.save(algo_data)
+        get_db().algos.save(algo_data)

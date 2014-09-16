@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from tornado import gen
+from config import datetime_repr, get_db
 
 from request_handlers.base_request_handler import BaseRequestHandler
 
@@ -36,8 +37,8 @@ class ConditionRequestHandler(BaseRequestHandler):
 
         stock_ids = map(lambda x: int(x), ids_raw.split(','))
 
-        start_time = datetime.strptime(start_time_raw, self.datetime_repr)
-        end_time = datetime.strptime(end_time_raw, self.datetime_repr)
+        start_time = datetime.strptime(start_time_raw, datetime_repr())
+        end_time = datetime.strptime(end_time_raw, datetime_repr())
         print start_time, end_time, stock_ids
         query = {
             '_id.c': {
@@ -49,7 +50,7 @@ class ConditionRequestHandler(BaseRequestHandler):
             }
         }
 
-        cursor = self.db.stocks.find(query)
+        cursor = get_db().stocks.find(query)
 
         self.write_start_array()
         for document in (yield cursor.to_list(length=100)):

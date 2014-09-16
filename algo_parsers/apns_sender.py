@@ -3,7 +3,7 @@ import time
 
 from tornado import gen
 
-from algo_parsers import config
+import config
 from lib.apns import Payload, APNs
 
 

@@ -1,11 +1,11 @@
 import logging
-
 import motor
+
 from tornado import gen
 
 from algo_parsers.KdjCondition import KdjCondition
 from algo_parsers.PriceCondition import PriceCondition
-from algo_parsers.config import debug_log
+from config import debug_log
 
 
 __author__ = 'guo'
@@ -13,8 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class Algorithm:
-
-    db = motor.MotorClient().ss
+    db = motor.MotorClient().stocks
 
     @classmethod
     def from_json(cls, json_dict, time):
@@ -47,7 +46,7 @@ class Algorithm:
     @gen.coroutine
     def parse_all(cls, time):
         algos = []
-        cursor = cls.db.algos.find()
+        cursor = Algorithm.db.algos.find()
 
         for algo_json in (yield cursor.to_list(100)):
             algos.append(cls.from_json(algo_json, time))

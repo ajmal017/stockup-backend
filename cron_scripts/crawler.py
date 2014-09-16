@@ -4,12 +4,12 @@ from collections import deque, defaultdict
 import logging
 from datetime import datetime
 
-import motor
 from pymongo.errors import DuplicateKeyError
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.options import options, define
 from algo_parsers.algorithm import Algorithm
+from config import datetime_repr, get_db, DEBUG
 from util import construct_sina_url
 
 
@@ -18,18 +18,16 @@ AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 logger = logging.getLogger(__name__)
 
 
-define("start", default=0, help="start line in stocks_all.txt")
-define("count", default=256, help="number of stocks to lookup")
-define("maxConnections", default=256, help="max number of open connections allowed")
-define("interval", default=2470, help="fetch data interval")
-define("debug", default=False, help="print debug statements to the console")
+define("skip", default=0, help="start line in stocks_all.txt", type=int)
+define("limit", default=256, help="number of stocks to lookup", type=int)
+define("maxConnections", default=256, help="max number of open connections allowed", type=int)
+define("interval", default=2470, help="fetch data interval", type=int)
 
 
 class SinaCrawler:
     num_connections = 0
     stock_catalog = {}
     segmented_catalog = []
-    db = motor.MotorClient().ss
     cur_iteration = -1L
     # keep a list of the moment recent times and pray we won't have concurrency issues here
     # i.e. if an earlier time info returns after a later time info
@@ -38,17 +36,13 @@ class SinaCrawler:
     def __init__(self):
         self.time = datetime.now()
 
-    @property
-    def datetime_repr(self):
-        return '%Y-%m-%dT%H:%M:%S'
-
     def stock_info_generator(self, stock_vars):
         for var in stock_vars:
             try:
                 stock_info_list = var.split('"')[1].split(',')
                 name = stock_info_list[0]
                 time_str = stock_info_list[-3] + "T" + stock_info_list[-2]
-                time = datetime.strptime(time_str, self.datetime_repr)
+                time = datetime.strptime(time_str, datetime_repr())
 
                 if name in SinaCrawler.stock_info_cache and time in SinaCrawler.stock_info_cache[name]:
                     # already saved this
@@ -64,18 +58,18 @@ class SinaCrawler:
 
     @gen.coroutine
     def fetch_stock_info(self):
-        if options.debug:
-            print "open connections", SinaCrawler.num_connections
+        if DEBUG:
+            print "open crawler connections", SinaCrawler.num_connections
         SinaCrawler.cur_iteration += 1
         if SinaCrawler.num_connections > options.maxConnections:
             return
 
         # update the catalog every once in a while
         if SinaCrawler.cur_iteration % 1000 == 0:
-            val = yield SinaCrawler.db.stock_catalog.find_one()
+            val = yield get_db().stock_catalog.find_one()
             if val:
                 SinaCrawler.stock_catalog = val["name_code_dict"]
-                vals = SinaCrawler.stock_catalog.values()[options.start:options.count]
+                vals = SinaCrawler.stock_catalog.values()[options.skip:options.limit]
                 SinaCrawler.segmented_catalog = []
 
                 length = len(vals)
@@ -106,7 +100,7 @@ class SinaCrawler:
                 stock_vars = response.body.decode(encoding='GB18030', errors='strict').strip().split('\n')
                 stock_list = [item for item in self.stock_info_generator(stock_vars) if item]
                 if stock_list:
-                    insert_tasks.append(SinaCrawler.db.stocks.insert(stock_list, continue_on_error=True))
+                    insert_tasks.append(get_db().stocks.insert(stock_list, continue_on_error=True))
 
         try:
             yield insert_tasks

@@ -1,14 +1,17 @@
 #!/usr/bin/env python
+import sys
+import tornado
+from tornado.options import define
 
+if "/var/www/stockup-backend/" not in sys.path:
+    sys.path.append("/var/www/stockup-backend/")
 """
 Script to update the list of valid stocks
 """
 from datetime import datetime
 import os
-import sys
 import logging
 
-import motor
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.ioloop import IOLoop, PeriodicCallback
@@ -17,14 +20,14 @@ here = os.path.dirname(os.path.abspath(__file__))
 par_here = os.path.join(here, os.pardir)
 if par_here not in sys.path:
     sys.path.append(par_here)
+
 from util import construct_sina_url
 
-db = motor.MotorClient().ss
-coll = db.stock_catalog
 logger = logging.getLogger("update_stock_list")
 
 AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
+define("env", default="dev", help="environment: prod|dev|stage|test", type=str)
 
 @gen.coroutine
 def fetch_info():
@@ -52,7 +55,8 @@ def fetch_info():
             name_code_dict[name] = sid
 
     try:
-        _id = yield coll.save({"_id": "stock_catalog",
+        from config import get_db
+        _id = yield get_db().stock_catalog.save({"_id": "stock_catalog",
                                "name_code_dict": name_code_dict,
                                "code_name_dict": code_name_dict})
         logger.info("saved stock catalog")
@@ -62,7 +66,11 @@ def fetch_info():
         logger.error(datetime.now())
         logger.error(str(e))
 
+def main():
+    tornado.options.parse_command_line()
+    fetch_info()
+    PeriodicCallback(fetch_info, 2*3600*1000).start()
+    IOLoop.instance().start()
 
-fetch_info()
-PeriodicCallback(fetch_info, 2*3600*1000).start()
-IOLoop.instance().start()
+if __name__ == "__main__":
+    main()
