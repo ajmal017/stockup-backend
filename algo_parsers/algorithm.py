@@ -1,9 +1,12 @@
 import logging
+
 import motor
 from tornado import gen
+
 from algo_parsers.KdjCondition import KdjCondition
 from algo_parsers.PriceCondition import PriceCondition
-from servers.config import debug_log
+from algo_parsers.config import debug_log
+
 
 __author__ = 'guo'
 logger = logging.getLogger(__name__)
@@ -76,14 +79,11 @@ class Algorithm:
 
     @classmethod
     @gen.coroutine
-    def parse_all(cls, time, test_case=None):
+    def parse_all(cls, time):
         algos = []
-        if test_case:
-            cursor = cls.db.algos.find({"_id": test_case})
-        else:
-            cursor = cls.db.algos.find()
+        cursor = cls.db.algos.find()
 
-        for algo_json in (yield cursor.to_list(length=100)):
+        for algo_json in (yield cursor.to_list(100)):
             algos.append(cls.from_json(algo_json, time))
 
         debug_log(logger, "parsing algos " + str(len(algos)))

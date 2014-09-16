@@ -15,16 +15,16 @@ class Condition:
         return None
 
     @gen.coroutine
-    def match_condition(self, algo, is_test=False):
+    def match_condition(self, algo):
         if self.is_primary:
-            yield self.match_condition_primary(algo, is_test)
+            yield self.match_condition_primary(algo)
         else:
-            yield self.match_condition_secondary(algo, is_test)
+            yield self.match_condition_secondary(algo)
 
     @gen.coroutine
-    def match_condition_secondary(self, algo, is_test):
+    def match_condition_secondary(self, algo):
         raise gen.Return(False)
 
     @gen.coroutine
-    def match_condition_primary(self, algo, is_test):
+    def match_condition_primary(self, algo):
         raise gen.Return(False)

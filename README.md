@@ -38,3 +38,10 @@ How the algorithm is stored and
 }
 
 ```
+
+price indices:
+
+0. name
+1. opening today
+2. closing yesterday
+3. current price

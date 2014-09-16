@@ -73,16 +73,17 @@ class SinaCrawler:
         # update the catalog every once in a while
         if SinaCrawler.cur_iteration % 1000 == 0:
             val = yield SinaCrawler.db.stock_catalog.find_one()
-            SinaCrawler.stock_catalog = val["name_code_dict"]
-            vals = SinaCrawler.stock_catalog.values()[options.start:options.count]
-            SinaCrawler.segmented_catalog = []
+            if val:
+                SinaCrawler.stock_catalog = val["name_code_dict"]
+                vals = SinaCrawler.stock_catalog.values()[options.start:options.count]
+                SinaCrawler.segmented_catalog = []
 
-            length = len(vals)
-            wanted_parts = length/30
-            SinaCrawler.segmented_catalog = [ vals[i*length / wanted_parts: (i+1)*length / wanted_parts] for i in range(wanted_parts) ]
-
+                length = len(vals)
+                wanted_parts = length/30
+                SinaCrawler.segmented_catalog = [vals[i*length / wanted_parts: (i+1)*length / wanted_parts] for i in range(wanted_parts)]
 
         if not SinaCrawler.stock_catalog:
+            logger.error("no stock catalog")
             return
 
         fetch_tasks = []
@@ -111,6 +112,7 @@ class SinaCrawler:
             yield insert_tasks
         except DuplicateKeyError, e:
             # only most recent error is reported because of the bulk insert API
+            logger.error("fetch_stock_info")
             logger.error(datetime.now())
             logger.error(str(e))
             return

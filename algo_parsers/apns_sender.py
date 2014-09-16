@@ -1,9 +1,11 @@
 import os
 import time
-from lib.apns import Payload, APNs
+
 from tornado import gen
 
-from servers import config
+from algo_parsers import config
+from lib.apns import Payload, APNs
+
 
 _here = os.path.dirname(os.path.abspath(__file__))
 
