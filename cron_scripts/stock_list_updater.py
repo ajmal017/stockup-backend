@@ -26,7 +26,6 @@ logger = logging.getLogger("update_stock_list")
 AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
 
-
 @gen.coroutine
 def fetch_info():
 

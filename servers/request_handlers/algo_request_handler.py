@@ -16,3 +16,8 @@ class AlgoRequestHandler(BaseRequestHandler):
     def post_upload(self):
         algo_data = json.loads(self.request.body)
         # save algo data
+        _id = {"algo_id": algo_data["algo_id"], "algo_v": algo_data["algo_v"]}
+        algo_data["_id"] = _id
+        del algo_data["algo_id"]
+        del algo_data["algo_v"]
+        self.db.algos.save(algo_data)
