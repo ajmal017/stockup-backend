@@ -3,8 +3,7 @@ import motor
 from tornado import gen
 from algo_parsers.KdjCondition import KdjCondition
 from algo_parsers.PriceCondition import PriceCondition
-from algo_parsers.apns_sender import apns_sender
-from servers import config
+from servers.config import debug_log
 
 __author__ = 'guo'
 logger = logging.getLogger(__name__)
@@ -87,8 +86,7 @@ class Algorithm:
         for algo_json in (yield cursor.to_list(length=100)):
             algos.append(cls.from_json(algo_json, time))
 
-        if config.DEBUG:
-            logger.info("parsing algos " + str(len(algos)))
+        debug_log(logger, "parsing algos " + str(len(algos)))
 
         algo_futures = []
         for algo in algos:

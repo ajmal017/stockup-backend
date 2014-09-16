@@ -56,7 +56,6 @@ def fetch_info():
         logger.error(str(e))
 
 
-
 fetch_info()
 PeriodicCallback(fetch_info, 2*3600*1000).start()
 IOLoop.instance().start()

@@ -24,6 +24,7 @@ class ConditionRequestHandler(BaseRequestHandler):
 
         :return:
         """
+        # TODO: add interval param to only get a subset in a certail
         start_time_raw = self.get_argument('start_time', None)
         end_time_raw = self.get_argument('end_time', None)
         ids_raw = self.get_argument('stock_ids', None)
@@ -35,16 +36,15 @@ class ConditionRequestHandler(BaseRequestHandler):
 
         start_time = datetime.strptime(start_time_raw, self.datetime_repr)
         end_time = datetime.strptime(end_time_raw, self.datetime_repr)
-
+        print start_time, end_time, stock_ids
         query = {
             '_id.c': {
                 '$in': stock_ids
             },
-            '$and':
-            [
-                {'_id.d': {'$gte': start_time}},
-                {'_id.d': {'$lte': end_time}}
-            ]
+            '_id.d': {
+                '$gte': start_time,
+                '$lte': end_time
+            }
         }
 
         cursor = self.db.stocks.find(query)
