@@ -11,12 +11,11 @@
 	$commands = array(
 		'echo $PWD',
 		'whoami',
-		'git pull',
+		'git pull --rebase',
 		'git status',
 		'git submodule sync',
 		'git submodule update',
-		'git submodule status',
-		'npm install'
+		'git submodule status'
 		);
 
  // Run the commands for output
