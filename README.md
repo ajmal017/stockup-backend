@@ -24,10 +24,10 @@ How the algorithm is stored and
 		"price_condition": {
 			"type": "more_than|less_than",
 			"price": "PRICE_OF_STOCK",
-			"window": "WINDOW" // timeframe in seconds where this condition must match that of the primary condition, 0 indicates time of trade
+			"window": "(int)WINDOW" // timeframe in seconds where this condition must match that of the primary condition, 0 indicates time of trade
 		},
 		"kdj_condition": { // D pass K for sell, K pass D for buy
-			"window": "WINDOW",
+			"window": ""
 			"n": "9", // NOT USER CHANGEABLE FOR NOW
 			"m": "3",
 			"m1": "3",
