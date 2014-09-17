@@ -6,7 +6,7 @@ from datetime import datetime
 import motor
 from pymongo.errors import DuplicateKeyError
 from tornado import gen
-from tornado.httpclient import AsyncHTTPClient
+from tornado.httpclient import AsyncHTTPClient, HTTPError
 from tornado.options import options, define
 
 from algo_parsers.algorithm import Algorithm
@@ -86,13 +86,17 @@ class SinaCrawler:
         fetch_tasks = []
 
         http_client = AsyncHTTPClient()
-
         for segment in SinaCrawler.segmented_catalog:
-            fetch_tasks.append(http_client.fetch(construct_sina_url(segment), request_timeout=10))
+            fetch_tasks.append(http_client.fetch(construct_sina_url(segment), request_timeout=20))
             SinaCrawler.num_connections += 1
-
-        responses = yield fetch_tasks
-        SinaCrawler.num_connections -= len(responses)
+        try:
+            responses = yield fetch_tasks
+            SinaCrawler.num_connections -= len(responses)
+        except HTTPError, e:
+            logger.error("fetch_stock_info")
+            logger.error(str(e))
+            SinaCrawler.num_connections = 0
+            return
 
         insert_tasks = []
         for response in responses:

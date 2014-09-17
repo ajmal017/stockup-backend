@@ -22,6 +22,7 @@ from request_handlers import *
 
 define("port", default=9990, help="run on the given port", type=int)
 define("env", default="dev", help="environment: prod|dev|stage|test", type=str)
+define("crawler_only", default=False, help="run only the crawler", type=bool)
 
 
 class StockApplication(Application):
@@ -46,13 +47,16 @@ class StockApplication(Application):
 
 def main():
     tornado.options.parse_command_line()
-    http_server = tornado.httpserver.HTTPServer(StockApplication())
-    http_server.listen(options.port)
+    loop = tornado.ioloop.IOLoop.instance()
+
     if options.env != "test":
         SinaCrawler().fetch_stock_info()
         PeriodicCallback(SinaCrawler().fetch_stock_info, options.interval).start()
-    loop = tornado.ioloop.IOLoop.instance()
-    loop.add_callback(apns_sender.connect)
+
+    if not options.crawler_only:
+        apns_sender.connect()
+        tornado.httpserver.HTTPServer(StockApplication()).listen(options.port)
+
     loop.start()
 
 
