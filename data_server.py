@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 import sys
 import motor
-
-if "/var/www/stockup-backend/" not in sys.path:
-    sys.path.append("/var/www/stockup-backend/")
-
 import os
 
 import tornado.httpserver
@@ -21,7 +17,6 @@ from algo_parsers.apns_sender import apns_sender
 import config
 from cron_scripts.crawler import SinaCrawler
 from request_handlers import *
-from tests.conditions_test import ConditionsTestHandler
 
 
 define("port", default=9990, help="run on the given port", type=int)
