@@ -6,7 +6,6 @@ from request_handlers.base_request_handler import BaseRequestHandler
 
 
 class AlgoRequestHandler(BaseRequestHandler):
-
     @gen.coroutine
     def post(self, action=None):
         if action == 'upload':

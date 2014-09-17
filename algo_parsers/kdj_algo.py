@@ -19,6 +19,7 @@ d_lower = 100
 
 curIndex = 0
 
+
 def algo():
     global curIndex
     while curIndex < len(kdjVals):
@@ -29,6 +30,7 @@ def algo():
             curIndex += 1
         else:
             break;
+
 
 def find_next_buy():
     global curIndex
@@ -46,6 +48,7 @@ def find_next_buy():
             break
         k_on_top = (k >= d)
         curIndex += 1
+
 
 def find_next_sell():
     global curIndex
@@ -65,19 +68,21 @@ def find_next_sell():
         k_on_top = (k < d)
         curIndex += 1
 
+
 def _get_close_price(_id):
-    prices = daily_collection.find_one({"_id":_id})
+    prices = daily_collection.find_one({"_id": _id})
     return prices["e"][3]
+
 
 stock_number = "600601"
 
-for stockInfo in kdj_933_collection.find({"_id.c":stock_number},sort=[("id.d",pymongo.ASCENDING)]):
+for stockInfo in kdj_933_collection.find({"_id.c": stock_number}, sort=[("id.d", pymongo.ASCENDING)]):
     kdjVals.append(stockInfo)
 
 algo()
 
 s = 0
-for i in range(3,len(sellPoints)):
-    print buyPoints[i],"," , buyDates[i] , "," , sellPoints[i] , "," , sellDates[i]
+for i in range(3, len(sellPoints)):
+    print buyPoints[i], ",", buyDates[i], ",", sellPoints[i], ",", sellDates[i]
     s = sellPoints[i] - buyPoints[i]
 print s

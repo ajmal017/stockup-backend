@@ -25,65 +25,70 @@ ADJ_CLOSE = 5
 
 INFO_ELEMENTS = "e"
 
-abbrevs = {"n":"name","c":"stock_code","d":"date"}
+abbrevs = {"n": "name", "c": "stock_code", "d": "date"}
 
-def shift(a,v,l):
-	a.append(v)
-	if len(a) > l: a.popleft()
+
+def shift(a, v, l):
+    a.append(v)
+    if len(a) > l: a.popleft()
 
 
 def calcRsv(vals):
-	shift(n_low, vals[LOW], n)
-	shift(n_high, vals[HIGH], n)
-	denominator = (max(n_high) - min(n_low))
-	if abs(denominator) < 0.000001:
-		try:
-			return m_rsv[-1]
-		except IndexError:
-			return -1
+    shift(n_low, vals[LOW], n)
+    shift(n_high, vals[HIGH], n)
+    denominator = (max(n_high) - min(n_low))
+    if abs(denominator) < 0.000001:
+        try:
+            return m_rsv[-1]
+        except IndexError:
+            return -1
 
-	return (vals[CLOSE] - min(n_low))/denominator*100
+    return (vals[CLOSE] - min(n_low)) / denominator * 100
+
 
 def calcK(rsv):
-	shift(m_rsv, rsv, m)
-	return avg(m_rsv)
+    shift(m_rsv, rsv, m)
+    return avg(m_rsv)
+
 
 def calcD(k):
-	shift(m1_k, k, m1)
-	return avg(m1_k)
+    shift(m1_k, k, m1)
+    return avg(m1_k)
+
 
 def avg(a):
-	return float(sum(a))/len(a)
+    return float(sum(a)) / len(a)
+
 
 stock_list = open("../stock-list.txt")
 
 for s in stock_list.readlines():
-	if s[0] == "#": continue
-	stock_number = s.strip().split()[1]
+    if s[0] == "#": continue
+    stock_number = s.strip().split()[1]
 
-	n_low = deque()
-	n_high = deque()
-	m_rsv = deque()
-	m1_k = deque()
+    n_low = deque()
+    n_high = deque()
+    m_rsv = deque()
+    m1_k = deque()
 
-	to_insert = []
-	for stockInfo in daily_collection.find({"_id.c":int(stock_number)},sort=[("_id.d",pymongo.ASCENDING)]):
+    to_insert = []
+    for stockInfo in daily_collection.find({"_id.c": int(stock_number)}, sort=[("_id.d", pymongo.ASCENDING)]):
 
-		rsv = calcRsv(stockInfo[INFO_ELEMENTS])
-		if rsv == -1:
-			continue
-		k = calcK(rsv)
-		d = calcD(k)
-		j = 3*k-2*d
+        rsv = calcRsv(stockInfo[INFO_ELEMENTS])
+        if rsv == -1:
+            continue
+        k = calcK(rsv)
+        d = calcD(k)
+        j = 3 * k - 2 * d
 
-		to_insert.append({"_id":stockInfo["_id"],"k":k,"d":d,"j":j})
-	try:
-		kdj_933_collection.insert(to_insert)
-		print "finished", stock_number
-	except errors.InvalidOperation:
-		print "error", stock_number
+        to_insert.append({"_id": stockInfo["_id"], "k": k, "d": d, "j": j})
+    try:
+        kdj_933_collection.insert(to_insert)
+        print "finished", stock_number
+    except errors.InvalidOperation:
+        print "error", stock_number
 
-	#error 600263
+        # error 600263
 
 
 

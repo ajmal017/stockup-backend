@@ -18,7 +18,6 @@ AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
 logger = logging.getLogger(__name__)
 
-
 define("skip", default=0, help="start line in stocks_all.txt", type=int)
 define("limit", default=256, help="number of stocks to lookup", type=int)
 define("maxConnections", default=256, help="max number of open connections allowed", type=int)
@@ -75,8 +74,9 @@ class SinaCrawler:
                 SinaCrawler.segmented_catalog = []
 
                 length = len(vals)
-                wanted_parts = length/30
-                SinaCrawler.segmented_catalog = [vals[i*length / wanted_parts: (i+1)*length / wanted_parts] for i in range(wanted_parts)]
+                wanted_parts = length / 30
+                SinaCrawler.segmented_catalog = [vals[i * length / wanted_parts: (i + 1) * length / wanted_parts] for i
+                                                 in range(wanted_parts)]
 
         if not SinaCrawler.stock_catalog:
             logger.error("no stock catalog")

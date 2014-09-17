@@ -2,7 +2,6 @@ from tornado import gen
 
 
 class Condition:
-
     def __init__(self):
         self.is_primary = False
         self.window = 0

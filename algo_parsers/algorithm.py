@@ -114,7 +114,7 @@ class Algorithm:
 
     @gen.coroutine
     def process_match(self):
-        #save the match record for future reference
+        # save the match record for future reference
         yield Algorithm.db.matches.insert(self.to_match_dict())
 
         # apns_sender.send()

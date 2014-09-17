@@ -7,7 +7,6 @@ from request_handlers.base_request_handler import BaseRequestHandler
 
 
 class ConditionRequestHandler(BaseRequestHandler):
-
     @gen.coroutine
     def get(self, condition=None):
         if condition == "price":
@@ -39,9 +38,8 @@ class ConditionRequestHandler(BaseRequestHandler):
             start_time = datetime.strptime(start_time_raw, datetime_repr())
             end_time = datetime.strptime(end_time_raw, datetime_repr())
         except ValueError, e:
-            self.write({'error':'field format incorrect'})
+            self.write({'error': 'field format incorrect'})
             return
-
 
         query = {
             '_id.c': {

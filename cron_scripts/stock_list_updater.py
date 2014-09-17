@@ -34,9 +34,9 @@ define("env", default="dev", help="environment: prod|dev|stage|test", type=str)
 
 db = motor.MotorClient().ss
 
+
 @gen.coroutine
 def fetch_info():
-
     name_code_dict = {}
     code_name_dict = {}
 
@@ -61,8 +61,8 @@ def fetch_info():
 
     try:
         _id = yield db.stock_catalog.save({"_id": "stock_catalog",
-                               "name_code_dict": name_code_dict,
-                               "code_name_dict": code_name_dict})
+                                           "name_code_dict": name_code_dict,
+                                           "code_name_dict": code_name_dict})
         logger.info("saved stock catalog")
         logger.info(str(_id))
 
@@ -70,11 +70,13 @@ def fetch_info():
         logger.error(datetime.now())
         logger.error(str(e))
 
+
 def main():
     tornado.options.parse_command_line()
     fetch_info()
-    PeriodicCallback(fetch_info, 2*3600*1000).start()
+    PeriodicCallback(fetch_info, 2 * 3600 * 1000).start()
     IOLoop.instance().start()
+
 
 if __name__ == "__main__":
     main()

@@ -11,6 +11,7 @@ from lib.apns import Payload, APNs
 _here = os.path.dirname(os.path.abspath(__file__))
 logger = logging.getLogger(__name__)
 
+
 class ApnsSender:
     apns = APNs(use_sandbox=True,
                 cert_file=os.path.join(_here, "certs/stockup_dev_cert.pem"),
@@ -28,7 +29,7 @@ class ApnsSender:
         if not ApnsSender.connected:
             raise gen.Return(False)
         identifier = 1
-        expiry = time.time()+3600
+        expiry = time.time() + 3600
         token_hex = config.TEST_IPAD_TOKEN
         payload = Payload(alert="Hello World!", sound="default", badge=1)
         yield gen.Task(ApnsSender.apns.gateway_server.send_notification, identifier, expiry, token_hex, payload)
@@ -43,5 +44,6 @@ class ApnsSender:
     def on_connected(cls):
         ApnsSender.apns.gateway_server.receive_response(cls.on_response)
         cls.connected = True
+
 
 apns_sender = ApnsSender()

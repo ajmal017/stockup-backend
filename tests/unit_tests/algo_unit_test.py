@@ -15,12 +15,14 @@ class ApnsUnitTest(AsyncTestCase):
     """
     Unit Test for Apple Push Notification
     """
+
     @gen_test
     def test_apns(self):
         yield gen.Task(apns_sender.connect)
         apns_sender.on_connected()
         result = yield apns_sender.send()
         self.assertTrue(result)
+
 
 class ConditionUnitTest(AsyncTestCase):
     """
@@ -34,6 +36,7 @@ class ConditionUnitTest(AsyncTestCase):
         matches = yield Algorithm.parse_all(time)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].algo_name, "match_algo")
+
 
 if __name__ == "__main__":
     logging.getLogger('tornado').addHandler(sys.stdout)

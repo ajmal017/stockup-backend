@@ -45,6 +45,7 @@ from tornado import ioloop
 MAX_PAYLOAD_LENGTH = 256
 TIME_OUT = 20
 
+
 class APNs(object):
     """A class representing an Apple Push Notification service connection"""
 
@@ -107,9 +108,9 @@ class APNs(object):
     def feedback_server(self):
         if not self._feedback_connection:
             self._feedback_connection = FeedbackConnection(
-                use_sandbox = self.use_sandbox,
-                cert_file = self.cert_file,
-                key_file = self.key_file
+                use_sandbox=self.use_sandbox,
+                cert_file=self.cert_file,
+                key_file=self.key_file
             )
         return self._feedback_connection
 
@@ -117,9 +118,9 @@ class APNs(object):
     def gateway_server(self):
         if not self._gateway_connection:
             self._gateway_connection = GatewayConnection(
-                use_sandbox = self.use_sandbox,
-                cert_file = self.cert_file,
-                key_file = self.key_file
+                use_sandbox=self.use_sandbox,
+                cert_file=self.cert_file,
+                key_file=self.key_file
             )
         return self._gateway_connection
 
@@ -128,6 +129,7 @@ class APNsConnection(object):
     """
     A generic connection class for communicating with the APNs
     """
+
     def __init__(self, cert_file=None, key_file=None):
         super(APNsConnection, self).__init__()
         self.cert_file = cert_file
@@ -154,12 +156,13 @@ class APNsConnection(object):
         if not self._connecting:
             self._connecting = True
             _ioloop = ioloop.IOLoop.instance()
-            self._connect_timeout = _ioloop.add_timeout(time.time()+TIME_OUT,
-                    self._connecting_timeout_callback)
+            self._connect_timeout = _ioloop.add_timeout(time.time() + TIME_OUT,
+                                                        self._connecting_timeout_callback)
             self._socket = socket(AF_INET, SOCK_STREAM)
-            self._stream = iostream.SSLIOStream(socket=self._socket, ssl_options={"keyfile": self.key_file, "certfile": self.cert_file})
+            self._stream = iostream.SSLIOStream(socket=self._socket,
+                                                ssl_options={"keyfile": self.key_file, "certfile": self.cert_file})
             self._stream.connect((self.server, self.port),
-                    functools.partial(self._on_connected, callback))
+                                 functools.partial(self._on_connected, callback))
 
     def _connecting_timeout_callback(self):
         if not self.is_alive():
@@ -213,7 +216,7 @@ class PayloadAlert(object):
         self.launch_image = launch_image
 
     def dict(self):
-        d = { 'body': self.body }
+        d = {'body': self.body}
         if self.action_loc_key:
             d['action-loc-key'] = self.action_loc_key
         if self.loc_key:
@@ -224,18 +227,23 @@ class PayloadAlert(object):
             d['launch-image'] = self.launch_image
         return d
 
+
 class PayloadTooLargeError(Exception):
     def __init__(self):
         super(PayloadTooLargeError, self).__init__()
 
+
 class TokenLengthOddError(Exception):
     pass
+
 
 class ConnectionError(Exception):
     pass
 
+
 class Payload(object):
     """A class representing an APNs message payload"""
+
     def __init__(self, alert=None, badge=None, sound=None, custom={}):
         super(Payload, self).__init__()
         self.alert = alert
@@ -259,12 +267,12 @@ class Payload(object):
         if self.badge is not None:
             d['badge'] = int(self.badge)
 
-        d = { 'aps': d }
+        d = {'aps': d}
         d.update(self.custom)
         return d
 
     def json(self):
-        return json.dumps(self.dict(), separators=(',',':'), ensure_ascii=False).encode('utf-8')
+        return json.dumps(self.dict(), separators=(',', ':'), ensure_ascii=False).encode('utf-8')
 
     def _check_size(self):
         if len(self.json()) > MAX_PAYLOAD_LENGTH:
@@ -280,13 +288,14 @@ class FeedbackConnection(APNsConnection):
     """
     A class representing a connection to the APNs Feedback server
     """
+
     def __init__(self, use_sandbox=False, **kwargs):
         super(FeedbackConnection, self).__init__(**kwargs)
         self.server = (
             'feedback.push.apple.com',
             'feedback.sandbox.push.apple.com')[use_sandbox]
         self.port = 2196
-        self.buff =''
+        self.buff = ''
 
     def __del__(self):
         super(FeedbackConnection, self).__del__()
@@ -315,10 +324,12 @@ class FeedbackConnection(APNsConnection):
             else:
                 return
 
+
 class GatewayConnection(APNsConnection):
     """
     A class that represents a connection to the APNs gateway server
     """
+
     def __init__(self, use_sandbox=False, **kwargs):
         super(GatewayConnection, self).__init__(**kwargs)
         self.server = (
@@ -348,7 +359,7 @@ class GatewayConnection(APNsConnection):
         payload_length_bin = APNs.packed_ushort_big_endian(len(payload_json))
 
         notification = ('\1' + identifier_bin + expiry + token_length_bin + token_bin
-            + payload_length_bin + payload_json)
+                        + payload_length_bin + payload_json)
 
         return notification
 
@@ -359,10 +370,11 @@ class GatewayConnection(APNsConnection):
         '''
         receive the error response, return the error status and seq id
         '''
+
         def _read_response_call(callback, data):
             command = APNs.unpacked_uchar(data[0])
             status = APNs.unpacked_uchar(data[1])
             seq = APNs.unpacked_uint_big_endian(data[2:6])
             callback(status, seq)
 
-        self.read(6, functools.partial(_read_response_call,callback))
+        self.read(6, functools.partial(_read_response_call, callback))

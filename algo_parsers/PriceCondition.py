@@ -11,8 +11,8 @@ from constants import PRICE_INDEX
 
 logger = logging.getLogger(__name__)
 
-class PriceCondition(Condition):
 
+class PriceCondition(Condition):
     @classmethod
     def from_dict(cls, condition_dict):
         condition = cls()
@@ -61,7 +61,7 @@ class PriceCondition(Condition):
                 matched = (price_curr < self.price)
             if matched:
                 raise gen.Return(True)
-        
+
         raise gen.Return(False)
 
     @gen.coroutine
