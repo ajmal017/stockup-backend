@@ -161,8 +161,8 @@ class APNsConnection(object):
             self._socket = socket(AF_INET, SOCK_STREAM)
             self._stream = iostream.SSLIOStream(socket=self._socket,
                                                 ssl_options={
-                                                "keyfile": self.key_file,
-                                                "certfile": self.cert_file})
+                                                    "keyfile": self.key_file,
+                                                    "certfile": self.cert_file})
             self._stream.connect((self.server, self.port),
                                  functools.partial(self._on_connected,
                                                    callback))
@@ -365,8 +365,8 @@ class GatewayConnection(APNsConnection):
         payload_length_bin = APNs.packed_ushort_big_endian(len(payload_json))
 
         notification = (
-        '\1' + identifier_bin + expiry + token_length_bin + token_bin
-        + payload_length_bin + payload_json)
+            '\1' + identifier_bin + expiry + token_length_bin + token_bin
+            + payload_length_bin + payload_json)
 
         return notification
 

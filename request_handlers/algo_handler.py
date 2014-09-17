@@ -1,5 +1,4 @@
 import ast
-import json
 
 from tornado import gen
 from tornado.web import authenticated
@@ -17,7 +16,7 @@ class AlgoHandler(BaseRequestHandler):
         elif action == 'remove':
             yield self.post_remove()
         else:
-            self.write({'error': "url doesn't exist"})
+            self.write_end_array(404)
 
     @gen.coroutine
     def post_remove(self):
@@ -51,15 +50,20 @@ class AlgoHandler(BaseRequestHandler):
 
     @authenticated
     @gen.coroutine
-    def get(self):
-        user_id = self.get_argument("user_id")
-        if self.get_argument("test", None):
-            cursor = self.settings["test_db"].algos.find({"user_id": user_id})
+    def get(self, action=None):
+        if action == "list":
+            user_id = self.get_argument("user_id", None)
+
+            if self.get_argument("test", None):
+                cursor = self.settings["test_db"].algos.find(
+                    {"user_id": user_id})
+            else:
+                cursor = self.settings["db"].algos.find({"user_id": user_id})
+
+            algos = []
+            for algo in (yield cursor.to_list(100)):
+                algos.append(algo)
+
+            self.write({"algos": algos})
         else:
-            cursor = self.settings["db"].algos.find({"user_id": user_id})
-
-        algos = []
-        for algo in (yield cursor.to_list(100)):
-            algos.append(algo)
-
-        self.write({"algos": algos})
+            self.write_error(404)

@@ -43,7 +43,7 @@ def shift(a, v, l):
 def calcEMA(vals, n):
     # since n2 is always a larger number
 
-    #DI = high + close + 2 * low
+    # DI = high + close + 2 * low
     if n == n1 and len(n_ema_n1) == 0:
         ema_daily = (n_end[0] + n_high[0] + 2 * n_low[0]) / 4
         n_ema_n1.append(ema_daily)
@@ -100,7 +100,7 @@ for s in stock_list.readlines():
     n_dif = deque()
     n_signal = deque()
     # n_di = deque()
-    #for calculating DIF and DEA
+    # for calculating DIF and DEA
 
     #calculating
     to_insert = []

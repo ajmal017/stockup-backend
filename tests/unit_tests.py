@@ -132,7 +132,13 @@ class AlgoUnitTest(BaseUnitTest):
 
     @gen_test
     def test_algo_get(self):
-        pass
+        client = AsyncHTTPClient()
+
+        url = "http://localhost:9990/algo/list/?user_id=robert&test=1"
+        response = yield client.fetch(url)
+
+        algo_dict = ast.literal_eval(response.body)
+        self.assertEqual(len(algo_dict["algos"]), 3)
 
 
 class CrawlerUnitTest(BaseUnitTest):

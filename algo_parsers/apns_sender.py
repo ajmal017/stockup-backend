@@ -41,7 +41,7 @@ class ApnsSender:
     def on_response(cls, status, seq):
         logger.error(
             "sent push message to APNS gateway error status %s seq %s" % (
-            status, seq))
+                status, seq))
 
     @classmethod
     def on_connected(cls):

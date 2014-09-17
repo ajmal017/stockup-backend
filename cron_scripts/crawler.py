@@ -15,6 +15,7 @@ from util import construct_sina_url
 
 
 
+
 # AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
 logger = logging.getLogger(__name__)
@@ -57,8 +58,8 @@ class SinaCrawler:
                     self.time = time
                     SinaCrawler.stock_info_cache[name].append(time)
                     yield {
-                    "_id": {"c": int(SinaCrawler.stock_catalog[name][2:]),
-                            "d": time}, "d": stock_info_list}
+                        "_id": {"c": int(SinaCrawler.stock_catalog[name][2:]),
+                                "d": time}, "d": stock_info_list}
             except Exception, e:
                 logger.error('stock_info_generator ')
                 logger.error(datetime.now())
@@ -88,7 +89,7 @@ class SinaCrawler:
                 wanted_parts = length / options.segmentSize
                 SinaCrawler.segmented_catalog = [vals[
                                                  i * length / wanted_parts: (
-                                                                            i + 1) * length / wanted_parts]
+                                                                                i + 1) * length / wanted_parts]
                                                  for i
                                                  in range(wanted_parts)]
 
