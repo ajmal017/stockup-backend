@@ -22,6 +22,7 @@ define("skip", default=0, help="start line in stocks_all.txt", type=int)
 define("limit", default=256, help="number of stocks to lookup", type=int)
 define("maxConnections", default=256, help="max number of open connections allowed", type=int)
 define("interval", default=2470, help="fetch data interval", type=int)
+define("segmentSize", default=20, help="batch size of each request to sina", type=int)
 
 
 class SinaCrawler:
@@ -74,7 +75,7 @@ class SinaCrawler:
                 SinaCrawler.segmented_catalog = []
 
                 length = len(vals)
-                wanted_parts = length / 30
+                wanted_parts = length / options.segmentSize
                 SinaCrawler.segmented_catalog = [vals[i * length / wanted_parts: (i + 1) * length / wanted_parts] for i
                                                  in range(wanted_parts)]
 

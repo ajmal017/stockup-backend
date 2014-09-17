@@ -93,8 +93,8 @@ mkdir /data-drive/db/
 mkdir /data-drive/log/	
 
 # TODO: change to use replica set and config file
-(crontab -l ; echo "@reboot sudo /usr/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log")| crontab -
-(crontab -l ; echo "@reboot sudo supervisord -c /var/www/stockup-backend/deployment/supervisord.conf")| crontab -
-
+(crontab -l ; echo "@reboot sudo /usr/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log")| sudo crontab -
+(crontab -l ; echo "@reboot sudo supervisord -c /var/www/stockup-backend/deployment/supervisord.conf")| sudo crontab -
+(crontab -l ; echo "* 1,4,8 * * * source /home/trader/.bash_profile; sctl restart data_server")| sudo crontab -
 
 
