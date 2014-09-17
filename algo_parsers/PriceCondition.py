@@ -2,9 +2,12 @@ from collections import deque
 from decimal import Decimal
 import logging
 from datetime import timedelta
+
 from tornado import gen
+
 from algo_parsers.Condition import Condition
 from constants import PRICE_INDEX
+
 
 logger = logging.getLogger(__name__)
 

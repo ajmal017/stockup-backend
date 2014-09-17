@@ -1,5 +1,4 @@
 import socket
-import motor
 
 DEBUG = False if 'stockup' in socket.gethostname() else True
 

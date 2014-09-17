@@ -1,6 +1,8 @@
+from collections import deque
+
 import pymongo
 from pymongo import MongoClient, errors
-from collections import deque
+
 client = MongoClient()
 db = client.ss
 daily_collection = db.daily

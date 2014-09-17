@@ -1,6 +1,8 @@
-from pymongo import MongoClient, errors
 import urllib2
 import datetime
+
+from pymongo import MongoClient, errors
+
 client = MongoClient()
 
 db = client.ss

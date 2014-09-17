@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 from collections import deque, defaultdict
-
 import logging
 from datetime import datetime
-import motor
 
+import motor
 from pymongo.errors import DuplicateKeyError
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.options import options, define
+
 from algo_parsers.algorithm import Algorithm
 from config import datetime_repr, DEBUG
 from util import construct_sina_url

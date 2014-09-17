@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 import sys
-import motor
 import os
 
+import motor
 import tornado.httpserver
 import tornado.ioloop
 from tornado.ioloop import PeriodicCallback
 from tornado.web import Application
 from tornado.options import options, define
+
 
 here = os.path.dirname(os.path.abspath(__file__))
 if here not in sys.path:

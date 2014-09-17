@@ -1,10 +1,10 @@
 from datetime import datetime
 import logging
 import unittest
-import motor
 import sys
+
+import motor
 from tornado import gen
-import tornado.ioloop
 from tornado.testing import AsyncTestCase, gen_test
 
 from algo_parsers.algorithm import Algorithm

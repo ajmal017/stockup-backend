@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from tornado import gen
-from config import datetime_repr
 
+from config import datetime_repr
 from request_handlers.base_request_handler import BaseRequestHandler
 
 

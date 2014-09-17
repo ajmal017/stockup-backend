@@ -1,6 +1,6 @@
 import logging
-import motor
 
+import motor
 from tornado import gen
 
 from algo_parsers.KdjCondition import KdjCondition

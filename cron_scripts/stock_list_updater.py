@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import sys
+
 import motor
 import tornado
 from tornado.options import define
+
 
 if "/var/www/stockup-backend/" not in sys.path:
     sys.path.append("/var/www/stockup-backend/")
