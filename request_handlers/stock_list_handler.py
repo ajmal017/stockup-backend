@@ -3,7 +3,7 @@ from tornado import gen
 from request_handlers.base_request_handler import BaseRequestHandler
 
 
-class StockListRequestHandler(BaseRequestHandler):
+class StockListHandler(BaseRequestHandler):
     @gen.coroutine
     def get(self):
         coll = self.settings["db"].stock_catalog

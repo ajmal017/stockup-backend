@@ -6,7 +6,7 @@ from config import datetime_repr
 from request_handlers.base_request_handler import BaseRequestHandler
 
 
-class ConditionRequestHandler(BaseRequestHandler):
+class ConditionHandler(BaseRequestHandler):
     @gen.coroutine
     def get(self, condition=None):
         if condition == "price":

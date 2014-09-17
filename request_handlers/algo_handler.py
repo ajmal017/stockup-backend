@@ -5,7 +5,7 @@ from tornado import gen
 from request_handlers.base_request_handler import BaseRequestHandler
 
 
-class AlgoRequestHandler(BaseRequestHandler):
+class AlgoHandler(BaseRequestHandler):
     @gen.coroutine
     def post(self, action=None):
         if action == 'upload':
