@@ -23,8 +23,8 @@ from request_handlers import *
 define("port", default=9990, help="run on the given port", type=int)
 define("env", default="dev", help="environment: prod|dev|stage|test", type=str)
 define("crawler_only", default=False, help="run only the crawler", type=bool)
-define("cookie_secret", default=config.COOKIE_KEY, help="the key to generate secure cookies", type=str)
-
+define("cookie_secret", default=config.COOKIE_KEY,
+       help="the key to generate secure cookies", type=str)
 
 
 class StockApplication(Application):
@@ -58,7 +58,8 @@ def main():
 
     if options.env != "test":
         SinaCrawler().fetch_stock_info()
-        PeriodicCallback(SinaCrawler().fetch_stock_info, options.interval).start()
+        PeriodicCallback(SinaCrawler().fetch_stock_info,
+                         options.interval).start()
 
     if not options.crawler_only:
         apns_sender.connect()

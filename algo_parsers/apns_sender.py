@@ -32,13 +32,16 @@ class ApnsSender:
         expiry = time.time() + 3600
         token_hex = config.TEST_IPAD_TOKEN
         payload = Payload(alert="Hello World!", sound="default", badge=1)
-        yield gen.Task(ApnsSender.apns.gateway_server.send_notification, identifier, expiry, token_hex, payload)
+        yield gen.Task(ApnsSender.apns.gateway_server.send_notification,
+                       identifier, expiry, token_hex, payload)
         config.debug_log(logger, "Sent push message to APNs gateway")
         raise gen.Return(True)
 
     @classmethod
     def on_response(cls, status, seq):
-        logger.error("sent push message to APNS gateway error status %s seq %s" % (status, seq))
+        logger.error(
+            "sent push message to APNS gateway error status %s seq %s" % (
+            status, seq))
 
     @classmethod
     def on_connected(cls):

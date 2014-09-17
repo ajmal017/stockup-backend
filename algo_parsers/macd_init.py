@@ -41,7 +41,7 @@ def shift(a, v, l):
 
 # first day EMA is DI
 def calcEMA(vals, n):
-    #since n2 is always a larger number
+    # since n2 is always a larger number
 
     #DI = high + close + 2 * low
     if n == n1 and len(n_ema_n1) == 0:
@@ -54,12 +54,14 @@ def calcEMA(vals, n):
         return ema_daily
 
     if n == n1:
-        ema_daily = L_n1 * n_end[len(n_end) - 1] + (n1 - 1) / (n1 + 1) * float(n_ema_n1[len(n_ema_n1) - 1]) + n_end[
-            len(n_end) - 2]
+        ema_daily = L_n1 * n_end[len(n_end) - 1] + (n1 - 1) / (n1 + 1) * float(
+            n_ema_n1[len(n_ema_n1) - 1]) + n_end[
+                        len(n_end) - 2]
         shift(n_ema_n1, ema_daily, n1)
     elif (n == n2):
-        ema_daily = L_n2 * n_end[len(n_end) - 1] + (n2 - 1) / (n2 + 1) * float(n_ema_n2[len(n_ema_n2) - 1]) + n_end[
-            len(n_end) - 2]
+        ema_daily = L_n2 * n_end[len(n_end) - 1] + (n2 - 1) / (n2 + 1) * float(
+            n_ema_n2[len(n_ema_n2) - 1]) + n_end[
+                        len(n_end) - 2]
         shift(n_ema_n2, ema_daily, n2)
     else:
         print "data point wrong!"
@@ -89,7 +91,7 @@ for s in stock_list.readlines():
     if s[0] == "#": continue
     stock_number = s.strip().split()[1]
 
-    #for preparing the
+    # for preparing the
     n_low = deque()
     n_high = deque()
     n_end = deque()
@@ -103,7 +105,8 @@ for s in stock_list.readlines():
     #calculating
     to_insert = []
     count = 0
-    for stockInfo in daily_collection.find({"_id.c": int(stock_number)}, sort=[("_id.d", pymongo.ASCENDING)]):
+    for stockInfo in daily_collection.find({"_id.c": int(stock_number)},
+                                           sort=[("_id.d", pymongo.ASCENDING)]):
         count += 1
         shift(n_low, stockInfo[INFO_ELEMENTS][LOW], n2)
         shift(n_high, stockInfo[INFO_ELEMENTS][HIGH], n2)

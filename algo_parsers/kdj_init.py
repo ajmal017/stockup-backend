@@ -72,7 +72,8 @@ for s in stock_list.readlines():
     m1_k = deque()
 
     to_insert = []
-    for stockInfo in daily_collection.find({"_id.c": int(stock_number)}, sort=[("_id.d", pymongo.ASCENDING)]):
+    for stockInfo in daily_collection.find({"_id.c": int(stock_number)},
+                                           sort=[("_id.d", pymongo.ASCENDING)]):
 
         rsv = calcRsv(stockInfo[INFO_ELEMENTS])
         if rsv == -1:

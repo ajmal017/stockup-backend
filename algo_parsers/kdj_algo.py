@@ -76,7 +76,8 @@ def _get_close_price(_id):
 
 stock_number = "600601"
 
-for stockInfo in kdj_933_collection.find({"_id.c": stock_number}, sort=[("id.d", pymongo.ASCENDING)]):
+for stockInfo in kdj_933_collection.find({"_id.c": stock_number},
+                                         sort=[("id.d", pymongo.ASCENDING)]):
     kdjVals.append(stockInfo)
 
 algo()

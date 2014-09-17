@@ -160,9 +160,12 @@ class APNsConnection(object):
                                                         self._connecting_timeout_callback)
             self._socket = socket(AF_INET, SOCK_STREAM)
             self._stream = iostream.SSLIOStream(socket=self._socket,
-                                                ssl_options={"keyfile": self.key_file, "certfile": self.cert_file})
+                                                ssl_options={
+                                                "keyfile": self.key_file,
+                                                "certfile": self.cert_file})
             self._stream.connect((self.server, self.port),
-                                 functools.partial(self._on_connected, callback))
+                                 functools.partial(self._on_connected,
+                                                   callback))
 
     def _connecting_timeout_callback(self):
         if not self.is_alive():
@@ -192,7 +195,8 @@ class APNsConnection(object):
 
     def read_till_close(self, callback):
         try:
-            self._stream.read_until_close(callback=callback, streaming_callback=callback)
+            self._stream.read_until_close(callback=callback,
+                                          streaming_callback=callback)
         except (AttributeError, IOError) as e:
             self.disconnect()
             raise ConnectionError('%s' % e)
@@ -272,7 +276,8 @@ class Payload(object):
         return d
 
     def json(self):
-        return json.dumps(self.dict(), separators=(',', ':'), ensure_ascii=False).encode('utf-8')
+        return json.dumps(self.dict(), separators=(',', ':'),
+                          ensure_ascii=False).encode('utf-8')
 
     def _check_size(self):
         if len(self.json()) > MAX_PAYLOAD_LENGTH:
@@ -301,7 +306,8 @@ class FeedbackConnection(APNsConnection):
         super(FeedbackConnection, self).__del__()
 
     def receive_feedback(self, callback):
-        self.read_till_close(functools.partial(self._feedback_callback, callback))
+        self.read_till_close(
+            functools.partial(self._feedback_callback, callback))
 
     def _feedback_callback(self, callback, data):
 
@@ -358,13 +364,17 @@ class GatewayConnection(APNsConnection):
             payload_json = payload
         payload_length_bin = APNs.packed_ushort_big_endian(len(payload_json))
 
-        notification = ('\1' + identifier_bin + expiry + token_length_bin + token_bin
-                        + payload_length_bin + payload_json)
+        notification = (
+        '\1' + identifier_bin + expiry + token_length_bin + token_bin
+        + payload_length_bin + payload_json)
 
         return notification
 
-    def send_notification(self, identifier, expiry, token_hex, payload, callback):
-        self.write(self._get_notification(identifier, expiry, token_hex, payload), callback)
+    def send_notification(self, identifier, expiry, token_hex, payload,
+                          callback):
+        self.write(
+            self._get_notification(identifier, expiry, token_hex, payload),
+            callback)
 
     def receive_response(self, callback):
         '''

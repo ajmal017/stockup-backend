@@ -13,6 +13,7 @@ from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.testing import AsyncTestCase, gen_test
 
+
 here = os.path.dirname(os.path.abspath(__file__))
 par_here = os.path.join(here, os.pardir)
 if par_here not in sys.path:
@@ -43,11 +44,13 @@ class ConditionUnitTest(AsyncTestCase):
 
     @gen_test
     def test_price(self):
-        time = datetime(year=2014, month=9, day=15, hour=15, minute=0, second=10)
+        time = datetime(year=2014, month=9, day=15, hour=15, minute=0,
+                        second=10)
         Algorithm.db = motor.MotorClient().ss_test
         matches = yield Algorithm.parse_all(time)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].algo_name, "match_algo")
+
 
 class CrawlerUnitTest(AsyncTestCase):
     """
@@ -60,8 +63,8 @@ class CrawlerUnitTest(AsyncTestCase):
         result = yield SinaCrawler().fetch_stock_info(commit=False)
         self.assertGreater(len(result), 10)
 
-class AuthenticationUnitTest(AsyncTestCase):
 
+class AuthenticationUnitTest(AsyncTestCase):
     @gen_test
     def test_authentication(self):
         client = AsyncHTTPClient()
@@ -70,11 +73,15 @@ class AuthenticationUnitTest(AsyncTestCase):
         yield client.fetch("http://localhost:9990/auth/logout")
 
         bad_body = {"username": "admin", "password": "wrong"}
-        response = yield client.fetch("http://localhost:9990/auth/login", method="POST", body=urllib.urlencode(bad_body))
+        response = yield client.fetch("http://localhost:9990/auth/login",
+                                      method="POST",
+                                      body=urllib.urlencode(bad_body))
         d = json.loads(response.body)
         self.assertDictEqual({u'error': u'login incorrect'}, d)
 
-        response = yield client.fetch("http://localhost:9990/auth/login", method="POST", body=urllib.urlencode(body))
+        response = yield client.fetch("http://localhost:9990/auth/login",
+                                      method="POST",
+                                      body=urllib.urlencode(body))
         cookie = response.headers["set-cookie"]
         headers = {"Cookie": cookie}
 

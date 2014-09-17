@@ -118,5 +118,5 @@ class Algorithm:
         yield Algorithm.db.matches.insert(self.to_match_dict())
 
         # apns_sender.send()
-        #TODO: if a notification/transaction failed, do something meaningful
+        # TODO: if a notification/transaction failed, do something meaningful
         raise gen.Return(True)

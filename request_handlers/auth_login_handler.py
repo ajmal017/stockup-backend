@@ -1,10 +1,9 @@
-from tornado import escape
 from tornado.web import MissingArgumentError
+
 from request_handlers.base_request_handler import BaseRequestHandler
 
 
 class AuthLoginHandler(BaseRequestHandler):
-
     def get(self):
         try:
             error_message = self.get_argument("error")
