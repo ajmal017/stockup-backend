@@ -4,7 +4,6 @@ from tornado import gen
 
 class Condition:
 
-
     def __init__(self):
         self.is_primary = False
         self.window = 0
@@ -17,9 +16,11 @@ class Condition:
     @gen.coroutine
     def match_condition(self, algo):
         if self.is_primary:
-            yield self.match_condition_primary(algo)
+            return_val = yield self.match_condition_primary(algo)
         else:
-            yield self.match_condition_secondary(algo)
+            return_val = yield self.match_condition_secondary(algo)
+
+        raise gen.Return(return_val)
 
     @gen.coroutine
     def match_condition_secondary(self, algo):

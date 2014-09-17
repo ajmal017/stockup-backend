@@ -10,13 +10,13 @@ par_here = os.path.join(here, os.pardir)
 if par_here not in sys.path:
     sys.path.append(par_here)
 
-from config import datetime_repr
+from config import datetime_repr, get_client
 
 
 @gen.coroutine
 def populate_test_db():
 
-    client = motor.MotorClient()
+    client = get_client()
     client.drop_database("ss_test")
     db = client.ss_test
 
@@ -26,7 +26,7 @@ def populate_test_db():
         "2014-09-15T15:00:05",
         "2014-09-15T15:00:10",
         "2014-09-15T15:00:15",
-    ]
+        ]
     inserts = []
 
     for i in range(len(prices)):
@@ -76,7 +76,29 @@ def populate_test_db():
 
     yield inserts
 
+    yield db.algos.insert({
+        "_id" : {
+            "algo_v" : 1,
+            "algo_id" : "test_id"
+        },
+        "algo_name" : "test_algo",
+        "stock_id" : 600100,
+        "user_id" : "robert",
+        "price_type" : "market",
+        "trade_method" : "sell",
+        "volume" : 100,
+        "primary_condition" : "price_condition",
+        "conditions" : {
+            "price_condition" : {
+                "price_type" : "more_than",
+                "price" : "12.00",
+                "window" : "60"
+            }
+        }
+    })
+
     print "done"
+    IOLoop.current().stop()
 
 def main():
     populate_test_db()

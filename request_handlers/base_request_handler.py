@@ -18,3 +18,6 @@ class BaseRequestHandler(RequestHandler):
 
     def write_separator(self):
         self.write(",")
+
+    def write_linebreak(self):
+        self.write("\n")

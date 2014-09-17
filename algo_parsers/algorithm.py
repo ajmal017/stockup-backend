@@ -19,10 +19,10 @@ class Algorithm:
     def from_json(cls, json_dict, time):
         algo = cls()
         algo.algo_name = json_dict["algo_name"]
-        algo.algo_v = json_dict["algo_v"]
+        algo.algo_v = json_dict["_id"]["algo_v"]
+        algo.algo_id = json_dict["_id"]["algo_id"]
         algo.stock_id = json_dict["stock_id"]
         algo.user_id = json_dict["user_id"]
-        algo.algo_id = json_dict["_id"]
         algo.price_type = json_dict["price_type"]
         algo.trade_method = json_dict["trade_method"]
         algo.volume = json_dict["volume"]
@@ -60,12 +60,18 @@ class Algorithm:
         match_responses = yield algo_futures
 
         match_futures = []
+
+        matches = []
         for i in range(len(match_responses)):
             if match_responses[i]:
                 # algorithm matched
+                debug_log(logger, "algorithm matched")
+                matches.append(algos[i])
                 match_futures.append(algos[i].process_match())
 
         match_responses = yield match_futures
+
+        raise gen.Return(matches)
 
     def __init__(self):
         self.algo_id = None
@@ -99,6 +105,7 @@ class Algorithm:
     @gen.coroutine
     def match(self):
         for condition in self.conditions.values():
+
             if not (yield condition.match_condition(self)):
                 raise gen.Return(False)
         raise gen.Return(True)
@@ -106,7 +113,7 @@ class Algorithm:
     @gen.coroutine
     def process_match(self):
         #save the match record for future reference
-        Algorithm.db.matches.insert(self.to_match_dict())
+        yield Algorithm.db.matches.insert(self.to_match_dict())
 
         # apns_sender.send()
         #TODO: if a notification/transaction failed, do something meaningful
