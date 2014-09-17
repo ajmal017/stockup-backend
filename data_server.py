@@ -29,6 +29,7 @@ define("cookie_secret", default=config.COOKIE_KEY,
 
 class StockApplication(Application):
     db = motor.MotorClient().ss
+    test_db = motor.MotorClient().ss_test
 
     def __init__(self):
         handlers = [
@@ -45,6 +46,7 @@ class StockApplication(Application):
             debug=config.DEBUG,
             xsrf_cookies=not config.DEBUG,
             db=StockApplication.db,
+            test_db=StockApplication.test_db,
             cookie_secret=options.cookie_secret,
             login_url="/auth/login"
         )

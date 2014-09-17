@@ -54,7 +54,7 @@ class ConditionHandler(BaseRequestHandler):
         cursor = self.settings["db"].stocks.find(query)
 
         self.write_start_array()
-        for document in (yield cursor.to_list(length=100)):
+        for document in (yield cursor.to_list(100)):
             del document['_id']['d']
             self.write({'doc': document})
             self.write_separator()
