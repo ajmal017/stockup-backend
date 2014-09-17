@@ -88,7 +88,7 @@ class SinaCrawler:
         http_client = AsyncHTTPClient()
 
         for segment in SinaCrawler.segmented_catalog:
-            fetch_tasks.append(http_client.fetch(construct_sina_url(segment)))
+            fetch_tasks.append(http_client.fetch(construct_sina_url(segment), request_timeout=10))
             SinaCrawler.num_connections += 1
 
         responses = yield fetch_tasks
