@@ -14,7 +14,7 @@ from config import datetime_repr, DEBUG
 from util import construct_sina_url
 
 
-AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
+# AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
 logger = logging.getLogger(__name__)
 
@@ -96,8 +96,8 @@ class SinaCrawler:
         insert_tasks = []
         for response in responses:
             if response.error:
-                logger.error(datetime.now())
-                logger.error(response.error)
+                logger.error(str(datetime.now()))
+                logger.error(str(response.error))
             else:
                 stock_vars = response.body.decode(encoding='GB18030', errors='strict').strip().split('\n')
                 stock_list = [item for item in self.stock_info_generator(stock_vars) if item]
