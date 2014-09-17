@@ -8,7 +8,7 @@ import tornado.ioloop
 from tornado.testing import AsyncTestCase, gen_test
 
 from algo_parsers.algorithm import Algorithm
-from config import get_client
+
 
 
 class CrawlerUnitTest(AsyncTestCase):
@@ -18,22 +18,12 @@ class CrawlerUnitTest(AsyncTestCase):
 
     @gen_test
     def test_price(self):
-        # Use a different DB for test
-        db = motor.MotorClient().ss_test
-        cursor = db.algos.find()
-        print db,cursor
 
-        @gen.coroutine
-        def f():
-            for i in (yield cursor.to_list(100)):
-                print i
-        u = yield f()
-        print "here2"
         time = datetime(year=2014, month=9, day=15, hour=15, minute=0, second=10)
-        Algorithm.db = get_client().ss_test
-        print Algorithm.db
+        Algorithm.db = motor.MotorClient().ss_test
         matches = yield Algorithm.parse_all(time)
-        print matches
+        self.assertEqual(len(matches),1)
+        self.assertEqual(matches[0].algo_name, "match_algo")
 
 if __name__ == "__main__":
     logging.getLogger('tornado').addHandler(sys.stdout)

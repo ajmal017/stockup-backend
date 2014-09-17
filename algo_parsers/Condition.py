@@ -7,7 +7,7 @@ class Condition:
     def __init__(self):
         self.is_primary = False
         self.window = 0
-
+        self.db = None
 
     @classmethod
     def from_dict(cls, dict):

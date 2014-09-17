@@ -38,6 +38,7 @@ class Algorithm:
                 conditions[k] = PriceCondition.from_dict(v)
             elif k == "kdj_condition":
                 conditions[k] = KdjCondition.from_dict(v)
+            conditions[k].db = Algorithm.db
 
         conditions[condition_dict["primary_condition"]].is_primary = True
         return conditions
@@ -46,6 +47,7 @@ class Algorithm:
     @gen.coroutine
     def parse_all(cls, time):
         algos = []
+
         cursor = Algorithm.db.algos.find()
 
         for algo_json in (yield cursor.to_list(100)):

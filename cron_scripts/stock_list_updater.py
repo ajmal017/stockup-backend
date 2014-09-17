@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import motor
 import tornado
 from tornado.options import define
 
@@ -29,6 +30,8 @@ AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
 define("env", default="dev", help="environment: prod|dev|stage|test", type=str)
 
+db = motor.MotorClient().ss
+
 @gen.coroutine
 def fetch_info():
 
@@ -55,8 +58,7 @@ def fetch_info():
             name_code_dict[name] = sid
 
     try:
-        from config import get_db
-        _id = yield get_db().stock_catalog.save({"_id": "stock_catalog",
+        _id = yield db.stock_catalog.save({"_id": "stock_catalog",
                                "name_code_dict": name_code_dict,
                                "code_name_dict": code_name_dict})
         logger.info("saved stock catalog")

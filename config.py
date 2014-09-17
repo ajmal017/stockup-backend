@@ -13,18 +13,3 @@ def debug_log(logger, msg):
 
 def datetime_repr():
     return '%Y-%m-%dT%H:%M:%S'
-
-
-client = motor.MotorClient()
-
-
-def get_db():
-    from tornado.options import options
-    if options.env == "test":
-        return client.ss_test
-    else:
-        return client.ss
-
-
-def get_client():
-    return client

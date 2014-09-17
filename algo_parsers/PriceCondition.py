@@ -35,8 +35,7 @@ class PriceCondition(Condition):
 
         stocks = deque()
 
-        from config import get_db
-        cursor = get_db().stocks.find(find_query)
+        cursor = self.db.stocks.find(find_query)
 
         for stock_dict in (yield cursor.to_list(100)):
             # most recent one is first
@@ -71,9 +70,7 @@ class PriceCondition(Condition):
 
         stocks = deque()
 
-        from config import get_db
-        from algo_parsers.algorithm import Algorithm
-        cursor = get_db().stocks.find(find_query).sort([("_id.d", -1)]).limit(2)
+        cursor = self.db.stocks.find(find_query).sort([("_id.d", -1)]).limit(2)
 
         for stock_dict in (yield cursor.to_list(100)):
             # most recent one is first

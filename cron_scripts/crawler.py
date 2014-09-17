@@ -3,13 +3,14 @@ from collections import deque, defaultdict
 
 import logging
 from datetime import datetime
+import motor
 
 from pymongo.errors import DuplicateKeyError
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.options import options, define
 from algo_parsers.algorithm import Algorithm
-from config import datetime_repr, get_db, DEBUG
+from config import datetime_repr, DEBUG
 from util import construct_sina_url
 
 
@@ -32,6 +33,7 @@ class SinaCrawler:
     # keep a list of the moment recent times and pray we won't have concurrency issues here
     # i.e. if an earlier time info returns after a later time info
     stock_info_cache = defaultdict(lambda: deque(maxlen=8))
+    db = motor.MotorClient().ss
 
     def __init__(self):
         self.time = datetime.now()
@@ -66,7 +68,7 @@ class SinaCrawler:
 
         # update the catalog every once in a while
         if SinaCrawler.cur_iteration % 1000 == 0:
-            val = yield get_db().stock_catalog.find_one()
+            val = yield SinaCrawler.db.stock_catalog.find_one()
             if val:
                 SinaCrawler.stock_catalog = val["name_code_dict"]
                 vals = SinaCrawler.stock_catalog.values()[options.skip:options.limit]
@@ -100,7 +102,7 @@ class SinaCrawler:
                 stock_vars = response.body.decode(encoding='GB18030', errors='strict').strip().split('\n')
                 stock_list = [item for item in self.stock_info_generator(stock_vars) if item]
                 if stock_list:
-                    insert_tasks.append(get_db().stocks.insert(stock_list, continue_on_error=True))
+                    insert_tasks.append(SinaCrawler.db.stocks.insert(stock_list, continue_on_error=True))
 
         try:
             yield insert_tasks

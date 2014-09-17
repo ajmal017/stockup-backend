@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from tornado import gen
-from config import datetime_repr, get_db
+from config import datetime_repr
 
 from request_handlers.base_request_handler import BaseRequestHandler
 
@@ -31,15 +31,18 @@ class ConditionRequestHandler(BaseRequestHandler):
         start_time_raw = self.get_argument('start_time', None)
         end_time_raw = self.get_argument('end_time', None)
         ids_raw = self.get_argument('stock_ids', None)
-        if not (start_time_raw and end_time_raw and ids_raw):
+        if not start_time_raw and end_time_raw and ids_raw:
             self.write({'arguments': ['start_time', 'end_time', 'stock_ids']})
             return
+        try:
+            stock_ids = map(lambda x: int(x), ids_raw.split(','))
+            start_time = datetime.strptime(start_time_raw, datetime_repr())
+            end_time = datetime.strptime(end_time_raw, datetime_repr())
+        except ValueError, e:
+            self.write({'error':'field format incorrect'})
+            return
 
-        stock_ids = map(lambda x: int(x), ids_raw.split(','))
 
-        start_time = datetime.strptime(start_time_raw, datetime_repr())
-        end_time = datetime.strptime(end_time_raw, datetime_repr())
-        print start_time, end_time, stock_ids
         query = {
             '_id.c': {
                 '$in': stock_ids
@@ -50,7 +53,7 @@ class ConditionRequestHandler(BaseRequestHandler):
             }
         }
 
-        cursor = get_db().stocks.find(query)
+        cursor = self.settings["db"].stocks.find(query)
 
         self.write_start_array()
         for document in (yield cursor.to_list(length=100)):

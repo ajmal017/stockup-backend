@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import sys
+import motor
+
 if "/var/www/stockup-backend/" not in sys.path:
     sys.path.append("/var/www/stockup-backend/")
 
@@ -27,6 +29,7 @@ define("env", default="dev", help="environment: prod|dev|stage|test", type=str)
 
 
 class StockApplication(Application):
+    db = motor.MotorClient().ss
 
     def __init__(self):
         handlers = [
@@ -36,14 +39,10 @@ class StockApplication(Application):
             (r"/stock-list/?", StockListRequestHandler),
         ]
 
-        if options.env == "test":
-            handlers.extend([
-                (r"/tests/(price|apns)/?", ConditionsTestHandler)
-            ])
-
         settings = dict(
             debug=config.DEBUG,
             xsrf_cookies=not config.DEBUG,
+            db=StockApplication.db
         )
 
         Application.__init__(self, handlers, **settings)
