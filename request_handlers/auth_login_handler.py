@@ -24,6 +24,7 @@ class AuthLoginHandler(BaseRequestHandler):
     def post(self):
         username = self.get_argument("username", None)
         password = self.get_argument("password", None)
+
         authenticated = self.check_permission(password, username)
 
         if authenticated:
@@ -34,6 +35,6 @@ class AuthLoginHandler(BaseRequestHandler):
 
     def set_current_user(self, user):
         if user:
-            self.set_secure_cookie("user", escape.json_encode(user))
+            self.set_secure_cookie("user", user)
         else:
             self.clear_cookie("user")

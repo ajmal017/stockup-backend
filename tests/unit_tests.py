@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 
 from datetime import datetime
+import json
 import logging
 import os
 import unittest
 import sys
+import urllib
 
 import motor
 from tornado import gen
+from tornado.httpclient import AsyncHTTPClient
 from tornado.testing import AsyncTestCase, gen_test
 
 here = os.path.dirname(os.path.abspath(__file__))
@@ -56,6 +59,28 @@ class CrawlerUnitTest(AsyncTestCase):
         SinaCrawler.db = motor.MotorClient().ss
         result = yield SinaCrawler().fetch_stock_info(commit=False)
         self.assertGreater(len(result), 10)
+
+class AuthenticationUnitTest(AsyncTestCase):
+
+    @gen_test
+    def test_authentication(self):
+        client = AsyncHTTPClient()
+        body = {"username": "admin", "password": "admin"}
+
+        yield client.fetch("http://localhost:9990/auth/logout")
+
+        bad_body = {"username": "admin", "password": "wrong"}
+        response = yield client.fetch("http://localhost:9990/auth/login", method="POST", body=urllib.urlencode(bad_body))
+        d = json.loads(response.body)
+        self.assertDictEqual({u'error': u'login incorrect'}, d)
+
+        response = yield client.fetch("http://localhost:9990/auth/login", method="POST", body=urllib.urlencode(body))
+        cookie = response.headers["set-cookie"]
+        headers = {"Cookie": cookie}
+
+        response = yield client.fetch("http://localhost:9990", headers=headers)
+        d = json.loads(response.body)
+        self.assertDictEqual({u"you're logged in as": u'admin'}, d)
 
 
 if __name__ == "__main__":

@@ -21,3 +21,6 @@ class BaseRequestHandler(RequestHandler):
 
     def write_linebreak(self):
         self.write("\n")
+
+    def get_current_user(self):
+        return self.get_secure_cookie("user")
