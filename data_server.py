@@ -23,6 +23,8 @@ from request_handlers import *
 define("port", default=9990, help="run on the given port", type=int)
 define("env", default="dev", help="environment: prod|dev|stage|test", type=str)
 define("crawler_only", default=False, help="run only the crawler", type=bool)
+define("cookie_secret", default=config.COOKIE_KEY, help="the key to generate secure cookies", type=str)
+
 
 
 class StockApplication(Application):
@@ -34,13 +36,17 @@ class StockApplication(Application):
             (r"/condition/(macd|kdj|price)/?", ConditionHandler),
             (r"/algo/(upload)/?", AlgoHandler),
             (r"/stock-list/?", StockListHandler),
+            (r"/auth/login/?", AuthLoginHandler),
+            (r"/auth/logout/?", AuthLogoutHandler)
 
         ]
 
         settings = dict(
             debug=config.DEBUG,
             xsrf_cookies=not config.DEBUG,
-            db=StockApplication.db
+            db=StockApplication.db,
+            cookie_secret=options.cookie_secret,
+            login_url="/auth/login"
         )
 
         Application.__init__(self, handlers, **settings)

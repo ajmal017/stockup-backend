@@ -10,7 +10,7 @@ from tornado.httpclient import AsyncHTTPClient, HTTPError
 from tornado.options import options, define
 
 from algo_parsers.algorithm import Algorithm
-from config import datetime_repr, DEBUG
+from config import datetime_repr, debug_log
 from util import construct_sina_url
 
 
@@ -59,16 +59,18 @@ class SinaCrawler:
                 logger.error(str(e))
 
     @gen.coroutine
-    def fetch_stock_info(self):
-        if DEBUG:
-            print "open crawler connections", SinaCrawler.num_connections
+    def fetch_stock_info(self, commit=True):
+
+        debug_log(logger, "open crawler connections {0}".format(SinaCrawler.num_connections))
         SinaCrawler.cur_iteration += 1
+
         if SinaCrawler.num_connections > options.maxConnections:
             return
 
         # update the catalog every once in a while
         if SinaCrawler.cur_iteration % 1000 == 0:
             val = yield SinaCrawler.db.stock_catalog.find_one()
+
             if val:
                 SinaCrawler.stock_catalog = val["name_code_dict"]
                 vals = SinaCrawler.stock_catalog.values()[options.skip:options.limit]
@@ -107,7 +109,10 @@ class SinaCrawler:
                 stock_vars = response.body.decode(encoding='GB18030', errors='strict').strip().split('\n')
                 stock_list = [item for item in self.stock_info_generator(stock_vars) if item]
                 if stock_list:
-                    insert_tasks.append(SinaCrawler.db.stocks.insert(stock_list, continue_on_error=True))
+                    if commit:
+                        insert_tasks.append(SinaCrawler.db.stocks.insert(stock_list, continue_on_error=True))
+                    else:
+                        raise gen.Return(stock_list)
 
         try:
             yield insert_tasks
