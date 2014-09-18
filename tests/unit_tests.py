@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import ast
-
 from datetime import datetime
-import json
 import logging
 import os
 import unittest
@@ -26,16 +24,16 @@ from cron_scripts.crawler import SinaCrawler
 
 
 class BaseUnitTest(AsyncTestCase):
-    # base_url = "http://stockup-dev.cloudapp.net:9990"
-    base_url = "http://localhost:9990"
+    base_url = "http://stockup-dev.cloudapp.net:9990"
+    # base_url = "http://localhost:9990"
     headers = None
 
     @gen.coroutine
     def login(self):
         body = {"username": "admin", "password": "admin"}
         response = yield AsyncHTTPClient().fetch(BaseUnitTest.base_url + "/auth/login",
-                                      method="POST",
-                                      body=urllib.urlencode(body))
+                                                 method="POST",
+                                                 body=urllib.urlencode(body))
         BaseUnitTest.headers = {"Cookie": response.headers["set-cookie"]}
 
     @gen.coroutine
@@ -94,27 +92,28 @@ class AlgoUnitTest(BaseUnitTest):
         }, "test": 1}
 
         response = yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/algo/upload",
-                                      method="POST",
-                                      headers=AlgoUnitTest.headers,
-                                      body=urllib.urlencode(body))
+                                                 method="POST",
+                                                 headers=AlgoUnitTest.headers,
+                                                 body=urllib.urlencode(body))
         d = ast.literal_eval(response.body)
         self.assertDictEqual(d, {"saved": "upload_algo_id"})
         yield self.logout()
 
     @gen_test
     def test_algo_remove(self):
-
+        yield self.login()
         body = {"algo": {
             "algo_v": 1,
             "algo_id": "upload_algo_id"
         }, "test": 1}
 
         response = yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/algo/remove",
-                                      method="POST",
-                                      headers=AlgoUnitTest.headers,
-                                      body=urllib.urlencode(body))
+                                                 method="POST",
+                                                 headers=AlgoUnitTest.headers,
+                                                 body=urllib.urlencode(body))
         d = ast.literal_eval(response.body)
         self.assertDictEqual(d, {"removed": "upload_algo_id"})
+        yield self.logout()
 
     @gen_test
     def test_algo_get(self):
@@ -134,7 +133,6 @@ class CrawlerUnitTest(BaseUnitTest):
 
 
 class AuthenticationUnitTest(BaseUnitTest):
-
     @gen_test
     def test_authentication(self):
         cls = AuthenticationUnitTest
