@@ -54,7 +54,11 @@ class ConditionHandler(BaseRequestHandler):
             }
         }
 
-        cursor = self.settings["db"].stocks.find(query)
+        if self.get_argument("test", None):
+            cursor = self.settings["test_db"].stocks.find(query)
+        else:
+            cursor = self.settings["db"].stocks.find(query)
+
 
         self.write_start_array()
         for document in (yield cursor.to_list(100)):

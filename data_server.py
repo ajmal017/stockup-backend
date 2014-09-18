@@ -38,7 +38,8 @@ class StockApplication(Application):
             (r"/algo/(upload|remove)/?", AlgoHandler),
             (r"/stock-list/?", StockListHandler),
             (r"/auth/login/?", AuthLoginHandler),
-            (r"/auth/logout/?", AuthLogoutHandler)
+            (r"/auth/logout/?", AuthLogoutHandler),
+            (r"/add-token/?", ApnsTokenHandler)
 
         ]
 

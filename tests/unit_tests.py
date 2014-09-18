@@ -11,6 +11,7 @@ import motor
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.testing import AsyncTestCase, gen_test
+from config import TEST_IPAD_TOKEN
 
 
 here = os.path.dirname(os.path.abspath(__file__))
@@ -24,8 +25,8 @@ from cron_scripts.crawler import SinaCrawler
 
 
 class BaseUnitTest(AsyncTestCase):
-    base_url = "http://stockup-dev.cloudapp.net:9990"
-    # base_url = "http://localhost:9990"
+    # base_url = "http://stockup-dev.cloudapp.net:9990"
+    base_url = "http://localhost:9990"
     headers = None
 
     @gen.coroutine
@@ -53,6 +54,20 @@ class ApnsUnitTest(BaseUnitTest):
         apns_sender.on_connected()
         result = yield apns_sender.send()
         self.assertTrue(result)
+
+    @gen_test
+    def test_token_upload(self):
+        yield self.login()
+        body = {
+            "user_id": "admin",
+            "apns_token": TEST_IPAD_TOKEN,
+            "test": 1
+        }
+        response = yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/add-token/",
+                                                 method="POST",
+                                                 headers=AlgoUnitTest.headers,
+                                                 body=urllib.urlencode(body))
+        yield self.logout()
 
 
 class AlgoUnitTest(BaseUnitTest):

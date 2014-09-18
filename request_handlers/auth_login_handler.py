@@ -13,7 +13,7 @@ class AuthLoginHandler(BaseRequestHandler):
         if error_message:
             self.write({"error": error_message})
         else:
-            self.write({"login": "handler"})
+            self.write({"error": "not logged in"})
 
     def check_permission(self, password, username):
         # TODO: flush this out
