@@ -14,7 +14,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 if here not in sys.path:
     sys.path.append(here)
 
-from algo_parsers.apns_sender import apns_sender
+from algo_parsers.apns_sender import ApnsSender
 import config
 from cron_scripts.crawler import SinaCrawler
 from request_handlers import *
@@ -65,7 +65,7 @@ def main():
                          options.interval).start()
 
     if not options.crawler_only:
-        apns_sender.connect()
+        ApnsSender.connect()
         tornado.httpserver.HTTPServer(StockApplication()).listen(options.port)
 
     loop.start()

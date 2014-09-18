@@ -11,7 +11,6 @@ from constants import PRICE_INDEX
 
 logger = logging.getLogger(__name__)
 
-
 class PriceCondition(Condition):
     @classmethod
     def from_dict(cls, condition_dict):
@@ -28,6 +27,10 @@ class PriceCondition(Condition):
 
     @gen.coroutine
     def match_condition_secondary(self, algo):
+        """
+        :param algo:
+        :return:
+        """
         min_time = algo.time - timedelta(seconds=self.window)
         max_time = algo.time + timedelta(seconds=self.window)
 
@@ -47,22 +50,20 @@ class PriceCondition(Condition):
         if len(stocks) < 2:
             logger.error("match_condition_secondary")
             logger.error("not enough stocks data")
-            raise gen.Return(False)
-
-        matched = False
+            return
 
         for stock in stocks:
             price_curr = Decimal(stock[PRICE_INDEX])
 
             # if there's one price that matches in the window, return True
             if self.price_type == "more_than":
-                matched = (price_curr > self.price)
+                self.matched = (price_curr > self.price)
             elif self.price_type == "less_than":
-                matched = (price_curr < self.price)
-            if matched:
-                raise gen.Return(True)
+                self.matched = (price_curr < self.price)
 
-        raise gen.Return(False)
+            if self.matched:
+                algo.match_price = price_curr
+                break
 
     @gen.coroutine
     def match_condition_primary(self, algo):
@@ -82,16 +83,14 @@ class PriceCondition(Condition):
         if len(stocks) < 2:
             logger.error("match_condition_primary")
             logger.error("not enough stocks data")
-            raise gen.Return(False)
-
+            return
         price_curr = Decimal(stocks[0][PRICE_INDEX])
         price_prev = Decimal(stocks[1][PRICE_INDEX])
 
-        matched = None
-
         if self.price_type == "more_than":
-            matched = price_curr > self.price >= price_prev
+            self.matched = price_curr > self.price >= price_prev
         elif self.price_type == "less_than":
-            matched = price_curr < self.price <= price_prev
+            self.matched = price_curr < self.price <= price_prev
 
-        raise gen.Return(matched)
+        if self.matched:
+            algo.match_price = price_curr

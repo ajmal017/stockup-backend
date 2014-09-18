@@ -17,8 +17,8 @@ class ApnsTokenHandler(BaseRequestHandler):
         else:
             db = self.settings["db"]
 
-        query = {"user_id": user_id}
-        update = {"$addToSet":{"apns_tokens": token}}
+        query = {"_id": user_id}
+        update = {"$addToSet": {"apns_tokens": token}}
 
         yield db.users.update(query, update, upsert=True)
 

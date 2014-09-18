@@ -6,6 +6,7 @@ class Condition:
         self.is_primary = False
         self.window = 0
         self.db = None
+        self.matched = False
 
     @classmethod
     def from_dict(cls, dict):
@@ -14,16 +15,14 @@ class Condition:
     @gen.coroutine
     def match_condition(self, algo):
         if self.is_primary:
-            return_val = yield self.match_condition_primary(algo)
+            yield self.match_condition_primary(algo)
         else:
-            return_val = yield self.match_condition_secondary(algo)
-
-        raise gen.Return(return_val)
+            yield self.match_condition_secondary(algo)
 
     @gen.coroutine
     def match_condition_secondary(self, algo):
-        raise gen.Return(False)
+        pass
 
     @gen.coroutine
     def match_condition_primary(self, algo):
-        raise gen.Return(False)
+        pass

@@ -12,7 +12,7 @@ _here = os.path.dirname(os.path.abspath(__file__))
 logger = logging.getLogger(__name__)
 
 
-class ApnsSender:
+class ApnsSender(object):
     apns = APNs(use_sandbox=True,
                 cert_file=os.path.join(_here, "certs/stockup_dev_cert.pem"),
                 key_file=os.path.join(_here, "certs/stockup_key_nopass.pem"))
@@ -24,8 +24,9 @@ class ApnsSender:
             callback = cls.on_connected
         ApnsSender.apns.gateway_server.connect(callback)
 
+    @classmethod
     @gen.coroutine
-    def send(self, token, alert, sound="default", badge=1, custom={}):
+    def send(cls, token, alert, sound="default", badge=1, custom=None):
         if not ApnsSender.connected:
             raise gen.Return(False)
         identifier = 1
@@ -46,6 +47,3 @@ class ApnsSender:
     def on_connected(cls):
         ApnsSender.apns.gateway_server.receive_response(cls.on_response)
         cls.connected = True
-
-
-apns_sender = ApnsSender()

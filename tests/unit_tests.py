@@ -19,9 +19,9 @@ if par_here not in sys.path:
     sys.path.append(par_here)
 
 from algo_parsers.algorithm import Algorithm
-from algo_parsers.apns_sender import apns_sender
 from cron_scripts.crawler import SinaCrawler
 from config import TEST_IPAD_TOKEN
+from algo_parsers.apns_sender import ApnsSender
 
 class BaseUnitTest(AsyncTestCase):
     # base_url = "http://stockup-dev.cloudapp.net:9990"
@@ -65,13 +65,13 @@ class ApnsUnitTest(BaseUnitTest):
 
     @gen_test
     def test_apns(self):
-        yield gen.Task(apns_sender.connect)
-        apns_sender.on_connected()
+        yield gen.Task(ApnsSender.connect)
+        ApnsSender.on_connected()
         db = motor.MotorClient().ss_test
-        result = yield db.users.find_one({"user_id": "admin"}, {"apns_tokens": 1})
+        result = yield db.users.find_one({"_id": "admin"}, {"apns_tokens": 1})
 
         for token in result["apns_tokens"]:
-            result = yield apns_sender.send(token=token,
+            result = yield ApnsSender.send(token=token,
                                             alert="Test Alert",
                                             custom={"test": "data"})
             self.assertTrue(result)

@@ -12,7 +12,7 @@ par_here = os.path.join(here, os.pardir)
 if par_here not in sys.path:
     sys.path.append(par_here)
 
-from config import datetime_repr
+from config import datetime_repr, TEST_IPAD_TOKEN
 
 
 @gen.coroutine
@@ -27,7 +27,7 @@ def populate_test_db():
         "2014-09-15T15:00:05",
         "2014-09-15T15:00:10",
         "2014-09-15T15:00:15",
-    ]
+        ]
     inserts = []
 
     for i in range(len(prices)):
@@ -76,6 +76,8 @@ def populate_test_db():
         inserts.append(db.stocks.insert(info))
 
     yield inserts
+
+    yield db.users.insert({ "_id" : "admin", "apns_tokens" : [ TEST_IPAD_TOKEN ] })
 
     yield db.algos.insert([{
                                "_id": {

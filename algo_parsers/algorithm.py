@@ -5,6 +5,7 @@ from tornado import gen
 
 from algo_parsers.KdjCondition import KdjCondition
 from algo_parsers.PriceCondition import PriceCondition
+from algo_parsers.apns_sender import ApnsSender
 from config import debug_log
 
 
@@ -71,7 +72,7 @@ class Algorithm:
                 matches.append(algos[i])
                 match_futures.append(algos[i].process_match())
 
-        match_responses = yield match_futures
+        yield match_futures
 
         raise gen.Return(matches)
 
@@ -86,6 +87,8 @@ class Algorithm:
         self.volume = None
         self.conditions = None
         self.time = None
+
+        self.match_price = None  # price that matched
 
     def to_match_dict(self):
         """
@@ -102,21 +105,29 @@ class Algorithm:
         json_dict["trade_method"] = self.trade_method
         json_dict["volume"] = self.volume
         json_dict["time"] = self.time
+        json_dict["match_price"] = str(self.match_price)
         return json_dict
 
     @gen.coroutine
     def match(self):
+        yield [condition.match_condition(self) for condition in self.conditions.values()]
         for condition in self.conditions.values():
-
-            if not (yield condition.match_condition(self)):
+            if not condition.matched:
                 raise gen.Return(False)
         raise gen.Return(True)
 
     @gen.coroutine
     def process_match(self):
         # save the match record for future reference
-        yield Algorithm.db.matches.insert(self.to_match_dict())
+        match_id = yield Algorithm.db.matches.insert(self.to_match_dict())
 
-        # apns_sender.send()
-        # TODO: if a notification/transaction failed, do something meaningful
+        # send a notification to the user
+        user_dict = yield self.db.users.find_one({"_id": self.user_id}, {"apns_tokens": 1})
+
+        for token in user_dict["apns_tokens"]:
+            sent = yield ApnsSender.send(token, self.algo_name[:30] + " matched!", custom={"algo_id": str(match_id)})
+            if not sent:
+                pass
+                # TODO: if a notification/transaction failed, do something meaningful
+        
         raise gen.Return(True)

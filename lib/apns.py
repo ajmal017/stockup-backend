@@ -248,7 +248,7 @@ class ConnectionError(Exception):
 class Payload(object):
     """A class representing an APNs message payload"""
 
-    def __init__(self, alert=None, badge=None, sound=None, custom={}):
+    def __init__(self, alert=None, badge=None, sound=None, custom=None):
         super(Payload, self).__init__()
         self.alert = alert
         self.badge = badge
