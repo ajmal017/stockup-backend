@@ -1,12 +1,15 @@
 from datetime import datetime
 
 from tornado import gen
+from tornado.web import authenticated
 
 from config import datetime_repr
 from request_handlers.base_request_handler import BaseRequestHandler
 
 
 class ConditionHandler(BaseRequestHandler):
+
+    @authenticated
     @gen.coroutine
     def get(self, condition=None):
         if condition == "price":

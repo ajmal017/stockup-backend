@@ -2,11 +2,14 @@ import ast
 import json
 
 from tornado import gen
+from tornado.web import authenticated
 
 from request_handlers.base_request_handler import BaseRequestHandler
 
 
 class AlgoHandler(BaseRequestHandler):
+
+    @authenticated
     @gen.coroutine
     def post(self, action=None):
         if action == 'upload':
@@ -46,6 +49,7 @@ class AlgoHandler(BaseRequestHandler):
             yield self.settings["db"].algos.save(algo_data)
         self.write({"saved": algo_data["_id"]["algo_id"]})
 
+    @authenticated
     @gen.coroutine
     def get(self):
         user_id = self.get_argument("user_id")

@@ -25,7 +25,26 @@ from algo_parsers.apns_sender import apns_sender
 from cron_scripts.crawler import SinaCrawler
 
 
-class ApnsUnitTest(AsyncTestCase):
+class BaseUnitTest(AsyncTestCase):
+    # base_url = "http://stockup-dev.cloudapp.net:9990"
+    base_url = "http://localhost:9990"
+    headers = None
+
+    @gen.coroutine
+    def login(self):
+        body = {"username": "admin", "password": "admin"}
+        response = yield AsyncHTTPClient().fetch(BaseUnitTest.base_url + "/auth/login",
+                                      method="POST",
+                                      body=urllib.urlencode(body))
+        BaseUnitTest.headers = {"Cookie": response.headers["set-cookie"]}
+
+    @gen.coroutine
+    def logout(self):
+        yield AsyncHTTPClient().fetch(BaseUnitTest.base_url + "/auth/logout")
+        BaseUnitTest.headers = None
+
+
+class ApnsUnitTest(BaseUnitTest):
     """
     Unit Test for Apple Push Notification
     """
@@ -38,7 +57,7 @@ class ApnsUnitTest(AsyncTestCase):
         self.assertTrue(result)
 
 
-class AlgoUnitTest(AsyncTestCase):
+class AlgoUnitTest(BaseUnitTest):
     """
     Unit Test for the Various Algorithms
     """
@@ -54,7 +73,7 @@ class AlgoUnitTest(AsyncTestCase):
 
     @gen_test
     def test_algo_post(self):
-        client = AsyncHTTPClient()
+        yield self.login()
         body = {"algo": {
             "algo_v": 1,
             "algo_id": "upload_algo_id",
@@ -74,22 +93,25 @@ class AlgoUnitTest(AsyncTestCase):
             }
         }, "test": 1}
 
-        response = yield client.fetch("http://localhost:9990/algo/upload",
+        response = yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/algo/upload",
                                       method="POST",
+                                      headers=AlgoUnitTest.headers,
                                       body=urllib.urlencode(body))
         d = ast.literal_eval(response.body)
         self.assertDictEqual(d, {"saved": "upload_algo_id"})
+        yield self.logout()
 
     @gen_test
     def test_algo_remove(self):
-        client = AsyncHTTPClient()
+
         body = {"algo": {
             "algo_v": 1,
             "algo_id": "upload_algo_id"
         }, "test": 1}
 
-        response = yield client.fetch("http://localhost:9990/algo/remove",
+        response = yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/algo/remove",
                                       method="POST",
+                                      headers=AlgoUnitTest.headers,
                                       body=urllib.urlencode(body))
         d = ast.literal_eval(response.body)
         self.assertDictEqual(d, {"removed": "upload_algo_id"})
@@ -99,7 +121,7 @@ class AlgoUnitTest(AsyncTestCase):
         pass
 
 
-class CrawlerUnitTest(AsyncTestCase):
+class CrawlerUnitTest(BaseUnitTest):
     """
     Unit Test for the Sina Crawler
     """
@@ -111,30 +133,29 @@ class CrawlerUnitTest(AsyncTestCase):
         self.assertGreater(len(result), 10)
 
 
-class AuthenticationUnitTest(AsyncTestCase):
+class AuthenticationUnitTest(BaseUnitTest):
+
     @gen_test
     def test_authentication(self):
+        cls = AuthenticationUnitTest
         client = AsyncHTTPClient()
-
-        base_url = "http://stockup-dev.cloudapp.net:9990"
-        # base_url = "http://localhost:9990"
-        yield client.fetch(base_url + "/auth/logout")
+        yield client.fetch(cls.base_url + "/auth/logout")
 
         bad_body = {"username": "admin", "password": "wrong"}
-        response = yield client.fetch(base_url + "/auth/login",
+        response = yield client.fetch(cls.base_url + "/auth/login",
                                       method="POST",
                                       body=urllib.urlencode(bad_body))
         d = ast.literal_eval(response.body)
         self.assertDictEqual({u'error': u'login incorrect'}, d)
 
         body = {"username": "admin", "password": "admin"}
-        response = yield client.fetch(base_url + "/auth/login",
+        response = yield client.fetch(cls.base_url + "/auth/login",
                                       method="POST",
                                       body=urllib.urlencode(body))
         cookie = response.headers["set-cookie"]
         headers = {"Cookie": cookie}
 
-        response = yield client.fetch(base_url, headers=headers)
+        response = yield client.fetch(cls.base_url, headers=headers)
         d = ast.literal_eval(response.body)
         self.assertDictEqual({u"you're logged in as": u'admin'}, d)
 
