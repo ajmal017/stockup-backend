@@ -116,23 +116,25 @@ class AuthenticationUnitTest(AsyncTestCase):
     def test_authentication(self):
         client = AsyncHTTPClient()
 
-        yield client.fetch("http://localhost:9990/auth/logout")
+        base_url = "http://stockup-dev.cloudapp.net:9990"
+        # base_url = "http://localhost:9990"
+        yield client.fetch(base_url + "/auth/logout")
 
         bad_body = {"username": "admin", "password": "wrong"}
-        response = yield client.fetch("http://localhost:9990/auth/login",
+        response = yield client.fetch(base_url + "/auth/login",
                                       method="POST",
                                       body=urllib.urlencode(bad_body))
         d = ast.literal_eval(response.body)
         self.assertDictEqual({u'error': u'login incorrect'}, d)
 
         body = {"username": "admin", "password": "admin"}
-        response = yield client.fetch("http://localhost:9990/auth/login",
+        response = yield client.fetch(base_url + "/auth/login",
                                       method="POST",
                                       body=urllib.urlencode(body))
         cookie = response.headers["set-cookie"]
         headers = {"Cookie": cookie}
 
-        response = yield client.fetch("http://localhost:9990", headers=headers)
+        response = yield client.fetch(base_url, headers=headers)
         d = ast.literal_eval(response.body)
         self.assertDictEqual({u"you're logged in as": u'admin'}, d)
 

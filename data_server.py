@@ -44,7 +44,7 @@ class StockApplication(Application):
 
         settings = dict(
             debug=config.DEBUG,
-            xsrf_cookies=not config.DEBUG,
+            xsrf_cookies=False,
             db=StockApplication.db,
             test_db=StockApplication.test_db,
             cookie_secret=options.cookie_secret,
