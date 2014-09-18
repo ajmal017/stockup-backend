@@ -28,7 +28,7 @@ class AlgoHandler(BaseRequestHandler):
         if self.get_argument("test", None):
             yield self.settings["test_db"].algos.remove(query)
         else:
-            yield self.settings["db"].algos.save(query)
+            yield self.settings["db"].algos.remove(query)
         self.write({"removed": algo_data["algo_id"]})
 
     @gen.coroutine

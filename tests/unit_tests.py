@@ -11,7 +11,6 @@ import motor
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.testing import AsyncTestCase, gen_test
-from config import TEST_IPAD_TOKEN
 
 
 here = os.path.dirname(os.path.abspath(__file__))
@@ -22,7 +21,7 @@ if par_here not in sys.path:
 from algo_parsers.algorithm import Algorithm
 from algo_parsers.apns_sender import apns_sender
 from cron_scripts.crawler import SinaCrawler
-
+from config import TEST_IPAD_TOKEN
 
 class BaseUnitTest(AsyncTestCase):
     # base_url = "http://stockup-dev.cloudapp.net:9990"
@@ -49,13 +48,6 @@ class ApnsUnitTest(BaseUnitTest):
     """
 
     @gen_test
-    def test_apns(self):
-        yield gen.Task(apns_sender.connect)
-        apns_sender.on_connected()
-        result = yield apns_sender.send()
-        self.assertTrue(result)
-
-    @gen_test
     def test_token_upload(self):
         yield self.login()
         body = {
@@ -63,12 +55,26 @@ class ApnsUnitTest(BaseUnitTest):
             "apns_token": TEST_IPAD_TOKEN,
             "test": 1
         }
-        response = yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/add-token/",
-                                                 method="POST",
-                                                 headers=AlgoUnitTest.headers,
-                                                 body=urllib.urlencode(body))
+
+        yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/add-token/",
+                                      method="POST",
+                                      headers=AlgoUnitTest.headers,
+                                      body=urllib.urlencode(body))
         yield self.logout()
 
+
+    @gen_test
+    def test_apns(self):
+        yield gen.Task(apns_sender.connect)
+        apns_sender.on_connected()
+        db = motor.MotorClient().ss_test
+        result = yield db.users.find_one({"user_id": "admin"}, {"apns_tokens": 1})
+
+        for token in result["apns_tokens"]:
+            result = yield apns_sender.send(token=token,
+                                            alert="Test Alert",
+                                            custom={"test": "data"})
+            self.assertTrue(result)
 
 class AlgoUnitTest(BaseUnitTest):
     """
@@ -92,7 +98,7 @@ class AlgoUnitTest(BaseUnitTest):
             "algo_id": "upload_algo_id",
             "algo_name": "upload_algo",
             "stock_id": 600100,
-            "user_id": "robert",
+            "user_id": "admin",
             "price_type": "market",
             "trade_method": "sell",
             "volume": 100,
@@ -132,13 +138,17 @@ class AlgoUnitTest(BaseUnitTest):
 
     @gen_test
     def test_algo_get(self):
-        client = AsyncHTTPClient()
+        yield self.login()
 
-        url = "http://localhost:9990/algo/list/?user_id=robert&test=1"
-        response = yield client.fetch(url)
+        client = AsyncHTTPClient()
+        user_id = "admin"
+        url = "http://localhost:9990/algo/list/?user_id=" + user_id + "&test=1"
+        response = yield client.fetch(url, headers=AlgoUnitTest.headers)
 
         algo_dict = ast.literal_eval(response.body)
-        self.assertEqual(len(algo_dict["algos"]), 3)
+
+        self.assertEqual(len(algo_dict["algos"]), 2)
+        yield self.logout()
 
 
 class CrawlerUnitTest(BaseUnitTest):

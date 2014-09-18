@@ -25,15 +25,14 @@ class ApnsSender:
         ApnsSender.apns.gateway_server.connect(callback)
 
     @gen.coroutine
-    def send(self):
+    def send(self, token, alert, sound="default", badge=1, custom={}):
         if not ApnsSender.connected:
             raise gen.Return(False)
         identifier = 1
         expiry = time.time() + 3600
-        token_hex = config.TEST_IPAD_TOKEN
-        payload = Payload(alert="Hello World!", sound="default", badge=1)
+        payload = Payload(alert=alert, sound=sound, badge=badge, custom=custom)
         yield gen.Task(ApnsSender.apns.gateway_server.send_notification,
-                       identifier, expiry, token_hex, payload)
+                       identifier, expiry, token, payload)
         config.debug_log(logger, "Sent push message to APNs gateway")
         raise gen.Return(True)
 
