@@ -90,8 +90,8 @@ class PriceCondition(Condition):
         matched = None
 
         if self.price_type == "more_than":
-            matched = price_curr > self.price > price_prev
+            matched = price_curr > self.price >= price_prev
         elif self.price_type == "less_than":
-            matched = price_curr < self.price < price_prev
+            matched = price_curr < self.price <= price_prev
 
         raise gen.Return(matched)
