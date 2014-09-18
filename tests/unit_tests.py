@@ -81,6 +81,20 @@ class AlgoUnitTest(AsyncTestCase):
         self.assertDictEqual(d, {"saved": "upload_algo_id"})
 
     @gen_test
+    def test_algo_remove(self):
+        client = AsyncHTTPClient()
+        body = {"algo": {
+            "algo_v": 1,
+            "algo_id": "upload_algo_id"
+        }, "test": 1}
+
+        response = yield client.fetch("http://localhost:9990/algo/remove",
+                                      method="POST",
+                                      body=urllib.urlencode(body))
+        d = ast.literal_eval(response.body)
+        self.assertDictEqual(d, {"removed": "upload_algo_id"})
+
+    @gen_test
     def test_algo_get(self):
         pass
 

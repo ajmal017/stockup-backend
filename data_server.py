@@ -35,7 +35,7 @@ class StockApplication(Application):
         handlers = [
             (r"/?", HomeHandler),
             (r"/condition/(macd|kdj|price)/?", ConditionHandler),
-            (r"/algo/(upload)/?", AlgoHandler),
+            (r"/algo/(upload|remove)/?", AlgoHandler),
             (r"/stock-list/?", StockListHandler),
             (r"/auth/login/?", AuthLoginHandler),
             (r"/auth/logout/?", AuthLogoutHandler)
