@@ -24,8 +24,8 @@ from config import TEST_IPAD_TOKEN
 from algo_parsers.apns_sender import ApnsSender
 
 class BaseUnitTest(AsyncTestCase):
-    # base_url = "http://stockup-dev.cloudapp.net:9990"
-    base_url = "http://localhost:9990"
+    base_url = "http://stockup-dev.cloudapp.net:9990"
+    # base_url = "http://localhost:9990"
     headers = None
 
     @gen.coroutine

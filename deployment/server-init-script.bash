@@ -25,7 +25,7 @@ sudo echo "$UUID /data-drive ext4 defaults 1 2" >> /etc/fstab
 cd ~/.ssh
 ssh-keygen -t rsa -C "robert.guo@10gen.com" -f id_rsa -N ''
 echo "please add this key to github ,press [Enter] when done"
-echo id_rsa
+more id_rsa.pub
 read placeholder
 
 aptInstall () {
@@ -43,13 +43,14 @@ aptInstall git
 aptInstall emacs
 aptInstall python-dev
 aptInstall python-pip
+aptInstall libcurl4-openssl-dev
 
 sudo pip install pymongo
 sudo pip install supervisor
 
 # shorthands
 addAbbrev () {
-	echo $1 >> ~/.bash_profile
+    echo $1 >> ~/.bash_profile
 }
 
 upgate() {
@@ -93,8 +94,8 @@ mkdir /data-drive/db/
 mkdir /data-drive/log/	
 
 # TODO: change to use replica set and config file
-(crontab -l ; echo "@reboot sudo /usr/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log")| sudo crontab -
+(echo "@reboot sudo /usr/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log")| sudo crontab -
 (crontab -l ; echo "@reboot sudo supervisord -c /var/www/stockup-backend/deployment/supervisord.conf")| sudo crontab -
-(crontab -l ; echo "* 1,4,8 * * * source /home/trader/.bash_profile; sctl restart data_server")| sudo crontab -
+(crontab -l ; echo "* 1,4,8 * * * sudo supervisorctl -c '/var/www/stockup-backend/deployment/supervisord.conf' restart data_server1 data_server2 data_server3 data_server4")| sudo crontab -
 
 

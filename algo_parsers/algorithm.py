@@ -35,6 +35,8 @@ class Algorithm:
     def conditions_from_dict(cls, condition_dict):
         conditions = {}
         for k, v in condition_dict["conditions"].iteritems():
+            if not v:
+                continue
             if k == "price_condition":
                 conditions[k] = PriceCondition.from_dict(v)
             elif k == "kdj_condition":
@@ -129,5 +131,5 @@ class Algorithm:
             if not sent:
                 pass
                 # TODO: if a notification/transaction failed, do something meaningful
-        
+
         raise gen.Return(True)

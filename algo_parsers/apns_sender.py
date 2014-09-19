@@ -30,7 +30,7 @@ class ApnsSender(object):
         if not ApnsSender.connected:
             raise gen.Return(False)
         identifier = 1
-        expiry = time.time() + 3600
+        expiry = time.time() + 3600*24
         payload = Payload(alert=alert, sound=sound, badge=badge, custom=custom)
         yield gen.Task(ApnsSender.apns.gateway_server.send_notification,
                        identifier, expiry, token, payload)
