@@ -32,16 +32,6 @@ class StockApplication(Application):
     test_db = motor.MotorClient().ss_test
 
     def __init__(self):
-        handlers = [
-            (r"/?", HomeHandler),
-            (r"/condition/(macd|kdj|price)/?", ConditionHandler),
-            (r"/algo/(upload|remove|list)/?", AlgoHandler),
-            (r"/stock-list/?", StockListHandler),
-            (r"/auth/login/?", AuthLoginHandler),
-            (r"/auth/logout/?", AuthLogoutHandler),
-            (r"/add-token/?", ApnsTokenHandler)
-
-        ]
 
         settings = dict(
             debug=config.DEBUG,
@@ -49,8 +39,21 @@ class StockApplication(Application):
             db=StockApplication.db,
             test_db=StockApplication.test_db,
             cookie_secret=options.cookie_secret,
-            login_url="/auth/login"
+            login_url="/auth/login",
+            static_path=os.path.join(here, "static")
         )
+
+        handlers = [
+            (r"/?", HomeHandler),
+            (r"/condition/(macd|kdj|price)/?", ConditionHandler),
+            (r"/algo/(upload|remove|list)/?", AlgoHandler),
+            (r"/stock-list/?", StockListHandler),
+            (r"/auth/login/?", AuthLoginHandler),
+            (r"/auth/logout/?", AuthLogoutHandler),
+            (r"/add-token/?", ApnsTokenHandler),
+            (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"})
+
+        ]
 
         Application.__init__(self, handlers, **settings)
 
