@@ -42,16 +42,21 @@ class Algorithm:
             elif k == "kdj_condition":
                 conditions[k] = KdjCondition.from_dict(v)
             conditions[k].db = Algorithm.db
-
         conditions[condition_dict["primary_condition"]].is_primary = True
         return conditions
 
     @classmethod
     @gen.coroutine
-    def parse_all(cls, time):
+    def parse_all(cls, time, filter_query=None):
+        """
+
+        :param time:
+        :param filter_query: filter out a subset of messages
+        :return:
+        """
         algos = []
 
-        cursor = Algorithm.db.algos.find()
+        cursor = Algorithm.db.algos.find(filter_query)
 
         for algo_json in (yield cursor.to_list(100)):
             algos.append(cls.from_json(algo_json, time))

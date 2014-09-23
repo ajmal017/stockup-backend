@@ -24,8 +24,8 @@ from config import TEST_IPAD_TOKEN
 from algo_parsers.apns_sender import ApnsSender
 
 class BaseUnitTest(AsyncTestCase):
-    base_url = "http://stockup-dev.cloudapp.net:9990"
-    # base_url = "http://localhost:9990"
+    # base_url = "http://stockup-dev.cloudapp.net:9990"
+    base_url = "http://localhost:9990"
     headers = None
 
     @gen.coroutine
@@ -80,13 +80,40 @@ class AlgoUnitTest(BaseUnitTest):
     """
     Unit Test for the Various Algorithms
     """
+    @gen_test
+    def test_kdj_condition(self):
+        time = datetime(year=2014, month=9, day=15, hour=15, minute=0,
+                        second=10)
+        Algorithm.db = motor.MotorClient().ss_test
+
+        filter = {
+            "_id.algo_id": {
+                "$in": [
+                    "upload_algo_id"
+                ]
+            }
+        }
+
+        matches = yield Algorithm.parse_all(time, filter)
+        self.assertEqual(len(matches), 1)
+        self.assertEqual(matches[0].algo_name, "match_algo")
 
     @gen_test
     def test_price_condition(self):
         time = datetime(year=2014, month=9, day=15, hour=15, minute=0,
                         second=10)
         Algorithm.db = motor.MotorClient().ss_test
-        matches = yield Algorithm.parse_all(time)
+
+        filter = {
+            "_id.algo_id": {
+                "$in": [
+                    "price_unmatch_algo_id",
+                    "price_match_algo_id"
+                ]
+            }
+        }
+
+        matches = yield Algorithm.parse_all(time, filter)
         self.assertEqual(len(matches), 1)
         self.assertEqual(matches[0].algo_name, "match_algo")
 
@@ -107,7 +134,13 @@ class AlgoUnitTest(BaseUnitTest):
                 "price_condition": {
                     "price_type": "more_than",
                     "price": "130.00",
-                    "window": "60"
+                    "window": 60
+                },
+                "kdj_condition": {
+                    "n": 100,
+                    "m": 30,
+                    "m1": 30,
+                    "window": 60
                 }
             }
         }, "test": 1}
@@ -142,7 +175,7 @@ class AlgoUnitTest(BaseUnitTest):
 
         client = AsyncHTTPClient()
         user_id = "admin"
-        url = "http://localhost:9990/algo/list/?user_id=" + user_id + "&test=1"
+        url = AlgoUnitTest.base_url + "/algo/list/?user_id=" + user_id + "&test=1"
         response = yield client.fetch(url, headers=AlgoUnitTest.headers)
 
         algo_dict = ast.literal_eval(response.body)

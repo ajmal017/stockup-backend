@@ -16,6 +16,7 @@ from util import construct_sina_url
 
 
 
+
 # AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
 logger = logging.getLogger(__name__)
@@ -24,7 +25,7 @@ define("skip", default=0, help="start line in stocks_all.txt", type=int)
 define("limit", default=256, help="number of stocks to lookup", type=int)
 define("maxConnections", default=256,
        help="max number of open connections allowed", type=int)
-define("interval", default=2470, help="fetch data interval", type=int)
+define("interval", default=2470, help="fetch data interval in ms", type=int)
 define("segmentSize", default=20, help="batch size of each request to sina",
        type=int)
 
@@ -81,17 +82,12 @@ class SinaCrawler:
 
             if val:
                 SinaCrawler.stock_catalog = val["name_code_dict"]
-                vals = SinaCrawler.stock_catalog.values()[
-                       options.skip:options.limit]
+                vals = SinaCrawler.stock_catalog.values()[options.skip:options.limit]
                 SinaCrawler.segmented_catalog = []
 
                 length = len(vals)
                 wanted_parts = length / options.segmentSize
-                SinaCrawler.segmented_catalog = [vals[
-                                                 i * length / wanted_parts: (
-                                                                                i + 1) * length / wanted_parts]
-                                                 for i
-                                                 in range(wanted_parts)]
+                SinaCrawler.segmented_catalog = [ vals[i * length / wanted_parts: (i + 1) * length / wanted_parts] for i in range(wanted_parts)]
 
         if not SinaCrawler.stock_catalog:
             logger.error("no stock catalog")
@@ -101,8 +97,7 @@ class SinaCrawler:
 
         http_client = AsyncHTTPClient()
         for segment in SinaCrawler.segmented_catalog:
-            fetch_tasks.append(http_client.fetch(construct_sina_url(segment),
-                                                 request_timeout=20))
+            fetch_tasks.append(http_client.fetch(construct_sina_url(segment), request_timeout=20))
             SinaCrawler.num_connections += 1
         try:
             responses = yield fetch_tasks
@@ -119,16 +114,11 @@ class SinaCrawler:
                 logger.error(str(datetime.now()))
                 logger.error(str(response.error))
             else:
-                stock_vars = response.body.decode(encoding='GB18030',
-                                                  errors='strict').strip().split(
-                    '\n')
-                stock_list = [item for item in
-                              self.stock_info_generator(stock_vars) if item]
+                stock_vars = response.body.decode(encoding='GB18030', errors='strict').strip().split('\n')
+                stock_list = [item for item in self.stock_info_generator(stock_vars) if item]
                 if stock_list:
                     if commit:
-                        insert_tasks.append(
-                            SinaCrawler.db.stocks.insert(stock_list,
-                                                         continue_on_error=True))
+                        insert_tasks.append(SinaCrawler.db.stocks.insert(stock_list, continue_on_error=True))
                     else:
                         raise gen.Return(stock_list)
 

@@ -63,7 +63,8 @@ def avg(a):
 stock_list = open("../stock-list.txt")
 
 for s in stock_list.readlines():
-    if s[0] == "#": continue
+    if s[0] == "#":
+        continue
     stock_number = s.strip().split()[1]
 
     n_low = deque()

@@ -1,4 +1,5 @@
 import ast
+import json
 
 from tornado import gen
 from tornado.web import authenticated
@@ -34,7 +35,8 @@ class AlgoHandler(BaseRequestHandler):
     @gen.coroutine
     def post_upload(self):
         algo_data_raw = self.get_argument("algo", None)
-        algo_data = ast.literal_eval(algo_data_raw)
+        print algo_data_raw
+        algo_data = json.loads(algo_data_raw)
 
         _id = {"algo_id": algo_data["algo_id"], "algo_v": algo_data["algo_v"]}
         algo_data["_id"] = _id

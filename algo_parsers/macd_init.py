@@ -12,7 +12,6 @@ macd_collection = db.macd
 # http://en.wikipedia.org/wiki/MACD
 # http://wiki.mbalib.com/wiki/%E5%B9%B3%E6%BB%91%E5%BC%82%E5%90%8C%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E7%BA%BF
 # 12, 26, 9
-# so far the script is wrong
 n1 = 12
 n2 = 26
 n3 = 9

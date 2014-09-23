@@ -12,6 +12,7 @@ from constants import PRICE_INDEX
 logger = logging.getLogger(__name__)
 
 class PriceCondition(Condition):
+
     @classmethod
     def from_dict(cls, condition_dict):
         condition = cls()
@@ -43,13 +44,13 @@ class PriceCondition(Condition):
 
         cursor = self.db.stocks.find(find_query)
 
-        for stock_dict in (yield cursor.to_list(100)):
+        for stock_dict in (yield cursor.to_list(1000)):
             # most recent one is first
             stocks.append(stock_dict["d"])
 
         if len(stocks) < 2:
             logger.error("match_condition_secondary")
-            logger.error("not enough stocks data")
+            logger.error("not enough price data")
             return
 
         for stock in stocks:
@@ -88,9 +89,9 @@ class PriceCondition(Condition):
         price_prev = Decimal(stocks[1][PRICE_INDEX])
 
         if self.price_type == "more_than":
-            self.matched = price_curr > self.price >= price_prev
+            self.matched = (price_curr > self.price >= price_prev)
         elif self.price_type == "less_than":
-            self.matched = price_curr < self.price <= price_prev
+            self.matched = (price_curr < self.price <= price_prev)
 
         if self.matched:
             algo.match_price = price_curr

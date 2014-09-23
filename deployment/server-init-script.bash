@@ -94,7 +94,7 @@ mkdir /data-drive/db/
 mkdir /data-drive/log/	
 
 # TODO: change to use replica set and config file
-(echo "@reboot sudo /usr/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log")| sudo crontab -
+(echo "@reboot  sudo /usr/local/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log --fork")| sudo crontab -
 (crontab -l ; echo "@reboot sudo supervisord -c /var/www/stockup-backend/deployment/supervisord.conf")| sudo crontab -
 (crontab -l ; echo "* 1,4,8 * * * sudo supervisorctl -c '/var/www/stockup-backend/deployment/supervisord.conf' restart data_server1 data_server2 data_server3 data_server4")| sudo crontab -
 

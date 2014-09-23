@@ -82,7 +82,7 @@ def populate_test_db():
     yield db.algos.insert([{
                                "_id": {
                                    "algo_v": 1,
-                                   "algo_id": "match_algo_id"
+                                   "algo_id": "price_match_algo_id"
                                },
                                "algo_name": "match_algo",
                                "stock_id": 600100,
@@ -101,7 +101,7 @@ def populate_test_db():
                            }, {
                                "_id": {
                                    "algo_v": 1,
-                                   "algo_id": "unmatch_algo_id"
+                                   "algo_id": "price_unmatch_algo_id"
                                },
                                "algo_name": "unmatch_algo",
                                "stock_id": 600100,

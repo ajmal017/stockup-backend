@@ -19,10 +19,8 @@ class Condition:
         else:
             yield self.match_condition_secondary(algo)
 
-    @gen.coroutine
     def match_condition_secondary(self, algo):
-        pass
+        raise Exception("not implemented in child class")
 
-    @gen.coroutine
     def match_condition_primary(self, algo):
-        pass
+        raise Exception("not implemented in child class")
