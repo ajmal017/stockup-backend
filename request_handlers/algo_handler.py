@@ -1,8 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import ast
 import json
 
 from tornado import gen
-from tornado.web import authenticated
+from tornado.web import authenticated, urlparse
 
 from request_handlers.base_request_handler import BaseRequestHandler
 
@@ -17,12 +20,13 @@ class AlgoHandler(BaseRequestHandler):
         elif action == 'remove':
             yield self.post_remove()
         else:
-            self.write_end_array(404)
+            self.write_error(404)
 
     @gen.coroutine
     def post_remove(self):
         algo_data_raw = self.get_argument("algo", None)
-        algo_data = ast.literal_eval(algo_data_raw)
+        print urlparse.parse_qs(algo_data_raw)
+        algo_data = (algo_data_raw)
 
         query = {"_id.algo_id": algo_data["algo_id"]}
 
@@ -34,9 +38,10 @@ class AlgoHandler(BaseRequestHandler):
 
     @gen.coroutine
     def post_upload(self):
-        algo_data_raw = self.get_argument("algo", None)
-        print algo_data_raw
-        algo_data = json.loads(algo_data_raw)
+
+        body = json.loads(self.request.body)
+
+        algo_data = body["algo"]
 
         _id = {"algo_id": algo_data["algo_id"], "algo_v": algo_data["algo_v"]}
         algo_data["_id"] = _id
@@ -44,7 +49,7 @@ class AlgoHandler(BaseRequestHandler):
         del algo_data["algo_id"]
         del algo_data["algo_v"]
 
-        if self.get_argument("test", None):
+        if "test" in body:
             yield self.settings["test_db"].algos.save(algo_data)
         else:
             yield self.settings["db"].algos.save(algo_data)

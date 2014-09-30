@@ -1,6 +1,9 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import ast
 from datetime import datetime
+import json
 import logging
 import os
 import unittest
@@ -123,7 +126,7 @@ class AlgoUnitTest(BaseUnitTest):
         body = {"algo": {
             "algo_v": 1,
             "algo_id": "upload_algo_id",
-            "algo_name": "upload_algo",
+            "algo_name": "测试算法",
             "stock_id": 600100,
             "user_id": "admin",
             "price_type": "market",
@@ -145,10 +148,12 @@ class AlgoUnitTest(BaseUnitTest):
             }
         }, "test": 1}
 
+        AlgoUnitTest.headers["Content-Type"] = "application/json"
+
         response = yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/algo/upload",
                                                  method="POST",
                                                  headers=AlgoUnitTest.headers,
-                                                 body=urllib.urlencode(body))
+                                                 body=json.dumps(body))
         d = ast.literal_eval(response.body)
         self.assertDictEqual(d, {"saved": "upload_algo_id"})
         yield self.logout()
@@ -164,7 +169,7 @@ class AlgoUnitTest(BaseUnitTest):
         response = yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/algo/remove",
                                                  method="POST",
                                                  headers=AlgoUnitTest.headers,
-                                                 body=urllib.urlencode(body))
+                                                 body=body)
         d = ast.literal_eval(response.body)
         self.assertDictEqual(d, {"removed": "upload_algo_id"})
         yield self.logout()
