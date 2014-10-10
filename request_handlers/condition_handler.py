@@ -9,7 +9,6 @@ from request_handlers.base_request_handler import BaseRequestHandler
 
 class ConditionHandler(BaseRequestHandler):
 
-    @authenticated
     @gen.coroutine
     def get(self, condition=None):
         if condition == "price":
@@ -33,7 +32,7 @@ class ConditionHandler(BaseRequestHandler):
         start_time_raw = self.get_argument('start_time', None)
         end_time_raw = self.get_argument('end_time', None)
         ids_raw = self.get_argument('stock_ids', None)
-        if not start_time_raw and end_time_raw and ids_raw:
+        if not (start_time_raw and end_time_raw and ids_raw):
             self.write({'arguments': ['start_time', 'end_time', 'stock_ids']})
             return
         try:
@@ -63,6 +62,6 @@ class ConditionHandler(BaseRequestHandler):
         self.write_start_array()
         for document in (yield cursor.to_list(100)):
             del document['_id']['d']
-            self.write({'doc': document})
+            self.write(document)
             self.write_separator()
         self.write_end_array()
