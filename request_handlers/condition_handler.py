@@ -68,4 +68,4 @@ class ConditionHandler(BaseRequestHandler):
             a.append(document["d"][TIME])
             prices_arr.append(a)
 
-        self.write(json.dumps(prices_arr))
+        self.write({"d": prices_arr})

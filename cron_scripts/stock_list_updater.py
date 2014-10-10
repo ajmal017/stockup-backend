@@ -30,7 +30,7 @@ logger = logging.getLogger("update_stock_list")
 
 AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
-define("env", default="dev", help="environment: prod|dev|stage|test", type=str)
+define("env", default="dev", help="environment: prod|dev|stage", type=str)
 
 db = motor.MotorClient().ss
 
