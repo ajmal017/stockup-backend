@@ -6,7 +6,7 @@ from datetime import timedelta
 from tornado import gen
 
 from algo_parsers.Condition import Condition
-from constants import PRICE_INDEX
+from constants import CUR_PRICE
 
 
 logger = logging.getLogger(__name__)
@@ -54,7 +54,7 @@ class PriceCondition(Condition):
             return
 
         for stock in stocks:
-            price_curr = Decimal(stock[PRICE_INDEX])
+            price_curr = Decimal(stock[CUR_PRICE])
 
             # if there's one price that matches in the window, return True
             if self.price_type == "more_than":
@@ -85,8 +85,8 @@ class PriceCondition(Condition):
             logger.error("match_condition_primary")
             logger.error("not enough stocks data")
             return
-        price_curr = Decimal(stocks[0][PRICE_INDEX])
-        price_prev = Decimal(stocks[1][PRICE_INDEX])
+        price_curr = Decimal(stocks[0][CUR_PRICE])
+        price_prev = Decimal(stocks[1][CUR_PRICE])
 
         if self.price_type == "more_than":
             self.matched = (price_curr > self.price >= price_prev)

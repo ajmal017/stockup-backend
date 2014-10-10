@@ -1,9 +1,10 @@
 from datetime import datetime
+import json
 
 from tornado import gen
-from tornado.web import authenticated
 
 from config import datetime_repr
+from constants import CUR_PRICE, DATE, TIME
 from request_handlers.base_request_handler import BaseRequestHandler
 
 
@@ -58,10 +59,13 @@ class ConditionHandler(BaseRequestHandler):
         else:
             cursor = self.settings["db"].stocks.find(query)
 
+        prices_arr = []
 
-        self.write_start_array()
-        for document in (yield cursor.to_list(100)):
-            del document['_id']['d']
-            self.write(document)
-            self.write_separator()
-        self.write_end_array()
+        for document in (yield cursor.to_list(1000)):
+            a = []
+            a.append(document["d"][CUR_PRICE])
+            a.append(document["d"][DATE])
+            a.append(document["d"][TIME])
+            prices_arr.append(a)
+
+        self.write(json.dumps(prices_arr))

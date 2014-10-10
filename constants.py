@@ -1,1 +1,13 @@
-PRICE_INDEX = 3
+
+#indices from Sina
+OPENING_PRICE = 1
+CLOSING_PRICE = 2
+CUR_PRICE = 3
+HI = 4
+LO = 5
+BUY = 6
+SELL = 7
+VOL = 8
+
+DATE = 30
+TIME = 31

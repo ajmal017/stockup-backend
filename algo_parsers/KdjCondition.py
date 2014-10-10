@@ -6,7 +6,7 @@ import pymongo
 
 from tornado import gen
 from algo_parsers.Condition import Condition
-from constants import PRICE_INDEX
+from constants import CUR_PRICE
 from util import shift, avg
 
 logger = logging.getLogger(__name__)
@@ -70,7 +70,7 @@ class KdjCondition(Condition):
 
         cursor = self.db.stocks.find(find_query, sort=sort_query)
         for stock_dict in (yield cursor.to_list(1000)):
-            price = Decimal(stock_dict["d"][PRICE_INDEX])
+            price = Decimal(stock_dict["d"][CUR_PRICE])
             rsv = self.calc_rsv(price)
             if rsv != -1:
                 k = self.calc_k(rsv)
