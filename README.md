@@ -1,11 +1,25 @@
-stockup-backend
-===============
+#### Stockup Backend Repo
 
-Backend for stockup
+This is a repo of our backend containing a tornado + motor API server, some homebrew azure deployment scripts (which should be formalized some day through a third party framework)
 
 Our MVP is a product that makes people money
 
-How the algorithm is stored and
+### Respository Structure
+
+## Branch Structure
+The branches follow the __va.b.c__ format, except master. __a__ is the major release. __b__ is a release branch if it's even or a devlopment branch if it's odd. __c__ is for patches and are generally used for the release branch only. e.g. v0.1 is a development branch v0.2.1 is a release branch with one patch. 
+
+Generally a development branch of __va.b__ gets released in branch __va.(b+1)__. 
+
+All code is commited to master and get periodically rebased onto development branches after each sprint.
+
+## Folder structure
+
+# algo_parsers
+
+algo parsers parse combination of conditions
+
+How the algorithm is stored
 
 ```json
 

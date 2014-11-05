@@ -79,6 +79,7 @@ sudo cp ~/.ssh/id_rsa /var/www/.ssh/
 sudo chown -R www-data:www-data /var/www/
 
 sudo -Hu www-data git clone git@github.com:guoyr/stockup-backend.git /var/www/stockup-backend
+sudo -Hu www-data git checkout v0.0
 sudo -Hu www-data ln -s /var/www/stockup-backend/deployment/deploy.php /var/www/html/deploy.php
 cd /var/www/stockup-backend/servers
 sudo pip install -r requirements.txt
