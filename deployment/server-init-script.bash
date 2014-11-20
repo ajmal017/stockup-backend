@@ -1,25 +1,26 @@
 #!/bin/bash
 
 # mount disk
-sudo fdisk -l
+sudo -s
+fdisk -l
 echo -n "What is the name of the disk? "
 read diskName
-echo "n                                                                                                            
-p                                                                                                                  
+echo "n
+p
 1
 
 
-w                                                                                                                  
-" | sudo fdisk /dev/$diskName
+w
+" | fdisk /dev/$diskName
 
-sudo mkfs -t ext4 /dev/"$diskName"1
-sudo mkdir /data-drive
-sudo mount /dev/"$diskName"1 /data-drive
-sudo chown trader:trader /data-drive
+mkfs -t ext4 /dev/"$diskName"1
+mkdir /data-drive
+mount /dev/"$diskName"1 /data-drive
+chown trader:trader /data-drive
 line=$(sudo -i blkid|tail -1)
 words=($line)
 UUID=${line[1]}
-sudo echo "$UUID /data-drive ext4 defaults 1 2" >> /etc/fstab
+echo "$UUID /data-drive ext4 defaults 1 2" >> /etc/fstab
 
 #generate ssh key
 cd ~/.ssh
@@ -29,7 +30,7 @@ more id_rsa.pub
 read placeholder
 
 aptInstall () {
-	echo "Y" | sudo apt-get install $1 &> ~/init-script.log
+    echo "Y" | apt-get install $1 &> ~/init-script.log
 }
 
 echo "Installing things, may take a while..."
@@ -54,8 +55,8 @@ addAbbrev () {
 }
 
 upgate() {
-	sudo apt-get update
-	echo "Y" | sudo apt-get upgrade &> ~/init-script.log
+    sudo apt-get update
+    echo "Y" | sudo apt-get upgrade &> ~/init-script.log
 }
 
 # git stuff
@@ -87,16 +88,14 @@ sudo pip install -r requirements.txt
 # npm install
 
 sudo cp /var/www/stockup-backend/deployment/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-sudo cp /var/www/stockup-backend/deployment/ports.conf /etc/apache2/ports.conf 
+sudo cp /var/www/stockup-backend/deployment/ports.conf /etc/apache2/ports.conf
 sudo cp /var/www/stockup-backend/deployment/mongodb.conf /etc/init/mongodb.conf
 
 # start MongoDB
 mkdir /data-drive/db/
-mkdir /data-drive/log/	
+mkdir /data-drive/log/
 
 # TODO: change to use replica set and config file
 (echo "@reboot  sudo /usr/local/bin/mongod --dbpath /data-drive/db/ --logpath /data-drive/log/mongodb.log --fork")| sudo crontab -
 (crontab -l ; echo "@reboot sudo supervisord -c /var/www/stockup-backend/deployment/supervisord.conf")| sudo crontab -
 (crontab -l ; echo "* 1,4,8 * * * sudo supervisorctl -c '/var/www/stockup-backend/deployment/supervisord.conf' restart data_server1 data_server2 data_server3 data_server4")| sudo crontab -
-
-
