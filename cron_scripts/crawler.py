@@ -69,11 +69,11 @@ class SinaCrawler:
     @gen.coroutine
     def fetch_stock_info(self, commit=True):
 
-        debug_log(logger, "open crawler connections {0}".format(
-            SinaCrawler.num_connections))
         SinaCrawler.cur_iteration += 1
 
         if SinaCrawler.num_connections > options.maxConnections:
+            debug_log(logger, "open crawler connections {0}".format(
+            SinaCrawler.num_connections))
             return
 
         # update the catalog every once in a while
