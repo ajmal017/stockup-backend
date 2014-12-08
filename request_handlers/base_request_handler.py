@@ -10,15 +10,6 @@ class BaseRequestHandler(RequestHandler):
             self.write({"error": 404,
                         "description": "The requested resource could not be found but may be available again in the future"})
 
-    def write_start_array(self):
-        self.write("[")
-
-    def write_end_array(self):
-        self.write("]")
-
-    def write_separator(self):
-        self.write(",")
-
     def write_linebreak(self):
         self.write("\n")
 
