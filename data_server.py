@@ -22,7 +22,6 @@ from request_handlers import *
 
 define("port", default=9990, help="run on the given port", type=int)
 define("debug", default=False, help="run in debug mode", type=bool)
-define("env", default="dev", help="environment: prod|dev|stage", type=str)
 define("run_crawler", default=True, help="run the crawler", type=bool)
 define("run_server", default=True, help="run the server", type=bool)
 define("cookie_secret", default=config.COOKIE_KEY,
