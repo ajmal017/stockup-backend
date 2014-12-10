@@ -84,6 +84,9 @@ sudo -Hu www-data git checkout v0.0
 sudo -Hu www-data ln -s /var/www/stockup-backend/deployment/deploy.php /var/www/html/deploy.php
 cd /var/www/stockup-backend/servers
 sudo pip install -r requirements.txt
+#TODO: also create test branch repo 
+#TODO add sudo www-data shortcut
+#TODO switch repo to the dev or prod branch
 # sudo npm isntall nodemon
 # npm install
 
