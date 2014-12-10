@@ -43,7 +43,7 @@ class StockApplication(Application):
             login_url="/auth/login",
             static_path=os.path.join(here, "static")
         )
-
+        paths = {"path": "./static"}
         handlers = [
             (r"/?", HomeHandler),
             (r"/condition/(macd|kdj|price)/?", ConditionHandler),
@@ -52,7 +52,7 @@ class StockApplication(Application):
             (r"/auth/login/?", AuthLoginHandler),
             (r"/auth/logout/?", AuthLogoutHandler),
             (r"/add-token/?", ApnsTokenHandler),
-            (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "./static"})
+            (r"/static/(.*)", tornado.web.StaticFileHandler, paths)
 
         ]
 

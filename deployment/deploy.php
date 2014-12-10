@@ -18,23 +18,25 @@
         'git submodule status'
         );
 
+    function runCommands() {
+        foreach($commands AS $command){
+            // Run it
+            $tmp = shell_exec($command);
+                   // Output
+            $output .= "<span style=\"color: #6BE234;\">\$</span> <span style=\"color: #729FCF;\">{$command}\n</span>";
+            $output .= htmlentities(trim($tmp)) . "\n";
+        }
+    }
  // Run the commands for output
     $output = '';
     chdir('/var/www/stockup-backend');
-    foreach($commands AS $command){
-           // Run it
-        $tmp = shell_exec($command);
-                   // Output
-        $output .= "<span style=\"color: #6BE234;\">\$</sp
-        an> <span style=\"color: #729FCF;\">{$command}\n</span>";
-        $output .= htmlentities(trim($tmp)) . "\n"
-        ;
-    }
-
- // Make it pretty for manual user access (and why not?)
-    ?>
-    <!DOCTYPE HTML>
-    <html lang="en-US">
+    runCommands();
+    chdir('/var/www/stockup-backend-test');
+    runCommands();
+    // Make it pretty for manual user access (and why not?)
+?>
+<!DOCTYPE HTML>
+<html lang="en-US">
     <head>
         <meta charset="UTF-8">
         <title>GIT DEPLOYMENT SCRIPT</title>
@@ -49,5 +51,5 @@
 
         <?php echo $output; ?>
     </pre>
-</body>
+    </body>
 </html>

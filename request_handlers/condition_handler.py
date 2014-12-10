@@ -61,7 +61,7 @@ class ConditionHandler(BaseRequestHandler):
 
         prices_arr = []
 
-        for document in (yield cursor.to_list(1000)):
+        for document in (yield cursor.to_list()):
             a = []
             a.append(document["d"][CUR_PRICE])
             a.append(document["d"][DATE])
