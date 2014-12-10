@@ -9,6 +9,7 @@
 
  // The commands
 global $commands;
+global $output;
 $commands = array(
         'echo $PWD',
         'whoami',
@@ -21,6 +22,7 @@ $commands = array(
 
     function runCommands() {
         global $commands;
+        global $output;
         foreach($commands AS $command){
             // Run it
             $tmp = shell_exec($command);
