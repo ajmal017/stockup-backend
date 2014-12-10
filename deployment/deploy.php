@@ -8,7 +8,8 @@
      */
 
  // The commands
-    $commands = array(
+global $commands;
+$commands = array(
         'echo $PWD',
         'whoami',
         'git pull --rebase',
@@ -19,6 +20,7 @@
         );
 
     function runCommands() {
+        global $commands;
         foreach($commands AS $command){
             // Run it
             $tmp = shell_exec($command);
