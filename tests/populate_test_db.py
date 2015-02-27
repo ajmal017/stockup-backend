@@ -1,6 +1,7 @@
 from datetime import datetime
 import os
 import sys
+import random
 
 import motor
 from tornado import gen
@@ -21,7 +22,7 @@ def populate_test_db():
     client.drop_database("ss_test")
     db = client.ss_test
 
-    prices = ["10.05", "11.05", "12.05", "13.05"]
+    curPrice = 12.05
     times = [
         "2014-09-15T15:00:00",
         "2014-09-15T15:00:05",
@@ -31,6 +32,8 @@ def populate_test_db():
     inserts = []
 
     for i in range(len(prices)):
+        lastPrice = curPrice
+        curPrice *= (random.gauss(0.005,0.01) + 1)
         info = {
             "_id": {
                 "c": 600100,
@@ -40,7 +43,7 @@ def populate_test_db():
                 "test_stock",
                 "10.66",
                 "10.72",
-                prices[i],
+                "%.2f" % curPrice,
                 "10.84",
                 "10.65",
                 "10.70",
