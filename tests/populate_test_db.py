@@ -34,6 +34,7 @@ def populate_test_db():
     for i in range(len(prices)):
         lastPrice = curPrice
         curPrice *= (random.gauss(0.005,0.01) + 1)
+        volume = 29580362
         info = {
             "_id": {
                 "c": 600100,
@@ -48,8 +49,8 @@ def populate_test_db():
                 "10.65",
                 "10.70",
                 "10.71",
-                "29580362",
-                "316949714",
+                "%d" % volume,
+                "%d" % curPrice * volume,
                 "52500",
                 "10.70",
                 "63800",
