@@ -7,14 +7,14 @@ from algo_parsers.KdjCondition import KdjCondition
 from algo_parsers.PriceCondition import PriceCondition
 from algo_parsers.apns_sender import ApnsSender
 from config import debug_log
-
+from tornado.options import options
 
 __author__ = 'guo'
 logger = logging.getLogger(__name__)
 
 
 class Algorithm:
-    db = motor.MotorClient().stocks
+    db = motor.MotorClient(options.dbhost).stocks
 
     @classmethod
     def from_json(cls, json_dict, time):

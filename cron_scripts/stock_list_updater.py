@@ -25,6 +25,7 @@ if par_here not in sys.path:
     sys.path.append(par_here)
 
 from util import construct_sina_url
+from tornado.options import options
 
 logger = logging.getLogger("update_stock_list")
 
@@ -32,7 +33,7 @@ AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
 define("env", default="dev", help="environment: prod|dev|stage", type=str)
 
-db = motor.MotorClient().ss
+db = motor.MotorClient(options.dbhost).ss
 
 
 @gen.coroutine

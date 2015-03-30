@@ -6,7 +6,7 @@ import random
 import motor
 from tornado import gen
 from tornado.ioloop import IOLoop
-
+from tornado.options import options
 
 here = os.path.dirname(os.path.abspath(__file__))
 par_here = os.path.join(here, os.pardir)
@@ -18,7 +18,7 @@ from config import datetime_repr, TEST_IPAD_TOKEN
 
 @gen.coroutine
 def populate_test_db():
-    client = motor.MotorClient()
+    client = motor.MotorClient(options.dbhost)
     client.drop_database("ss_test")
     db = client.ss_test
 
@@ -30,7 +30,7 @@ def populate_test_db():
         "2014-09-15T15:00:15",
         ]
     inserts = []
-
+    prices = [12.05,12.05,12.05,12.05]
     for i in range(len(prices)):
         lastPrice = curPrice
         curPrice *= (random.gauss(0.005,0.01) + 1)

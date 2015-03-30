@@ -38,7 +38,7 @@ class SinaCrawler:
     # keep a list of the moment recent times and pray we won't have concurrency issues here
     # i.e. if an earlier time info returns after a later time info
     stock_info_cache = defaultdict(lambda: deque(maxlen=8))
-    db = motor.MotorClient().ss
+    db = motor.MotorClient(options.dbhost).ss
 
     def __init__(self):
         self.time = datetime.now()
