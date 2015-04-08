@@ -13,19 +13,21 @@
 # -*- coding: utf-8 -*-
 import time
 import hashlib
-import MySQLdb
+import Motor
 import yaml
+
+
 class MACD():
     def __init__(self):
         config = yaml.load(open('config.yml'))
         self.sleep_time = config['btcchina']['trade_option']['sleep_time']
-        self.conn = MySQLdb.connect(host=config['database']['host'],user=config['database']['username'],passwd=config['database']['password'],db =config['database']['databasename'],charset=config['database']['encoding'] )
-    def _getclose(self, num):
-        read = self.conn.cursor()
-        sql = "select close,time from ohlc order by id desc limit %s" % num
-        count = read.execute(sql)
-        results = read.fetchall()
-        return results[::-1]
+        self.db = motor.MotorClient('119.29.16.193').ss_test
+
+    def _getclose(self):
+	sort_query = [("_id", pymongo.ASCENDING)]
+	return db.ohlc.find(sort=sort_query)
+        
+
     def _ema(self, s, n):
         """
         returns an n period exponential moving average for
@@ -52,8 +54,10 @@ class MACD():
             j = j + 1
             ema.append(tmp)
         return ema
+
+    @gen.coroutine
     def getMACD(self, n):
-        array = self._getclose(n)
+        array = yield self._getclose().to_list(n)
         prices = map(lambda x: x[0], array)
         t = map(lambda x: int(time.mktime(x[1].timetuple())) * 1000, array)
         short_ema = self._ema(prices, 12)
