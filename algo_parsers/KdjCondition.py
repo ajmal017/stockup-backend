@@ -81,7 +81,6 @@ class KdjCondition(Condition):
                 self.kdj.append([k, d, j, ts])
 
         if len(self.kdj) < 2:
-            logger.error("match_condition_primary")
             logger.error("not enough kdj data")
             raise gen.Return(False)
 

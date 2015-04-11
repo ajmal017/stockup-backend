@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# to run single test:
+# python unit_tests.py unit_tests.AlgoUnitTest.test_kdj_condition
+
+# to run all tests
+# python unit_tests.py
+
 import ast
 from datetime import datetime
 import json
@@ -11,6 +17,7 @@ import sys
 import urllib
 
 import motor
+import tornado
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.testing import AsyncTestCase, gen_test
@@ -27,6 +34,11 @@ from config import TEST_IPAD_TOKEN
 from algo_parsers.apns_sender import ApnsSender
 
 # http://stockup-dev.cloudapp.net:9990/condition/price/?start_time=2014-10-08T11:00:00&end_time=2014-10-08T13:00:00&stock_ids=600198
+
+TEST_MODULES = ["unit_tests"]
+
+def all():
+    return unittest.defaultTestLoader.loadTestsFromNames(TEST_MODULES)
 
 class BaseUnitTest(AsyncTestCase):
     # base_url = "http://stockup-dev.cloudapp.net:9990"
@@ -230,5 +242,5 @@ class AuthenticationUnitTest(BaseUnitTest):
 
 
 if __name__ == "__main__":
-    logging.getLogger('tornado').addHandler(sys.stdout)
-    unittest.main()
+    # logging.getLogger('tornado').addHandler(sys.stdout)
+    tornado.testing.main()
