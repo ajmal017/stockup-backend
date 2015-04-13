@@ -22,106 +22,53 @@ def populate_test_db():
     client.drop_database("ss_test")
     db = client.ss_test
 
+    ## price algo data
     curPrice = 12.05
     times = [
-        "2014-09-15T15:00:00",
-        "2014-09-15T15:00:05",
-        "2014-09-15T15:00:10",
-        "2014-09-15T15:00:15",
-        ]
+ "2014-09-15T15:00:00", "2014-09-15T15:00:05", "2014-09-15T15:00:10", "2014-09-15T15:00:15", ]
     inserts = []
     prices = [12.05,12.05,12.05,12.05]
     for i in range(len(prices)):
-        lastPrice = curPrice
-        curPrice *= (random.gauss(0.005,0.01) + 1)
-        volume = 29580362
-        info = {
-            "_id": {
-                "c": 600100,
-                "d": datetime.strptime(times[i], datetime_repr())
-            },
-            "d": [
-                "test_stock",
-                "10.66",
-                "10.72",
-                "%.2f" % curPrice,
-                "10.84",
-                "10.65",
-                "10.70",
-                "10.71",
-                "%d" % volume,
-                "%d" % curPrice * volume,
-                "52500",
-                "10.70",
-                "63800",
-                "10.69",
-                "35599",
-                "10.68",
-                "48325",
-                "10.67",
-                "104764",
-                "10.66",
-                "154876",
-                "10.71",
-                "374400",
-                "10.72",
-                "94596",
-                "10.73",
-                "253400",
-                "10.74",
-                "153500",
-                "10.75",
-                "2014-09-15",
-                "15:03:03",
-                "00"
-            ]
-        }
+ lastPrice = curPrice
+ curPrice *= (random.gauss(0.005,0.01) + 1)
+ volume = 29580362
+ info = {
+     "_id": {
+        "c": 600100,
+        "d": datetime.strptime(times[i], datetime_repr())
+     },
+     "d": ["test_stock",  "10.66",  "10.72",  "%.2f" % curPrice,  "10.84",  "10.65",  "10.70",  "10.71",  "%d" % volume,  "%d" % curPrice * volume,  "52500",  "10.70",  "63800",  "10.69",  "35599",  "10.68",  "48325",  "10.67",  "104764",  "10.66",  "154876",  "10.71",  "374400",  "10.72",  "94596",  "10.73",  "253400",  "10.74",  "153500",  "10.75",  "2014-09-15",  "15:03:03",  "00"]
+ }
 
-        inserts.append(db.stocks.insert(info))
+ inserts.append(db.stocks.insert(info))
 
     yield inserts
+
+    ## kdj algo data
+    dates = ["2015-04-08T00:00:00","2015-04-07T00:00:00","2015-04-06T00:00:00","2015-04-03T00:00:00","2015-04-02T00:00:00","2015-04-01T00:00:00","2015-03-31T00:00:00","2015-03-30T00:00:00","2015-03-27T00:00:00","2015-03-26T00:00:00","2015-03-25T00:00:00","2015-03-24T00:00:00","2015-03-23T00:00:00","2015-03-20T00:00:00","2015-03-19T00:00:00","2015-03-18T00:00:00","2015-03-17T00:00:00","2015-03-16T00:00:00","2015-03-13T00:00:00","2015-03-12T00:00:00","2015-03-11T00:00:00","2015-03-10T00:00:00","2015-03-09T00:00:00","2015-03-06T00:00:00","2015-03-05T00:00:00","2015-03-04T00:00:00","2015-03-03T00:00:00","2015-03-02T00:00:00","2015-02-27T00:00:00","2015-02-26T00:00:00","2015-02-25T00:00:00"]
+
+    closings = ["16.93","17.6","17.08","17.08","16.83","16.95","16.41","16.38","16.17","16","16.57","16.84","16.47","15.73","15.64","15.5","15.25","15.02","14.44","14.2","14.18","14.33","14.33","14.08","14.29","14.7","14.62","15.21","15.08","14.81","14.61"]
+
 
     yield db.users.insert({ "_id" : "admin", "apns_tokens" : [ TEST_IPAD_TOKEN ] })
 
     yield db.algos.insert([{
-                               "_id": {
-                                   "algo_v": 1,
-                                   "algo_id": "price_match_algo_id"
-                               },
-                               "algo_name": "match_algo",
-                               "stock_id": 600100,
-                               "user_id": "admin",
-                               "price_type": "market",
-                               "trade_method": "sell",
-                               "volume": 100,
-                               "primary_condition": "price_condition",
-                               "conditions": {
-                                   "price_condition": {
-                                       "price_type": "more_than",
-                                       "price": "12.00",
-                                       "window": "60"
-                                   }
-                               }
-                           }, {
-                               "_id": {
-                                   "algo_v": 1,
-                                   "algo_id": "price_unmatch_algo_id"
-                               },
-                               "algo_name": "unmatch_algo",
-                               "stock_id": 600100,
-                               "user_id": "admin",
-                               "price_type": "market",
-                               "trade_method": "sell",
-                               "volume": 100,
-                               "primary_condition": "price_condition",
-                               "conditions": {
-                                   "price_condition": {
-                                       "price_type": "more_than",
-                                       "price": "13.00",
-                                       "window": "60"
-                                   }
-                               }
-                           }])
+   "_id": {
+"algo_v": 1,"algo_id": "price_match_algo_id"
+   },   "algo_name": "match_algo",   "stock_id": 600100,   "user_id": "admin",   "price_type": "market",   "trade_method": "sell",   "volume": 100,   "primary_condition": "price_condition",   "conditions": {
+"price_condition": {
+    "price_type": "more_than",    "price": "12.00",    "window": "60"
+}
+   }
+      }, {
+   "_id": {
+"algo_v": 1,"algo_id": "price_unmatch_algo_id"
+   },   "algo_name": "unmatch_algo",   "stock_id": 600100,   "user_id": "admin",   "price_type": "market",   "trade_method": "sell",   "volume": 100,   "primary_condition": "price_condition",   "conditions": {
+"price_condition": {
+    "price_type": "more_than",    "price": "13.00",    "window": "60"
+}
+   }
+      }])
 
     print "done"
     IOLoop.current().stop()
