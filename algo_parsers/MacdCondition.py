@@ -9,23 +9,24 @@
 #       DEA=LastDEA * 8/10 + DIF * 2/10
 #       MACD=(DIF-DEA) * 2
 # * *****************************************************************************/
+#zip(["oh", "hi"], [1, 2]) --> [("oh", 1), ("hi", 2)]W
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import time
 import hashlib
 import Motor
-import yaml
-
+import pymongo
+import json
 
 class MACD():
     def __init__(self):
-        config = yaml.load(open('config.yml'))
+        config = json.loads(open('config.yml'))
         self.sleep_time = config['btcchina']['trade_option']['sleep_time']
-        self.db = motor.MotorClient('119.29.16.193').ss_test
+        self.db = Motor.MotorClient('119.29.16.193').ss_test
 
     def _getclose(self):
-	sort_query = [("_id", pymongo.ASCENDING)]
-	return db.ohlc.find(sort=sort_query)
+	    sort_query = [("_id", pymongo.ASCENDING)]
+	    return self.db.ohlc.find(sort=sort_query)
         
 
     def _ema(self, s, n):

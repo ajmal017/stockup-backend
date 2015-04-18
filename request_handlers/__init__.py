@@ -5,6 +5,7 @@ from request_handlers.condition_handler import ConditionHandler
 from request_handlers.algo_handler import AlgoHandler
 from request_handlers.stock_list_handler import StockListHandler
 from request_handlers.apns_token_handler import ApnsTokenHandler
-
+from request_handlers.kdj_Handler import KDJHandler
+from request_handlers.macd_Handler import MACDHandler
 
 __author__ = 'guo'

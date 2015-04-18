@@ -1,5 +1,5 @@
-import urlparse
-
+import urllib
+from collections import deque
 
 def construct_sina_url(values):
     scheme = "http"
@@ -8,7 +8,7 @@ def construct_sina_url(values):
     params = ""
     query = "list=" + ",".join(str(s) for s in values)
     frags = ""
-    return urlparse.urlunparse((scheme, netloc, path, params, query, frags))
+    return urllib.parse.urlunparse((scheme, netloc, path, params, query, frags))
 
 
 def shift(a, v, l):

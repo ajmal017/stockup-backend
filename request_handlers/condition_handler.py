@@ -15,9 +15,9 @@ class ConditionHandler(BaseRequestHandler):
         if condition == "price":
             yield self.get_price()
         elif condition == "macd":
-            print "macd"
+            print("macd")
         elif condition == "kdj":
-            print "kdj"
+            print ("kdj")
 
     @gen.coroutine
     def get_price(self):
@@ -40,7 +40,7 @@ class ConditionHandler(BaseRequestHandler):
             stock_ids = map(lambda x: int(x), ids_raw.split(','))
             start_time = datetime.strptime(start_time_raw, datetime_repr())
             end_time = datetime.strptime(end_time_raw, datetime_repr())
-        except ValueError, e:
+        except ValueError as e:
             self.write({'error': 'field format incorrect'})
             return
 

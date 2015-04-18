@@ -1,0 +1,160 @@
+    $(function () {
+        Highcharts.setOptions({  
+            global: {  
+                useUTC: false  
+            }  
+        }); 
+        $.getJSON('/boll/', function(bolldata) {
+            var ohlc = []
+                volume = [],
+                dataLength = bolldata['ohlc'].length;
+            for (i = 0; i < dataLength; i++) {
+                ohlc.push([
+                    bolldata['ohlc'][i][0],
+                    bolldata['ohlc'][i][1],
+                    bolldata['ohlc'][i][2],
+                    bolldata['ohlc'][i][3],
+                    bolldata['ohlc'][i][4],
+                ]);
+                volume.push([
+                    bolldata['ohlc'][i][0],
+                    bolldata['ohlc'][i][5],
+                ])
+            };
+            $.getJSON('/kdj/', function(kdjdata) {
+               $.getJSON('/macd/', function(macddata) {
+                    $('#container').highcharts('StockChart', {
+                        rangeSelector: {
+                            enabled: 0
+                        },
+                        chart: {
+                            backgroundColor: '#333333',
+                        },
+                	    tooltip: {
+                	    	formatter: function() {
+                				var s = ''+ Highcharts.dateFormat('%A, %b %e, %H:%M', this.x) +'';
+                				$.each(this.points, function(i, point) {
+                					s += ''+this.series.name+': '+parseFloat(point.y).toFixed(2);
+                				});
+                				return s;
+                			}
+                	    },
+                        plotOptions: {
+                            series: {
+                                marker: {
+                                    enabled: false
+                                },
+                                lineWidth: 1.1,
+                            }
+                        },
+                        yAxis: [{
+                          title: {
+                              text: 'MACD(12,26,9)'
+                          },
+                          height: 200,
+                        }, {
+                          title: {
+                              text: 'KDJ(9,3,3)'
+                          },
+                          top: 250,
+                          height: 150,
+                          offset: 0,
+                          gridLineDashStyle: 'Dash',
+                          tickPositions: [0, 20, 50, 80, 100, 200]
+                        }, {
+                            title: {
+                                text: 'BOLL(20)'
+                            },
+                            top: 450,
+                            height: 300,
+                            offset: 0,
+                        }, {
+                            title: {
+                                text: 'VOL'
+                            },
+                            top: 800,
+                            height: 100,
+                            offset: 0,
+                        }],
+                        series: [{
+                            name: 'BAR',
+                            color: '',
+                            negativeColor: '',
+                            borderColor: '#333333',
+                            type: 'column',
+                            data: macddata['bar'],
+                            yAxis: 0,
+                        }, {
+                            name: 'DIFF',
+                            color: '#ffffff',
+                            type: 'line',
+                            data: macddata['dif'],
+                            lineWidth: 2,
+                            yAxis: 0,
+                        }, {
+                            name: 'DEA',
+                            color: '#ffff00',
+                            type: 'line',
+                            data: macddata['dea'],
+                            lineWidth: 2,
+                            yAxis: 0,
+                        }, {
+                            name: 'K',
+                            color: '#ffffff',
+                            type: 'line',
+                            data: kdjdata['k'],
+                            yAxis: 1,
+                        }, {
+                            name: 'D',
+                            color: '#ffff00',
+                            type: 'line',
+                            data: kdjdata['d'],
+                            yAxis: 1,
+                        }, {
+                            name: 'J',
+                            color: '#cc99cc',
+                            type: 'line',
+                            data: kdjdata['j'],
+                            yAxis: 1,
+                        }, {
+                            type: 'candlestick',
+                            name: 'ohlc',
+                            data: ohlc,
+                            upColor: '',
+                            upLineColor: '',
+                            color: '',
+                            lineColor: '',
+                            yAxis: 2,
+                        }, {
+                            type: 'spline',
+                            name: 'up',
+                            data: bolldata['up'],
+                            color: '#ffff00',
+                            lineWidth: 2,
+                            yAxis: 2,
+                        }, {
+                            type: 'spline',
+                            name: 'md',
+                            data: bolldata['md'],
+                            color: '#ffffff',
+                            lineWidth: 2,
+                            yAxis: 2,
+                        }, {
+                            type: 'spline',
+                            name: 'dn',
+                            data: bolldata['dn'],
+                            color: '#cc99cc',
+                            lineWidth: 2,
+                            yAxis: 2,
+                        }, {
+                            name: 'VOL',
+                            borderColor: '#333333',
+                            type: 'column',
+                            data: volume,
+                            yAxis: 3,
+                        }]
+                    });
+                });
+            });
+        });
+    }); 

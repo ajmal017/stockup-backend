@@ -1,0 +1,486 @@
+Traceback (most recent call last):
+  File "crawler.py", line 12, in <module>
+    from algo_parsers.algorithm import Algorithm
+ImportError: No module named algo_parsers.algorithm
+Traceback (most recent call last):
+  File "stock_list_updater.py", line 83, in <module>
+    main()
+  File "stock_list_updater.py", line 79, in main
+    IOLoop.instance().start()
+  File "/usr/local/lib/python2.7/dist-packages/tornado/ioloop.py", line 762, in start
+    now = self.time()
+  File "/usr/local/lib/python2.7/dist-packages/tornado/ioloop.py", line 866, in time
+    return self.time_func()
+KeyboardInterrupt
+[I 150401 20:45:36 stock_list_updater:67] saved stock catalog
+[I 150401 20:45:36 stock_list_updater:68] stock_catalog
+[W 150401 22:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150401 22:45:36 stock_list_updater:71] 2015-04-01 22:45:36.429333
+[E 150401 22:45:36 stock_list_updater:72] could not connect to 119.29.16.193:27017: error
+[W 150402 00:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150402 00:45:36 stock_list_updater:71] 2015-04-02 00:45:36.564362
+[E 150402 00:45:36 stock_list_updater:72] error
+[W 150402 02:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150402 02:45:36 stock_list_updater:71] 2015-04-02 02:45:36.704638
+[E 150402 02:45:36 stock_list_updater:72] error
+[W 150402 04:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150402 04:45:36 stock_list_updater:71] 2015-04-02 04:45:36.826818
+[E 150402 04:45:36 stock_list_updater:72] error
+[W 150402 06:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150402 06:45:36 stock_list_updater:71] 2015-04-02 06:45:36.342299
+[E 150402 06:45:36 stock_list_updater:72] error
+[W 150402 08:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150402 08:45:36 stock_list_updater:71] 2015-04-02 08:45:36.281508
+[E 150402 08:45:36 stock_list_updater:72] error
+[W 150402 10:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150402 10:45:36 stock_list_updater:71] 2015-04-02 10:45:36.972033
+[E 150402 10:45:36 stock_list_updater:72] error
+[I 150402 12:45:37 stock_list_updater:67] saved stock catalog
+[I 150402 12:45:37 stock_list_updater:68] stock_catalog
+[I 150402 14:45:37 stock_list_updater:67] saved stock catalog
+[I 150402 14:45:37 stock_list_updater:68] stock_catalog
+[I 150402 16:45:37 stock_list_updater:67] saved stock catalog
+[I 150402 16:45:37 stock_list_updater:68] stock_catalog
+[I 150402 18:45:37 stock_list_updater:67] saved stock catalog
+[I 150402 18:45:37 stock_list_updater:68] stock_catalog
+[I 150402 20:45:36 stock_list_updater:67] saved stock catalog
+[I 150402 20:45:36 stock_list_updater:68] stock_catalog
+[I 150402 22:45:36 stock_list_updater:67] saved stock catalog
+[I 150402 22:45:36 stock_list_updater:68] stock_catalog
+[I 150403 00:45:36 stock_list_updater:67] saved stock catalog
+[I 150403 00:45:36 stock_list_updater:68] stock_catalog
+[W 150403 02:45:35 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150403 02:45:35 stock_list_updater:71] 2015-04-03 02:45:35.795229
+[E 150403 02:45:35 stock_list_updater:72] could not connect to 119.29.16.193:27017: error
+[W 150403 04:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150403 04:45:36 stock_list_updater:71] 2015-04-03 04:45:36.183238
+[E 150403 04:45:36 stock_list_updater:72] error
+[W 150403 06:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150403 06:45:36 stock_list_updater:71] 2015-04-03 06:45:36.917925
+[E 150403 06:45:36 stock_list_updater:72] error
+[W 150403 08:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150403 08:45:36 stock_list_updater:71] 2015-04-03 08:45:36.376052
+[E 150403 08:45:36 stock_list_updater:72] error
+[W 150403 10:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150403 10:45:36 stock_list_updater:71] 2015-04-03 10:45:36.078726
+[E 150403 10:45:36 stock_list_updater:72] error
+[I 150403 12:45:36 stock_list_updater:67] saved stock catalog
+[I 150403 12:45:36 stock_list_updater:68] stock_catalog
+[I 150403 14:45:36 stock_list_updater:67] saved stock catalog
+[I 150403 14:45:36 stock_list_updater:68] stock_catalog
+[I 150403 16:45:37 stock_list_updater:67] saved stock catalog
+[I 150403 16:45:37 stock_list_updater:68] stock_catalog
+[I 150403 18:45:36 stock_list_updater:67] saved stock catalog
+[I 150403 18:45:36 stock_list_updater:68] stock_catalog
+[I 150403 20:45:36 stock_list_updater:67] saved stock catalog
+[I 150403 20:45:36 stock_list_updater:68] stock_catalog
+[I 150403 22:45:36 stock_list_updater:67] saved stock catalog
+[I 150403 22:45:36 stock_list_updater:68] stock_catalog
+[I 150404 00:45:36 stock_list_updater:67] saved stock catalog
+[I 150404 00:45:36 stock_list_updater:68] stock_catalog
+[I 150404 02:45:37 stock_list_updater:67] saved stock catalog
+[I 150404 02:45:37 stock_list_updater:68] stock_catalog
+[I 150404 04:45:37 stock_list_updater:67] saved stock catalog
+[I 150404 04:45:37 stock_list_updater:68] stock_catalog
+[I 150404 06:45:37 stock_list_updater:67] saved stock catalog
+[I 150404 06:45:37 stock_list_updater:68] stock_catalog
+[I 150404 08:45:36 stock_list_updater:67] saved stock catalog
+[I 150404 08:45:36 stock_list_updater:68] stock_catalog
+[I 150404 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150404 10:45:36 stock_list_updater:68] stock_catalog
+[I 150404 12:45:37 stock_list_updater:67] saved stock catalog
+[I 150404 12:45:37 stock_list_updater:68] stock_catalog
+[W 150404 14:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150404 14:45:36 stock_list_updater:71] 2015-04-04 14:45:36.271592
+[E 150404 14:45:36 stock_list_updater:72] could not connect to 119.29.16.193:27017: error
+[W 150404 16:45:37 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150404 16:45:37 stock_list_updater:71] 2015-04-04 16:45:37.436826
+[E 150404 16:45:37 stock_list_updater:72] error
+[W 150404 18:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150404 18:45:36 stock_list_updater:71] 2015-04-04 18:45:36.702175
+[E 150404 18:45:36 stock_list_updater:72] error
+[W 150404 20:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150404 20:45:36 stock_list_updater:71] 2015-04-04 20:45:36.660551
+[E 150404 20:45:36 stock_list_updater:72] error
+[W 150404 22:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150404 22:45:36 stock_list_updater:71] 2015-04-04 22:45:36.394801
+[E 150404 22:45:36 stock_list_updater:72] error
+[W 150405 00:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 00:45:36 stock_list_updater:71] 2015-04-05 00:45:36.214794
+[E 150405 00:45:36 stock_list_updater:72] error
+[W 150405 02:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 02:45:36 stock_list_updater:71] 2015-04-05 02:45:36.749136
+[E 150405 02:45:36 stock_list_updater:72] error
+[W 150405 04:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 04:45:36 stock_list_updater:71] 2015-04-05 04:45:36.656974
+[E 150405 04:45:36 stock_list_updater:72] error
+[W 150405 06:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 06:45:36 stock_list_updater:71] 2015-04-05 06:45:36.548141
+[E 150405 06:45:36 stock_list_updater:72] error
+[W 150405 08:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 08:45:36 stock_list_updater:71] 2015-04-05 08:45:36.792973
+[E 150405 08:45:36 stock_list_updater:72] error
+[W 150405 10:45:37 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 10:45:37 stock_list_updater:71] 2015-04-05 10:45:37.086345
+[E 150405 10:45:37 stock_list_updater:72] error
+[W 150405 12:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 12:45:36 stock_list_updater:71] 2015-04-05 12:45:36.478873
+[E 150405 12:45:36 stock_list_updater:72] error
+[W 150405 14:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 14:45:36 stock_list_updater:71] 2015-04-05 14:45:36.952421
+[E 150405 14:45:36 stock_list_updater:72] error
+[W 150405 16:45:37 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 16:45:37 stock_list_updater:71] 2015-04-05 16:45:37.267734
+[E 150405 16:45:37 stock_list_updater:72] error
+[W 150405 18:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 18:45:36 stock_list_updater:71] 2015-04-05 18:45:36.951603
+[E 150405 18:45:36 stock_list_updater:72] error
+[W 150405 20:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 20:45:36 stock_list_updater:71] 2015-04-05 20:45:36.668883
+[E 150405 20:45:36 stock_list_updater:72] error
+[W 150405 22:45:37 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150405 22:45:37 stock_list_updater:71] 2015-04-05 22:45:37.109319
+[E 150405 22:45:37 stock_list_updater:72] error
+[W 150406 00:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 00:45:36 stock_list_updater:71] 2015-04-06 00:45:36.984436
+[E 150406 00:45:36 stock_list_updater:72] error
+[W 150406 02:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 02:45:36 stock_list_updater:71] 2015-04-06 02:45:36.873926
+[E 150406 02:45:36 stock_list_updater:72] error
+[W 150406 04:45:37 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 04:45:37 stock_list_updater:71] 2015-04-06 04:45:37.228597
+[E 150406 04:45:37 stock_list_updater:72] error
+[W 150406 06:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 06:45:36 stock_list_updater:71] 2015-04-06 06:45:36.700788
+[E 150406 06:45:36 stock_list_updater:72] error
+[W 150406 08:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 08:45:36 stock_list_updater:71] 2015-04-06 08:45:36.944140
+[E 150406 08:45:36 stock_list_updater:72] error
+[W 150406 10:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 10:45:36 stock_list_updater:71] 2015-04-06 10:45:36.865081
+[E 150406 10:45:36 stock_list_updater:72] error
+[W 150406 12:45:37 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 12:45:37 stock_list_updater:71] 2015-04-06 12:45:37.486026
+[E 150406 12:45:37 stock_list_updater:72] error
+[W 150406 14:45:37 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 14:45:37 stock_list_updater:71] 2015-04-06 14:45:37.127230
+[E 150406 14:45:37 stock_list_updater:72] error
+[W 150406 16:45:37 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 16:45:37 stock_list_updater:71] 2015-04-06 16:45:37.036405
+[E 150406 16:45:37 stock_list_updater:72] error
+[W 150406 18:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 18:45:36 stock_list_updater:71] 2015-04-06 18:45:36.989770
+[E 150406 18:45:36 stock_list_updater:72] error
+[W 150406 20:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 20:45:36 stock_list_updater:71] 2015-04-06 20:45:36.557658
+[E 150406 20:45:36 stock_list_updater:72] error
+[W 150406 22:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150406 22:45:36 stock_list_updater:71] 2015-04-06 22:45:36.699860
+[E 150406 22:45:36 stock_list_updater:72] error
+[W 150407 00:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 00:45:36 stock_list_updater:71] 2015-04-07 00:45:36.549417
+[E 150407 00:45:36 stock_list_updater:72] error
+[W 150407 02:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 02:45:36 stock_list_updater:71] 2015-04-07 02:45:36.591340
+[E 150407 02:45:36 stock_list_updater:72] error
+[W 150407 04:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 04:45:36 stock_list_updater:71] 2015-04-07 04:45:36.947549
+[E 150407 04:45:36 stock_list_updater:72] error
+[W 150407 06:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 06:45:36 stock_list_updater:71] 2015-04-07 06:45:36.884141
+[E 150407 06:45:36 stock_list_updater:72] error
+[W 150407 08:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 08:45:36 stock_list_updater:71] 2015-04-07 08:45:36.958892
+[E 150407 08:45:36 stock_list_updater:72] error
+[W 150407 10:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 10:45:36 stock_list_updater:71] 2015-04-07 10:45:36.412959
+[E 150407 10:45:36 stock_list_updater:72] error
+[W 150407 12:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 12:45:36 stock_list_updater:71] 2015-04-07 12:45:36.946269
+[E 150407 12:45:36 stock_list_updater:72] error
+[I 150407 14:45:37 stock_list_updater:67] saved stock catalog
+[I 150407 14:45:37 stock_list_updater:68] stock_catalog
+[W 150407 16:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 16:45:36 stock_list_updater:71] 2015-04-07 16:45:36.893337
+[E 150407 16:45:36 stock_list_updater:72] could not connect to 119.29.16.193:27017: error
+[W 150407 18:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 18:45:36 stock_list_updater:71] 2015-04-07 18:45:36.614597
+[E 150407 18:45:36 stock_list_updater:72] error
+[W 150407 20:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150407 20:45:36 stock_list_updater:71] 2015-04-07 20:45:36.329575
+[E 150407 20:45:36 stock_list_updater:72] error
+[I 150407 22:45:37 stock_list_updater:67] saved stock catalog
+[I 150407 22:45:37 stock_list_updater:68] stock_catalog
+[I 150408 00:45:36 stock_list_updater:67] saved stock catalog
+[I 150408 00:45:36 stock_list_updater:68] stock_catalog
+[W 150408 02:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150408 02:45:36 stock_list_updater:71] 2015-04-08 02:45:36.683228
+[E 150408 02:45:36 stock_list_updater:72] could not connect to 119.29.16.193:27017: error
+[W 150408 04:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150408 04:45:36 stock_list_updater:71] 2015-04-08 04:45:36.389790
+[E 150408 04:45:36 stock_list_updater:72] error
+[W 150408 06:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150408 06:45:36 stock_list_updater:71] 2015-04-08 06:45:36.891233
+[E 150408 06:45:36 stock_list_updater:72] error
+[I 150408 08:45:36 stock_list_updater:67] saved stock catalog
+[I 150408 08:45:36 stock_list_updater:68] stock_catalog
+[I 150408 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150408 10:45:36 stock_list_updater:68] stock_catalog
+[W 150408 12:45:37 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150408 12:45:37 stock_list_updater:71] 2015-04-08 12:45:37.419294
+[E 150408 12:45:37 stock_list_updater:72] could not connect to 119.29.16.193:27017: error
+[W 150408 14:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150408 14:45:36 stock_list_updater:71] 2015-04-08 14:45:36.508827
+[E 150408 14:45:36 stock_list_updater:72] error
+[I 150408 16:45:36 stock_list_updater:67] saved stock catalog
+[I 150408 16:45:36 stock_list_updater:68] stock_catalog
+[W 150408 18:45:36 iostream:1126] Connect error on fd 16: ECONNREFUSED
+[E 150408 18:45:36 stock_list_updater:71] 2015-04-08 18:45:36.696547
+[E 150408 18:45:36 stock_list_updater:72] could not connect to 119.29.16.193:27017: error
+[I 150408 20:45:37 stock_list_updater:67] saved stock catalog
+[I 150408 20:45:37 stock_list_updater:68] stock_catalog
+[I 150408 22:45:36 stock_list_updater:67] saved stock catalog
+[I 150408 22:45:36 stock_list_updater:68] stock_catalog
+[I 150409 00:45:35 stock_list_updater:67] saved stock catalog
+[I 150409 00:45:35 stock_list_updater:68] stock_catalog
+[I 150409 02:45:35 stock_list_updater:67] saved stock catalog
+[I 150409 02:45:35 stock_list_updater:68] stock_catalog
+[I 150409 04:45:36 stock_list_updater:67] saved stock catalog
+[I 150409 04:45:36 stock_list_updater:68] stock_catalog
+[I 150409 06:45:37 stock_list_updater:67] saved stock catalog
+[I 150409 06:45:37 stock_list_updater:68] stock_catalog
+[I 150409 08:45:36 stock_list_updater:67] saved stock catalog
+[I 150409 08:45:36 stock_list_updater:68] stock_catalog
+[I 150409 10:45:37 stock_list_updater:67] saved stock catalog
+[I 150409 10:45:37 stock_list_updater:68] stock_catalog
+[I 150409 12:45:36 stock_list_updater:67] saved stock catalog
+[I 150409 12:45:36 stock_list_updater:68] stock_catalog
+[I 150409 14:45:36 stock_list_updater:67] saved stock catalog
+[I 150409 14:45:36 stock_list_updater:68] stock_catalog
+[I 150409 16:45:36 stock_list_updater:67] saved stock catalog
+[I 150409 16:45:36 stock_list_updater:68] stock_catalog
+[I 150409 18:45:37 stock_list_updater:67] saved stock catalog
+[I 150409 18:45:37 stock_list_updater:68] stock_catalog
+[I 150409 20:45:37 stock_list_updater:67] saved stock catalog
+[I 150409 20:45:37 stock_list_updater:68] stock_catalog
+[I 150409 22:45:37 stock_list_updater:67] saved stock catalog
+[I 150409 22:45:37 stock_list_updater:68] stock_catalog
+[I 150410 00:45:36 stock_list_updater:67] saved stock catalog
+[I 150410 00:45:36 stock_list_updater:68] stock_catalog
+[I 150410 02:45:36 stock_list_updater:67] saved stock catalog
+[I 150410 02:45:36 stock_list_updater:68] stock_catalog
+[I 150410 04:45:36 stock_list_updater:67] saved stock catalog
+[I 150410 04:45:36 stock_list_updater:68] stock_catalog
+[I 150410 06:45:36 stock_list_updater:67] saved stock catalog
+[I 150410 06:45:36 stock_list_updater:68] stock_catalog
+[I 150410 08:45:36 stock_list_updater:67] saved stock catalog
+[I 150410 08:45:36 stock_list_updater:68] stock_catalog
+[I 150410 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150410 10:45:36 stock_list_updater:68] stock_catalog
+[I 150410 12:45:36 stock_list_updater:67] saved stock catalog
+[I 150410 12:45:36 stock_list_updater:68] stock_catalog
+[I 150410 14:45:34 stock_list_updater:67] saved stock catalog
+[I 150410 14:45:34 stock_list_updater:68] stock_catalog
+[I 150410 16:45:36 stock_list_updater:67] saved stock catalog
+[I 150410 16:45:36 stock_list_updater:68] stock_catalog
+[I 150410 18:45:37 stock_list_updater:67] saved stock catalog
+[I 150410 18:45:37 stock_list_updater:68] stock_catalog
+[I 150410 20:45:36 stock_list_updater:67] saved stock catalog
+[I 150410 20:45:36 stock_list_updater:68] stock_catalog
+[I 150410 22:45:37 stock_list_updater:67] saved stock catalog
+[I 150410 22:45:37 stock_list_updater:68] stock_catalog
+[I 150411 00:45:36 stock_list_updater:67] saved stock catalog
+[I 150411 00:45:36 stock_list_updater:68] stock_catalog
+[I 150411 02:45:36 stock_list_updater:67] saved stock catalog
+[I 150411 02:45:36 stock_list_updater:68] stock_catalog
+[I 150411 04:45:35 stock_list_updater:67] saved stock catalog
+[I 150411 04:45:35 stock_list_updater:68] stock_catalog
+[I 150411 06:45:36 stock_list_updater:67] saved stock catalog
+[I 150411 06:45:36 stock_list_updater:68] stock_catalog
+[I 150411 08:45:36 stock_list_updater:67] saved stock catalog
+[I 150411 08:45:36 stock_list_updater:68] stock_catalog
+[I 150411 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150411 10:45:36 stock_list_updater:68] stock_catalog
+[I 150411 12:45:36 stock_list_updater:67] saved stock catalog
+[I 150411 12:45:36 stock_list_updater:68] stock_catalog
+[I 150411 14:45:37 stock_list_updater:67] saved stock catalog
+[I 150411 14:45:37 stock_list_updater:68] stock_catalog
+[I 150411 16:45:37 stock_list_updater:67] saved stock catalog
+[I 150411 16:45:37 stock_list_updater:68] stock_catalog
+[I 150411 18:45:36 stock_list_updater:67] saved stock catalog
+[I 150411 18:45:36 stock_list_updater:68] stock_catalog
+[I 150411 20:45:37 stock_list_updater:67] saved stock catalog
+[I 150411 20:45:37 stock_list_updater:68] stock_catalog
+[I 150411 22:45:37 stock_list_updater:67] saved stock catalog
+[I 150411 22:45:37 stock_list_updater:68] stock_catalog
+[I 150412 00:45:36 stock_list_updater:67] saved stock catalog
+[I 150412 00:45:36 stock_list_updater:68] stock_catalog
+[I 150412 02:45:36 stock_list_updater:67] saved stock catalog
+[I 150412 02:45:36 stock_list_updater:68] stock_catalog
+[I 150412 04:45:36 stock_list_updater:67] saved stock catalog
+[I 150412 04:45:36 stock_list_updater:68] stock_catalog
+[I 150412 06:45:36 stock_list_updater:67] saved stock catalog
+[I 150412 06:45:36 stock_list_updater:68] stock_catalog
+[I 150412 08:45:37 stock_list_updater:67] saved stock catalog
+[I 150412 08:45:37 stock_list_updater:68] stock_catalog
+[I 150412 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150412 10:45:36 stock_list_updater:68] stock_catalog
+[I 150412 12:45:36 stock_list_updater:67] saved stock catalog
+[I 150412 12:45:36 stock_list_updater:68] stock_catalog
+[I 150412 14:45:37 stock_list_updater:67] saved stock catalog
+[I 150412 14:45:37 stock_list_updater:68] stock_catalog
+[I 150412 16:45:37 stock_list_updater:67] saved stock catalog
+[I 150412 16:45:37 stock_list_updater:68] stock_catalog
+[I 150412 18:45:36 stock_list_updater:67] saved stock catalog
+[I 150412 18:45:36 stock_list_updater:68] stock_catalog
+[I 150412 20:45:36 stock_list_updater:67] saved stock catalog
+[I 150412 20:45:36 stock_list_updater:68] stock_catalog
+[I 150412 22:45:36 stock_list_updater:67] saved stock catalog
+[I 150412 22:45:36 stock_list_updater:68] stock_catalog
+[I 150413 00:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 00:45:36 stock_list_updater:68] stock_catalog
+[I 150413 02:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 02:45:36 stock_list_updater:68] stock_catalog
+[I 150413 04:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 04:45:36 stock_list_updater:68] stock_catalog
+[I 150413 06:45:37 stock_list_updater:67] saved stock catalog
+[I 150413 06:45:37 stock_list_updater:68] stock_catalog
+[I 150413 08:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 08:45:36 stock_list_updater:68] stock_catalog
+[E 150413 10:45:44 ioloop:588] Exception in callback <functools.partial object at 0x7f383692c3c0>
+    Traceback (most recent call last):
+      File "/usr/local/lib/python2.7/dist-packages/tornado/ioloop.py", line 568, in _run_callback
+        ret = callback()
+      File "/usr/local/lib/python2.7/dist-packages/tornado/stack_context.py", line 275, in null_wrapper
+        return fn(*args, **kwargs)
+      File "/usr/local/lib/python2.7/dist-packages/tornado/ioloop.py", line 574, in <lambda>
+        self.add_future(ret, lambda f: f.result())
+      File "/usr/local/lib/python2.7/dist-packages/tornado/concurrent.py", line 209, in result
+        raise_exc_info(self._exc_info)
+      File "/usr/local/lib/python2.7/dist-packages/tornado/gen.py", line 812, in run
+        yielded = self.gen.send(value)
+      File "stock_list_updater.py", line 55, in fetch_info
+        for response in responses:
+    AttributeError: 'NoneType' object has no attribute 'decode'
+[I 150413 12:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 12:45:36 stock_list_updater:68] stock_catalog
+[I 150413 14:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 14:45:36 stock_list_updater:68] stock_catalog
+[I 150413 16:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 16:45:36 stock_list_updater:68] stock_catalog
+[I 150413 18:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 18:45:36 stock_list_updater:68] stock_catalog
+[I 150413 20:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 20:45:36 stock_list_updater:68] stock_catalog
+[I 150413 22:45:36 stock_list_updater:67] saved stock catalog
+[I 150413 22:45:36 stock_list_updater:68] stock_catalog
+[I 150414 00:45:36 stock_list_updater:67] saved stock catalog
+[I 150414 00:45:36 stock_list_updater:68] stock_catalog
+[I 150414 02:45:36 stock_list_updater:67] saved stock catalog
+[I 150414 02:45:36 stock_list_updater:68] stock_catalog
+[I 150414 04:45:36 stock_list_updater:67] saved stock catalog
+[I 150414 04:45:36 stock_list_updater:68] stock_catalog
+[I 150414 06:45:36 stock_list_updater:67] saved stock catalog
+[I 150414 06:45:36 stock_list_updater:68] stock_catalog
+[I 150414 08:45:37 stock_list_updater:67] saved stock catalog
+[I 150414 08:45:37 stock_list_updater:68] stock_catalog
+[I 150414 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150414 10:45:36 stock_list_updater:68] stock_catalog
+[I 150414 12:45:37 stock_list_updater:67] saved stock catalog
+[I 150414 12:45:37 stock_list_updater:68] stock_catalog
+[I 150414 14:45:36 stock_list_updater:67] saved stock catalog
+[I 150414 14:45:36 stock_list_updater:68] stock_catalog
+[I 150414 16:45:36 stock_list_updater:67] saved stock catalog
+[I 150414 16:45:36 stock_list_updater:68] stock_catalog
+[I 150414 18:46:13 stock_list_updater:67] saved stock catalog
+[I 150414 18:46:13 stock_list_updater:68] stock_catalog
+[I 150414 20:45:37 stock_list_updater:67] saved stock catalog
+[I 150414 20:45:37 stock_list_updater:68] stock_catalog
+[I 150414 22:45:36 stock_list_updater:67] saved stock catalog
+[I 150414 22:45:36 stock_list_updater:68] stock_catalog
+[I 150415 00:45:37 stock_list_updater:67] saved stock catalog
+[I 150415 00:45:37 stock_list_updater:68] stock_catalog
+[I 150415 02:45:36 stock_list_updater:67] saved stock catalog
+[I 150415 02:45:36 stock_list_updater:68] stock_catalog
+[I 150415 04:45:37 stock_list_updater:67] saved stock catalog
+[I 150415 04:45:37 stock_list_updater:68] stock_catalog
+[I 150415 06:45:37 stock_list_updater:67] saved stock catalog
+[I 150415 06:45:37 stock_list_updater:68] stock_catalog
+[I 150415 08:45:36 stock_list_updater:67] saved stock catalog
+[I 150415 08:45:36 stock_list_updater:68] stock_catalog
+[I 150415 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150415 10:45:36 stock_list_updater:68] stock_catalog
+[I 150415 12:45:36 stock_list_updater:67] saved stock catalog
+[I 150415 12:45:36 stock_list_updater:68] stock_catalog
+[I 150415 14:45:37 stock_list_updater:67] saved stock catalog
+[I 150415 14:45:37 stock_list_updater:68] stock_catalog
+[I 150415 16:45:36 stock_list_updater:67] saved stock catalog
+[I 150415 16:45:36 stock_list_updater:68] stock_catalog
+[I 150415 18:45:36 stock_list_updater:67] saved stock catalog
+[I 150415 18:45:36 stock_list_updater:68] stock_catalog
+[I 150415 20:45:36 stock_list_updater:67] saved stock catalog
+[I 150415 20:45:36 stock_list_updater:68] stock_catalog
+[I 150415 22:45:36 stock_list_updater:67] saved stock catalog
+[I 150415 22:45:36 stock_list_updater:68] stock_catalog
+[I 150416 00:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 00:45:36 stock_list_updater:68] stock_catalog
+[I 150416 02:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 02:45:36 stock_list_updater:68] stock_catalog
+[I 150416 04:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 04:45:36 stock_list_updater:68] stock_catalog
+[I 150416 06:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 06:45:36 stock_list_updater:68] stock_catalog
+[I 150416 08:45:37 stock_list_updater:67] saved stock catalog
+[I 150416 08:45:37 stock_list_updater:68] stock_catalog
+[I 150416 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 10:45:36 stock_list_updater:68] stock_catalog
+[I 150416 12:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 12:45:36 stock_list_updater:68] stock_catalog
+[I 150416 14:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 14:45:36 stock_list_updater:68] stock_catalog
+[I 150416 16:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 16:45:36 stock_list_updater:68] stock_catalog
+[I 150416 18:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 18:45:36 stock_list_updater:68] stock_catalog
+[I 150416 20:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 20:45:36 stock_list_updater:68] stock_catalog
+[I 150416 22:45:36 stock_list_updater:67] saved stock catalog
+[I 150416 22:45:36 stock_list_updater:68] stock_catalog
+[I 150417 00:45:37 stock_list_updater:67] saved stock catalog
+[I 150417 00:45:37 stock_list_updater:68] stock_catalog
+[I 150417 02:45:36 stock_list_updater:67] saved stock catalog
+[I 150417 02:45:36 stock_list_updater:68] stock_catalog
+[I 150417 04:45:37 stock_list_updater:67] saved stock catalog
+[I 150417 04:45:37 stock_list_updater:68] stock_catalog
+[I 150417 06:45:36 stock_list_updater:67] saved stock catalog
+[I 150417 06:45:36 stock_list_updater:68] stock_catalog
+[I 150417 08:45:36 stock_list_updater:67] saved stock catalog
+[I 150417 08:45:36 stock_list_updater:68] stock_catalog
+[I 150417 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150417 10:45:36 stock_list_updater:68] stock_catalog
+[I 150417 12:45:35 stock_list_updater:67] saved stock catalog
+[I 150417 12:45:35 stock_list_updater:68] stock_catalog
+[I 150417 14:45:37 stock_list_updater:67] saved stock catalog
+[I 150417 14:45:37 stock_list_updater:68] stock_catalog
+[I 150417 16:45:37 stock_list_updater:67] saved stock catalog
+[I 150417 16:45:37 stock_list_updater:68] stock_catalog
+[I 150417 18:45:37 stock_list_updater:67] saved stock catalog
+[I 150417 18:45:37 stock_list_updater:68] stock_catalog
+[I 150417 20:45:36 stock_list_updater:67] saved stock catalog
+[I 150417 20:45:36 stock_list_updater:68] stock_catalog
+[I 150417 22:45:37 stock_list_updater:67] saved stock catalog
+[I 150417 22:45:37 stock_list_updater:68] stock_catalog
+[I 150418 00:45:35 stock_list_updater:67] saved stock catalog
+[I 150418 00:45:35 stock_list_updater:68] stock_catalog
+[I 150418 02:45:37 stock_list_updater:67] saved stock catalog
+[I 150418 02:45:37 stock_list_updater:68] stock_catalog
+[I 150418 04:45:36 stock_list_updater:67] saved stock catalog
+[I 150418 04:45:36 stock_list_updater:68] stock_catalog
+[I 150418 06:45:36 stock_list_updater:67] saved stock catalog
+[I 150418 06:45:36 stock_list_updater:68] stock_catalog
+[I 150418 08:45:37 stock_list_updater:67] saved stock catalog
+[I 150418 08:45:37 stock_list_updater:68] stock_catalog
+[I 150418 10:45:36 stock_list_updater:67] saved stock catalog
+[I 150418 10:45:36 stock_list_updater:68] stock_catalog
+[I 150418 12:45:36 stock_list_updater:67] saved stock catalog
+[I 150418 12:45:36 stock_list_updater:68] stock_catalog

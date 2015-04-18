@@ -6,14 +6,7 @@ from request_handlers.base_request_handler import BaseRequestHandler
 class AuthLoginHandler(BaseRequestHandler):
 
     def get(self):
-        try:
-            error_message = self.get_argument("error")
-        except MissingArgumentError:
-            error_message = ""
-        if error_message:
-            self.write({"error": error_message})
-        else:
-            self.write({"error": "not logged in"})
+        self.render('../static/login/index.html')
 
     def check_permission(self, password, username):
         # TODO: flush this out
@@ -30,7 +23,10 @@ class AuthLoginHandler(BaseRequestHandler):
         if authenticated:
             self.set_current_user(username)
             self.write({"authenticated": True})
+            self.redirect('/static/test/index.html', permanent=True)
         else:
+            self.write({"username": username})
+            self.write({"password": password})
             self.write({"error": "login incorrect"})
 
     def set_current_user(self, user):

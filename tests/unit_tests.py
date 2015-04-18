@@ -14,23 +14,23 @@ import motor
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.testing import AsyncTestCase, gen_test
-
+from tornado.options import options
 
 here = os.path.dirname(os.path.abspath(__file__))
 par_here = os.path.join(here, os.pardir)
 if par_here not in sys.path:
     sys.path.append(par_here)
 
-from algo_parsers.algorithm import Algorithm
+from algo_parsers.Instruction import Algorithm
 from cron_scripts.crawler import SinaCrawler
 from config import TEST_IPAD_TOKEN
-from algo_parsers.apns_sender import ApnsSender
+from algo_parsers.Apns_sender import ApnsSender
 
 # http://stockup-dev.cloudapp.net:9990/condition/price/?start_time=2014-10-08T11:00:00&end_time=2014-10-08T13:00:00&stock_ids=600198
 
 class BaseUnitTest(AsyncTestCase):
     # base_url = "http://stockup-dev.cloudapp.net:9990"
-    base_url = "http://localhost:9990"
+    base_url = "http://119.29.16.193:9990"
     headers = None
 
     @gen.coroutine
@@ -72,7 +72,7 @@ class ApnsUnitTest(BaseUnitTest):
     def test_apns(self):
         yield gen.Task(ApnsSender.connect)
         ApnsSender.on_connected()
-        db = motor.MotorClient().ss_test
+        db = motor.MotorClient(options.dbhost).ss_test
         result = yield db.users.find_one({"_id": "admin"}, {"apns_tokens": 1})
 
         for token in result["apns_tokens"]:
@@ -87,14 +87,15 @@ class AlgoUnitTest(BaseUnitTest):
     """
     @gen_test
     def test_kdj_condition(self):
-        time = datetime(year=2014, month=9, day=15, hour=15, minute=0,
+        time = datetime(year=2015, month=3, day=29, hour=15, minute=0,
                         second=10)
-        Algorithm.db = motor.MotorClient().ss_test
+        Algorithm.db = motor.MotorClient(options.dbhost).ss_test
 
         filter = {
             "_id.algo_id": {
                 "$in": [
-                    "upload_algo_id"
+                    "kdj_match_algo_id",
+                    "kdj_unmatch_algo_id"
                 ]
             }
         }
@@ -105,9 +106,9 @@ class AlgoUnitTest(BaseUnitTest):
 
     @gen_test
     def test_price_condition(self):
-        time = datetime(year=2014, month=9, day=15, hour=15, minute=0,
+        time = datetime(year=2015, month=9, day=15, hour=15, minute=0,
                         second=10)
-        Algorithm.db = motor.MotorClient().ss_test
+        Algorithm.db = motor.MotorClient(options.dbhost).ss_test
 
         filter = {
             "_id.algo_id": {
@@ -171,7 +172,7 @@ class AlgoUnitTest(BaseUnitTest):
         response = yield AsyncHTTPClient().fetch(AlgoUnitTest.base_url + "/algo/remove",
                                                  method="POST",
                                                  headers=AlgoUnitTest.headers,
-                                                 body=body)
+                                                 body=json.dumps(body))
         d = ast.literal_eval(response.body)
         self.assertDictEqual(d, {"removed": "upload_algo_id"})
         yield self.logout()
@@ -198,7 +199,7 @@ class CrawlerUnitTest(BaseUnitTest):
 
     @gen_test(timeout=20)
     def test_crawler(self):
-        SinaCrawler.db = motor.MotorClient().ss
+        SinaCrawler.db = motor.MotorClient(options.dbhost).ss
         result = yield SinaCrawler().fetch_stock_info(commit=False)
         self.assertGreater(len(result), 10)
 

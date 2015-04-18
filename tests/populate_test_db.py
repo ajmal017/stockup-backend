@@ -19,21 +19,21 @@ from config import datetime_repr, TEST_IPAD_TOKEN
 @gen.coroutine
 def populate_test_db():
     client = motor.MotorClient(options.dbhost)
-    client.drop_database("ss_test")
+    #client.drop_database("ss_test")
     db = client.ss_test
 
     curPrice = 12.05
     times = [
-        "2014-09-15T15:00:00",
-        "2014-09-15T15:00:05",
-        "2014-09-15T15:00:10",
-        "2014-09-15T15:00:15",
+        "2015-03-31T15:00:00",
+        "2015-03-31T15:00:05",
+        "2015-03-31T15:00:10",
+        "2015-03-31T15:00:15",
         ]
     inserts = []
-    prices = [12.05,12.05,12.05,12.05]
+    prices = [12.40,12.40,12.25,12.40]
     for i in range(len(prices)):
         lastPrice = curPrice
-        curPrice *= (random.gauss(0.005,0.01) + 1)
+        curPrice = prices[i]  #*= (random.gauss(0.005,0.01) + 1)
         volume = 29580362
         info = {
             "_id": {
@@ -50,7 +50,7 @@ def populate_test_db():
                 "10.70",
                 "10.71",
                 "%d" % volume,
-                "%d" % curPrice * volume,
+                "%d" % volume,
                 "52500",
                 "10.70",
                 "63800",
@@ -77,28 +77,29 @@ def populate_test_db():
             ]
         }
 
-        inserts.append(db.stocks.insert(info))
+        inserts.append(db.stocks_second.insert(info))
 
     yield inserts
 
     yield db.users.insert({ "_id" : "admin", "apns_tokens" : [ TEST_IPAD_TOKEN ] })
 
-    yield db.algos.insert([{
+    yield db.instructions.insert([{
                                "_id": {
                                    "algo_v": 1,
                                    "algo_id": "price_match_algo_id"
                                },
                                "algo_name": "match_algo",
-                               "stock_id": 600100,
-                               "user_id": "admin",
                                "price_type": "market",
                                "trade_method": "sell",
+                               "stock_id": 600006,
+                                "user_id": "admin",
                                "volume": 100,
+                               "period":1,
                                "primary_condition": "price_condition",
                                "conditions": {
                                    "price_condition": {
                                        "price_type": "more_than",
-                                       "price": "12.00",
+                                       "price": "12.30",
                                        "window": "60"
                                    }
                                }
@@ -108,11 +109,12 @@ def populate_test_db():
                                    "algo_id": "price_unmatch_algo_id"
                                },
                                "algo_name": "unmatch_algo",
-                               "stock_id": 600100,
+                               "stock_id": 600006,
                                "user_id": "admin",
                                "price_type": "market",
                                "trade_method": "sell",
                                "volume": 100,
+                               "period":1,
                                "primary_condition": "price_condition",
                                "conditions": {
                                    "price_condition": {
@@ -123,7 +125,51 @@ def populate_test_db():
                                }
                            }])
 
-    print "done"
+    yield db.instructions.insert([{
+                               "_id": {
+                                   "algo_v": 1,
+                                   "algo_id": "kdj_match_algo_id"
+                               },
+                               "algo_name": "match_algo",
+                               "stock_id": 600006,
+                               "user_id": "admin",
+                               "price_type": "market",
+                               "trade_method": "sell",
+                               "volume": 100,
+                               "period":1,
+                               "primary_condition": "kdj_condition",
+                               "conditions": {
+                                   "kdj_condition": {
+                                       "n": 9,
+                                       "m": 3,
+                                       "m1": 3,
+                                       "window": "60"
+                                   }
+                               }
+                           }, {
+                               "_id": {
+                                   "algo_v": 1,
+                                   "algo_id": "kdj_unmatch_algo_id"
+                               },
+                               "algo_name": "unmatch_algo",
+                               "stock_id": 600006,
+                               "user_id": "admin",
+                               "price_type": "market",
+                               "trade_method": "sell",
+                               "volume": 100,
+                               "period": 1,
+                               "primary_condition": "kdj_condition",
+                               "conditions": {
+                                   "kdj_condition": {
+                                       "n": 9,
+                                       "m": 1,
+                                       "m1": 1,
+                                       "window": "60"
+                                   }
+                               }
+                           }])
+
+    print("done")
     IOLoop.current().stop()
 
 
@@ -132,5 +178,5 @@ def main():
 
 
 if __name__ == "__main__":
-    populate_test_db()
+    main()
     IOLoop.instance().start()

@@ -3,10 +3,10 @@
 
 import ast
 import json
-
 from tornado import gen
-from tornado.web import authenticated, urlparse
-
+from tornado.web import authenticated
+from urllib import parse
+from tests import backtest
 from request_handlers.base_request_handler import BaseRequestHandler
 
 
@@ -24,13 +24,16 @@ class AlgoHandler(BaseRequestHandler):
 
     @gen.coroutine
     def post_remove(self):
-        algo_data_raw = self.get_argument("algo", None)
-        print urlparse.parse_qs(algo_data_raw)
+
+        body = json.loads(self.request.body)
+        algo_data_raw = body["algo"]
+        #value =  urlparse.parse_qs(algo_data_raw)
         algo_data = (algo_data_raw)
 
         query = {"_id.algo_id": algo_data["algo_id"]}
 
-        if self.get_argument("test", None):
+        #if self.get_argument("test", None):
+        if "test" in body:
             yield self.settings["test_db"].algos.remove(query)
         else:
             yield self.settings["db"].algos.remove(query)
@@ -39,21 +42,25 @@ class AlgoHandler(BaseRequestHandler):
     @gen.coroutine
     def post_upload(self):
 
-        body = json.loads(self.request.body)
+        str_body = self.request.body.decode()
+        body = json.loads(str_body)
 
-        algo_data = body["algo"]
+        '''
+        _data = body["data"]
 
         _id = {"algo_id": algo_data["algo_id"], "algo_v": algo_data["algo_v"]}
         algo_data["_id"] = _id
 
         del algo_data["algo_id"]
         del algo_data["algo_v"]
-
+        '''
         if "test" in body:
-            yield self.settings["test_db"].algos.save(algo_data)
+            db = self.settings["test_db"]
+            yield db.algos.save(body)
         else:
-            yield self.settings["db"].algos.save(algo_data)
-        self.write({"saved": algo_data["_id"]["algo_id"]})
+            yield self.settings["db"].algos.save(body)
+
+        self.write({"saved": body["_id"]["algo_id"]})
 
     @authenticated
     @gen.coroutine
@@ -62,13 +69,15 @@ class AlgoHandler(BaseRequestHandler):
             user_id = self.get_argument("user_id", None)
 
             if self.get_argument("test", None):
-                cursor = self.settings["test_db"].algos.find(
+                db = self.settings["test_db"]
+                cursor = db.algos.find(
                     {"user_id": user_id})
             else:
                 cursor = self.settings["db"].algos.find({"user_id": user_id})
 
             algos = []
-            for algo in (yield cursor.to_list(100)):
+            list = yield cursor.to_list(100)
+            for algo in (list):
                 algos.append(algo)
 
             self.write({"algos": algos})

@@ -13,14 +13,14 @@ class Condition:
         return None
 
     @gen.coroutine
-    def match_condition(self, algo):
+    def match_condition(self, algo,time):
         if self.is_primary:
-            yield self.match_condition_primary(algo)
+            yield self.match_condition_primary(algo,time)
         else:
-            yield self.match_condition_secondary(algo)
+            yield self.match_condition_secondary(algo,time)
 
-    def match_condition_secondary(self, algo):
+    def match_condition_secondary(self, algo,time):
         raise Exception("not implemented in child class")
 
-    def match_condition_primary(self, algo):
+    def match_condition_primary(self, algo,time):
         raise Exception("not implemented in child class")

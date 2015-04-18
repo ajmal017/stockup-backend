@@ -14,7 +14,6 @@ Script to update the list of valid stocks
 from datetime import datetime
 import os
 import logging
-
 from tornado import gen
 from tornado.httpclient import AsyncHTTPClient
 from tornado.ioloop import IOLoop, PeriodicCallback
@@ -26,6 +25,7 @@ if par_here not in sys.path:
 
 from util import construct_sina_url
 from tornado.options import options
+define("dbhost", default="119.29.16.193", help="mongodb host ip address ", type=str)
 
 logger = logging.getLogger("update_stock_list")
 
@@ -33,7 +33,7 @@ AsyncHTTPClient.configure('tornado.curl_httpclient.CurlAsyncHTTPClient')
 
 define("env", default="dev", help="environment: prod|dev|stage", type=str)
 
-db = motor.MotorClient(options.dbhost).ss
+db = motor.MotorClient(options.dbhost).ss_test
 
 
 @gen.coroutine
@@ -51,6 +51,7 @@ def fetch_info():
 
     responses = yield tasks
 
+
     for response in responses:
         body = response.body.decode(encoding='GB18030', errors='strict').strip()
         stock_info_list = body.split('"')[1].split(',')
@@ -67,7 +68,7 @@ def fetch_info():
         logger.info("saved stock catalog")
         logger.info(str(_id))
 
-    except Exception, e:
+    except Exception as e:
         logger.error(datetime.now())
         logger.error(str(e))
 

@@ -7,4 +7,5 @@ class HomeHandler(BaseRequestHandler):
 
     @authenticated
     def get(self):
-        self.write({"you're logged in as": self.current_user})
+        #self.write({"you're logged in as": self.current_user})
+        self.redirect('/static/index.html')

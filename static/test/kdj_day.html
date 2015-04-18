@@ -1,0 +1,114 @@
+
+<html>
+<head>
+<title>Javascript Form Submit Example</title>
+<!-- Include CSS File Here -->
+<!--link rel="stylesheet" href="css/submit_javascript.css"/-->
+<!-- Include JS File Here -->
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="../js/submit_javascript.js"></script>
+<script type="text/javascript">
+	
+function getdata(stockcode,starttime,endtime,n,m,m1 ) {
+            $.getJSON('/kdj/day/?stockcode='+String(stockcode)+'&starttime='+String(starttime)+'&endtime='+String(endtime)+'&n='+String(n)+'&m='+String(m)+'&m1='+String(m1), function(kdjdata) {
+            				$('#container').highcharts({
+            title: {
+                text: 'Daily KDJ Curves',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Source: authed by stockup',
+                x: -20
+            },
+            xAxis: {
+                type: 'datetime',  
+                //tickInterval: 3600*1000  ,
+            },
+            yAxis: {
+                title: {
+                    text: 'KDJ'
+                },
+	
+		tickPositions: [-200 ,-160,-100,-80,-60,-40,-20,0, 40, 80, 100, 120, 140, 160,200,240,260,300,400],
+		labels:{
+		formatter:function(){
+		    return this.value;
+		}
+		}	
+
+		},
+            tooltip: {
+                valueSuffix: 'price'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'K',
+                data: kdjdata["k"]
+            
+	    //, {
+            //    name: 'D',
+            //    data: kdjdata["d"]
+            }]
+            //, {
+            //    name: 'J',
+            //    data: kdjdata["j"]
+            //}]
+        });
+     });
+
+};
+
+// Submit form with name function.
+function submit_day_kdj() {
+var stockcode  = document.getElementById("stockcode").value;
+var starttime  = document.getElementById("startdate").value;
+var endtime  = document.getElementById("enddate").value;
+var n  = document.getElementById("n").value;
+var m  = document.getElementById("m").value;
+var m1  = document.getElementById("m1").value;
+//if (validation()) // Calling validation function
+{
+getdata(stockcode,starttime,endtime,n,m,m1)
+//document.getElementById("kdj_day").submit(); //form submission
+}
+}
+	
+</script>
+</head>
+<body>
+<form action="#" method="post" name="form_name" id="form_id" class="form_class" >
+<h2>lookup the kdj day curve</h2>
+
+<label>n</label>
+<input type="text" name="n" id="n" placeholder="n" />
+<label>m :</label>
+<input type="text" name="m" id="m" placeholder="m" />
+<label>m1 :</label>
+<input type="text" name="m1" id="m1" placeholder="m1" />
+
+
+
+
+<label>stock code :</label>
+<input type="text" name="stockcode" id="stockcode" placeholder="Valid stock code" />
+
+<label>startdate :</label>
+<input type="text" name="startdate" id="startdate" placeholder="startdate" />
+<label>enddate :</label>
+<input type="text" name="enddate" id="enddate" placeholder="enddate" />
+
+<br><br>
+<input type="button" name="submit_id" id="btn_id" value="Submit" onclick="javascript:submit_day_kdj()"/>
+</form>
+<script src="../js/highcharts.js"></script>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+</body>
+</html>
+ 	

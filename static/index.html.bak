@@ -1,0 +1,14 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        var lol = $('#lolz');
+        lol.click(function() {
+            alert(lol.val());
+        });
+    });
+</script>
+
+<body>
+    <input type="text" name="enter" class="enter" value="" id="lolz"/>
+    <input type="button" value="click" />
+</body>
+ 	

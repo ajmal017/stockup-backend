@@ -11,4 +11,4 @@ class StockListHandler(BaseRequestHandler):
     def get(self):
         coll = self.settings["db"].stock_catalog
         doc = yield coll.find_one()
-        self.write(doc)
+        self.write(doc["name_code_dict"])
