@@ -90,7 +90,7 @@ class KdjCondition(Condition):
 
     @gen.coroutine
     def kdj_calc(self, algo,time):
-        cursor = self.cachefromdb(algo,time)
+        cursor = self.ccccc(algo,time)
         for stock_dict in (yield cursor.to_list(100)):
             if 1 == algo.period:
                 self.cur_price = Decimal(stock_dict["d"][constants.CUR_PRICE])
@@ -107,6 +107,21 @@ class KdjCondition(Condition):
         print(self.n_low)
         print(algo.stock_id)
         if len(self.n_low) != self.n:
+
+        cursor = self.db.stocks.find(find_query, sort=sort_query)
+        for stock_dict in (yield cursor.to_list(1000)):
+            price = Decimal(stock_dict["d"][CUR_PRICE])
+            rsv = self.calc_rsv(price)
+            if rsv != -1:
+                k = self.calc_k(rsv)
+                d = self.calc_d(k)
+                j = 3 * k - 2 * d
+                from config import datetime_repr
+                ts = datetime.strptime(stock_dict["_id"]["d"], datetime_repr())
+                self.kdj.append([k, d, j, ts])
+
+        if len(self.kdj) < 2:
+            logger.error("not enough kdj data")
             raise gen.Return(False)
 
         rsv = self.calc_rsv(self.cur_price)
@@ -187,5 +202,9 @@ class KdjCondition(Condition):
             if prev_k <= prev_d and curr_k > curr_d:
                 return True
 
+<<<<<<< HEAD
 
         return False
+=======
+        return False
+>>>>>>> 486a97009d441b3b9a088b476b4a95146bc65a4f
