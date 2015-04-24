@@ -202,9 +202,4 @@ class KdjCondition(Condition):
             if prev_k <= prev_d and curr_k > curr_d:
                 return True
 
-<<<<<<< HEAD
-
         return False
-=======
-        return False
->>>>>>> 486a97009d441b3b9a088b476b4a95146bc65a4f
