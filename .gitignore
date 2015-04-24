@@ -38,6 +38,8 @@ build
 out
 mongo*.jar
 *.pyc
+*.swp
+*.swo
 
 # Eclipse files
 .classpath
