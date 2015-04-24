@@ -86,7 +86,52 @@ def populate_test_db():
    }
       }])
 
-    print "done"
+
+    yield db.instructions.insert([{
+                               "_id": {
+                                   "algo_v": 1,
+                                   "algo_id": "kdj_match_algo_id"
+                               },
+                               "algo_name": "match_algo",
+                               "stock_id": 600006,
+                               "user_id": "admin",
+                               "price_type": "market",
+                               "trade_method": "sell",
+                               "volume": 100,
+                               "period":1,
+                               "primary_condition": "kdj_condition",
+                               "conditions": {
+                                   "kdj_condition": {
+                                       "n": 9,
+                                       "m": 3,
+                                       "m1": 3,
+                                       "window": "60"
+                                   }
+                               }
+                           }, {
+                               "_id": {
+                                   "algo_v": 1,
+                                   "algo_id": "kdj_unmatch_algo_id"
+                               },
+                               "algo_name": "unmatch_algo",
+                               "stock_id": 600006,
+                               "user_id": "admin",
+                               "price_type": "market",
+                               "trade_method": "sell",
+                               "volume": 100,
+                               "period": 1,
+                               "primary_condition": "kdj_condition",
+                               "conditions": {
+                                   "kdj_condition": {
+                                       "n": 9,
+                                       "m": 1,
+                                       "m1": 1,
+                                       "window": "60"
+                                   }
+                               }
+                           }])
+
+    print("done")
     IOLoop.current().stop()
 
 
@@ -97,3 +142,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    IOLoop.instance().start()
