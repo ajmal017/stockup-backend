@@ -86,8 +86,7 @@ def populate_test_db():
    }
       }])
 
-
-    yield db.instructions.insert([{
+    yield db.algos.insert([{
                                "_id": {
                                    "algo_v": 1,
                                    "algo_id": "kdj_match_algo_id"
